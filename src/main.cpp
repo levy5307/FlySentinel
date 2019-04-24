@@ -3,7 +3,11 @@
 //
 
 #include <iostream>
+#include <zconf.h>
 
 int main(int argc, char **argv) {
-    std::cout << "Hello, flySentinel. Wish you be better!" << std::endl;
+    while(1) {
+        std::cout << "Hello, flySentinel. Wish you be better!" << std::endl;
+        sleep(1);
+    }
 }
