@@ -19,7 +19,7 @@
 
 Coordinator::Coordinator() {
     /** 加载config **/
-    std::string configfile = "../conf/fly.conf";                    /** 配置文件名字 */
+    std::string configfile = "../conf/sentinel.conf";                    /** 配置文件名字 */
     this->configReader = new TextConfigReader(configfile);
     this->configCache = configReader->loadConfig();
 
