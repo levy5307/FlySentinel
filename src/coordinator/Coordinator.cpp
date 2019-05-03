@@ -5,16 +5,12 @@
 #include "Coordinator.h"
 #include "../net/NetHandler.h"
 #include "../config/TextConfigReader.h"
-#include "../config/ConfigCache.h"
-#include "../atomic/AtomicHandler.h"
-#include "../flyClient/FlyClient.h"
 #include "../flyClient/FlyClientFactory.h"
 #include "../flyObj/flyObjHashTable/FlyObjHashTableFactory.h"
 #include "../flyObj/FlyObjLinkedList/FlyObjLinkedListFactory.h"
 #include "../flyObj/FlyObjSkipList/FlyObjSkipListFactory.h"
 #include "../flyObj/FlyObjIntSet/FlyObjIntSetFactory.h"
 #include "../flyObj/FlyObjString/FlyObjStringFactory.h"
-#include "../flyServer/FlyServer.h"
 #include "../bio/BIOHandler.h"
 
 Coordinator::Coordinator() {
