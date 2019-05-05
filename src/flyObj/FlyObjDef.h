@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/9.
 //
 
-#ifndef FLYDB_FLYOBJDEF_H
-#define FLYDB_FLYOBJDEF_H
+#ifndef FLYSENTINEL_FLYOBJDEF_H
+#define FLYSENTINEL_FLYOBJDEF_H
 
 enum FlyObjType {
     FLY_TYPE_STRING = 0,
@@ -13,4 +13,4 @@ enum FlyObjType {
     FLY_TYPE_SET = 4
 };
 
-#endif //FLYDB_FLYOBJDEF_H
+#endif //FLYSENTINEL_FLYOBJDEF_H

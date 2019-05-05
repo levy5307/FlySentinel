@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/10/18.
 //
 
-#ifndef FLYDB_FLYCLIENT_H
-#define FLYDB_FLYCLIENT_H
+#ifndef FLYSENTINEL_FLYCLIENT_H
+#define FLYSENTINEL_FLYCLIENT_H
 
 #include <string>
 #include <list>
@@ -151,4 +151,4 @@ private:
 };
 
 
-#endif //FLYDB_FLYCLIENT_H
+#endif //FLYSENTINEL_FLYCLIENT_H

@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/11/3.
 //
 
-#ifndef FLYDB_NETDEF_H
-#define FLYDB_NETDEF_H
+#ifndef FLYSENTINEL_NETDEF_H
+#define FLYSENTINEL_NETDEF_H
 
 const int NET_NONE = 0;
 const int NET_IP_ONLY = 1<<0;
@@ -33,4 +33,4 @@ const int PROTO_REQ_BULK_MAX_LEN = 512 * 1024 * 1024;
 const int PROTO_INLINE_MAX_SIZE = 1024 * 64;                // 每行的最大长度
 const int PROTO_REPLY_CHUNK_BYTES = 16 * 1024;              // flyclient每个reply最大长度
 
-#endif //FLYDB_NETDEF_H
+#endif //FLYSENTINEL_NETDEF_H

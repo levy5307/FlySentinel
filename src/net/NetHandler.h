@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/11/3.
 //
 
-#ifndef FLYDB_NETHANDLER_H
-#define FLYDB_NETHANDLER_H
+#ifndef FLYSENTINEL_NETHANDLER_H
+#define FLYSENTINEL_NETHANDLER_H
 
 #include <sys/socket.h>
 #include "../utils/MiscTool.h"
@@ -80,4 +80,4 @@ private:
     AbstractLogHandler *logHandler;
 };
 
-#endif //FLYDB_NETHANDLER_H
+#endif //FLYSENTINEL_NETHANDLER_H

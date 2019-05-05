@@ -1,8 +1,8 @@
 // Created by 赵立伟 on 2018/9/20.
 //
 
-#ifndef FLYDB_HASHTABLE_H
-#define FLYDB_HASHTABLE_H
+#ifndef FLYSENTINEL_HASHTABLE_H
+#define FLYSENTINEL_HASHTABLE_H
 
 #include "DictEntry.cpp"
 #include "DictDef.h"
@@ -44,4 +44,4 @@ private:
     AbstractLogHandler *logHandler;
 };
 
-#endif //FLYDB_HASHTABLE_H
+#endif //FLYSENTINEL_HASHTABLE_H

@@ -2,11 +2,9 @@
 // Created by 赵立伟 on 2018/10/13.
 //
 
-#ifndef FLYDB_FLYOBJ_H
-#define FLYDB_FLYOBJ_H
+#ifndef FLYSENTINEL_FLYOBJ_H
+#define FLYSENTINEL_FLYOBJ_H
 
-#include <memory>
-#include <cstdint>
 #include "FlyObjDef.h"
 
 class FlyObj {
@@ -26,4 +24,4 @@ protected:
     void* ptr;
 };
 
-#endif //FLYDB_FLYOBJ_H
+#endif //FLYSENTINEL_FLYOBJ_H

@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/1.
 //
 
-#ifndef FLYDB_FIO_H
-#define FLYDB_FIO_H
+#ifndef FLYSENTINEL_FIO_H
+#define FLYSENTINEL_FIO_H
 
 #include <cstddef>
 #include <cstdint>

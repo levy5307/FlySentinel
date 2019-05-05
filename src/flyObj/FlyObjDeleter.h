@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2019/1/27.
 //
 
-#ifndef FLYDB_FLYOBJDELETER_H
-#define FLYDB_FLYOBJDELETER_H
+#ifndef FLYSENTINEL_FLYOBJDELETER_H
+#define FLYSENTINEL_FLYOBJDELETER_H
 
 template<class T>
 struct MyDeleter {
@@ -19,4 +19,4 @@ struct MyDeleter<T[]> {
     }
 };
 
-#endif //FLYDB_FLYOBJDELETER_H
+#endif //FLYSENTINEL_FLYOBJDELETER_H

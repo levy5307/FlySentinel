@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/8.
 //
 
-#ifndef FLYDB_COORDINATOR_H
-#define FLYDB_COORDINATOR_H
+#ifndef FLYSENTINEL_COORDINATOR_H
+#define FLYSENTINEL_COORDINATOR_H
 
 #include "interface/AbstractCoordinator.h"
 
@@ -41,7 +41,7 @@ private:
     ConfigCache *configCache;
     BaseConfigReader *configReader;
 
-    
+
     /**
      * logHandler
      */
@@ -53,4 +53,4 @@ private:
     AbstractBIOHandler *bioHandler = NULL;
 };
 
-#endif //FLYDB_COORDINATOR_H
+#endif //FLYSENTINEL_COORDINATOR_H

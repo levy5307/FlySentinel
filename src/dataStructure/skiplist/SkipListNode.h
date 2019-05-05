@@ -2,10 +2,9 @@
 // Created by 赵立伟 on 2018/9/24.
 //
 
-#ifndef FLYDB_SKIPLISTNODE_H
-#define FLYDB_SKIPLISTNODE_H
+#ifndef FLYSENTINEL_SKIPLISTNODE_H
+#define FLYSENTINEL_SKIPLISTNODE_H
 
-#include <string>
 #include <vector>
 #include "SkipListDef.h"
 
@@ -44,4 +43,4 @@ private:
     SkipListNode<T> *previous;
 };
 
-#endif //FLYDB_SKIPLISTNODE_H
+#endif //FLYSENTINEL_SKIPLISTNODE_H

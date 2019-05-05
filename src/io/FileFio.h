@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/1.
 //
 
-#ifndef FLYDB_FILEFIO_H
-#define FLYDB_FILEFIO_H
+#ifndef FLYSENTINEL_FILEFIO_H
+#define FLYSENTINEL_FILEFIO_H
 
 #include "base/Fio.h"
 
@@ -56,4 +56,4 @@ private:
 };
 
 
-#endif //FLYDB_FILEFIO_H
+#endif //FLYSENTINEL_FILEFIO_H

@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2019/2/24.
 //
 
-#ifndef FLYDB_BIOJOB_H
-#define FLYDB_BIOJOB_H
+#ifndef FLYSENTINEL_BIOJOB_H
+#define FLYSENTINEL_BIOJOB_H
 
 #include <ctime>
 
@@ -31,4 +31,4 @@ private:
 
 
 
-#endif //FLYDB_BIOJOB_H
+#endif //FLYSENTINEL_BIOJOB_H

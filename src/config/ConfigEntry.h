@@ -2,10 +2,9 @@
 // Created by levy on 2019/3/21.
 //
 
-#ifndef FLYDB_CONFIGENTRY_H
-#define FLYDB_CONFIGENTRY_H
+#ifndef FLYSENTINEL_CONFIGENTRY_H
+#define FLYSENTINEL_CONFIGENTRY_H
 
-#include <cstdio>
 #include <string>
 
 class BaseConfigReader;
@@ -27,4 +26,4 @@ private:
 };
 
 
-#endif //FLYDB_CONFIGENTRY_H
+#endif //FLYSENTINEL_CONFIGENTRY_H

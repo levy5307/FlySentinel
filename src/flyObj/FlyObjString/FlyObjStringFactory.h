@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/9.
 //
 
-#ifndef FLYDB_FLYOBJSTRINGFACTORY_H
-#define FLYDB_FLYOBJSTRINGFACTORY_H
+#ifndef FLYSENTINEL_FLYOBJSTRINGFACTORY_H
+#define FLYSENTINEL_FLYOBJSTRINGFACTORY_H
 
 #include "../../coordinator/interface/AbstractFlyObjFactory.h"
 
@@ -15,4 +15,4 @@ public:
 };
 
 
-#endif //FLYDB_FLYOBJSTRINGFACTORY_H
+#endif //FLYSENTINEL_FLYOBJSTRINGFACTORY_H

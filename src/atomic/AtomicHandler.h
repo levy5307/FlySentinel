@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/11/10.
 //
 
-#ifndef FLYDB_ATOMICHANDLER_H
-#define FLYDB_ATOMICHANDLER_H
+#ifndef FLYSENTINEL_ATOMICHANDLER_H
+#define FLYSENTINEL_ATOMICHANDLER_H
 
 #define atomicIncr(var, count) { \
     pthread_mutex_lock(&var ## Mutex); \
@@ -36,4 +36,4 @@
     pthread_mutex_lock(&var ** Mutex); \
 }
 
-#endif //FLYDB_ATOMICHANDLER_H
+#endif //FLYSENTINEL_ATOMICHANDLER_H

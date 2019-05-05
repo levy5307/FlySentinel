@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/3.
 //
 
-#ifndef FLYDB_ABSTRACTFLYCLIENT_H
-#define FLYDB_ABSTRACTFLYCLIENT_H
+#ifndef FLYSENTINEL_ABSTRACTFLYCLIENT_H
+#define FLYSENTINEL_ABSTRACTFLYCLIENT_H
 
 #include <ctime>
 #include <cstdint>
@@ -148,4 +148,4 @@ public:
 
 };
 
-#endif //FLYDB_ABSTRACTFLYCLIENT_H
+#endif //FLYSENTINEL_ABSTRACTFLYCLIENT_H

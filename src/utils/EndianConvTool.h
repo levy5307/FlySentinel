@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/10/4.
 //
 
-#ifndef FLYDB_ENDIANCONVTOOL_H
-#define FLYDB_ENDIANCONVTOOL_H
+#ifndef FLYSENTINEL_ENDIANCONVTOOL_H
+#define FLYSENTINEL_ENDIANCONVTOOL_H
 
 #include <cstdint>
 #include "../def.h"
@@ -96,4 +96,4 @@ private:
 };
 
 
-#endif //FLYDB_ENDIANCONVTOOL_H
+#endif //FLYSENTINEL_ENDIANCONVTOOL_H

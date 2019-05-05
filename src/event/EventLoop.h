@@ -2,12 +2,11 @@
 // Created by 赵立伟 on 2018/10/20.
 //
 
-#ifndef FLYDB_EVENTLOOP_H
-#define FLYDB_EVENTLOOP_H
+#ifndef FLYSENTINEL_EVENTLOOP_H
+#define FLYSENTINEL_EVENTLOOP_H
 
 #include <vector>
 #include <list>
-#include <ctime>
 #include "FileEvent.h"
 #include "TimeEvent.h"
 #include "../coordinator/interface/AbstractEventLoop.h"
@@ -59,4 +58,4 @@ private:
 };
 
 
-#endif //FLYDB_EVENTLOOP_H
+#endif //FLYSENTINEL_EVENTLOOP_H

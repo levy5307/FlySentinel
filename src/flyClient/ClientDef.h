@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/11/18.
 //
 
-#ifndef FLYDB_CLIENTDEF_H
-#define FLYDB_CLIENTDEF_H
+#ifndef FLYSENTINEL_CLIENTDEF_H
+#define FLYSENTINEL_CLIENTDEF_H
 
 /** 当前服务器是一个slave */
 const int CLIENT_SLAVE = 1 << 0;
@@ -22,4 +22,4 @@ const int CLIENT_PRE_PSYNC = 1 << 16;
 
 const int FLY_REPLY_CHUNK_BYTES = 16 * 1024;
 
-#endif //FLYDB_CLIENTDEF_H
+#endif //FLYSENTINEL_CLIENTDEF_H

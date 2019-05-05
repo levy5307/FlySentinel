@@ -2,10 +2,8 @@
 // Created by 赵立伟 on 2019/1/20.
 //
 
-#ifndef FLYDB_ABSTRACTBIOHANDLER_H
-#define FLYDB_ABSTRACTBIOHANDLER_H
-
-#include <cstdint>
+#ifndef FLYSENTINEL_ABSTRACTBIOHANDLER_H
+#define FLYSENTINEL_ABSTRACTBIOHANDLER_H
 
 class AbstractBIOHandler {
 public:
@@ -24,4 +22,4 @@ public:
     virtual void killThread(int type) = 0;
 };
 
-#endif //FLYDB_ABSTRACTBIOHANDLER_H
+#endif //FLYSENTINEL_ABSTRACTBIOHANDLER_H

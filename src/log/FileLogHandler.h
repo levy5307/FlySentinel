@@ -2,10 +2,9 @@
 // Created by 赵立伟 on 2018/11/18.
 //
 
-#ifndef FLYDB_LOGHANDLER_H
-#define FLYDB_LOGHANDLER_H
+#ifndef FLYSENTINEL_LOGHANDLER_H
+#define FLYSENTINEL_LOGHANDLER_H
 
-#include "../flyServer/FlyServer.h"
 #include "../coordinator/interface/AbstractLogHandler.h"
 
 class FileLogHandler : public AbstractLogHandler {
@@ -27,4 +26,4 @@ private:
     static int verbosity;
 };
 
-#endif //FLYDB_LOGHANDLER_H
+#endif //FLYSENTINEL_LOGHANDLER_H

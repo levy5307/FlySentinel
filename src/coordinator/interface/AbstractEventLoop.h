@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/8.
 //
 
-#ifndef FLYDB_ABSTRACTEVENTLOOP_H
-#define FLYDB_ABSTRACTEVENTLOOP_H
+#ifndef FLYSENTINEL_ABSTRACTEVENTLOOP_H
+#define FLYSENTINEL_ABSTRACTEVENTLOOP_H
 
 #include "../../event/EventDef.h"
 
@@ -40,4 +40,4 @@ public:
                                  eventFinalizerProc *finalizerProc) = 0;
 };
 
-#endif //FLYDB_ABSTRACTEVENTLOOP_H
+#endif //FLYSENTINEL_ABSTRACTEVENTLOOP_H

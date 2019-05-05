@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/9/24.
 //
 
-#ifndef FLYDB_SKIPDEF_H
-#define FLYDB_SKIPDEF_H
+#ifndef FLYSENTINEL_SKIPDEF_H
+#define FLYSENTINEL_SKIPDEF_H
 
 const uint8_t SKIP_LIST_MAX_LEVEL = 32;
 
@@ -17,4 +17,4 @@ struct SkipListRange {
     bool minex, maxex;
 };
 
-#endif //FLYDB_SKIPDEF_H
+#endif //FLYSENTINEL_SKIPDEF_H

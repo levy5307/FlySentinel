@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/23.
 //
 
-#ifndef FLYDB_COMMANDTABLEDEF_H
-#define FLYDB_COMMANDTABLEDEF_H
+#ifndef FLYSENTINEL_COMMANDTABLEDEF_H
+#define FLYSENTINEL_COMMANDTABLEDEF_H
 
 enum CommandFlag {
     CMD_WRITE = 1 << 0,                 /** "w" flag */
@@ -24,4 +24,4 @@ enum CommandFlag {
     CMD_MODULE_NO_CLUSTER = 1 << 15     /** Deny on Cluster. */
 };
 
-#endif //FLYDB_COMMANDTABLEDEF_H
+#endif //FLYSENTINEL_COMMANDTABLEDEF_H

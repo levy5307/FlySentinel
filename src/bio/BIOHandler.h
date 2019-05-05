@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2019/1/20.
 //
 
-#ifndef FLYDB_BIOHANDLER_H
-#define FLYDB_BIOHANDLER_H
+#ifndef FLYSENTINEL_BIOHANDLER_H
+#define FLYSENTINEL_BIOHANDLER_H
 
 #include <pthread.h>
 #include <list>
@@ -42,4 +42,4 @@ private:
 };
 
 
-#endif //FLYDB_BIOHANDLER_H
+#endif //FLYSENTINEL_BIOHANDLER_H

@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/9.
 //
 
-#ifndef FLYDB_FLYOBJHASHTABLE_H
-#define FLYDB_FLYOBJHASHTABLE_H
+#ifndef FLYSENTINEL_FLYOBJHASHTABLE_H
+#define FLYSENTINEL_FLYOBJHASHTABLE_H
 
 #include "../FlyObj.h"
 
@@ -15,4 +15,4 @@ public:
 };
 
 
-#endif //FLYDB_FLYOBJHASHTABLE_H
+#endif //FLYSENTINEL_FLYOBJHASHTABLE_H

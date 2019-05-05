@@ -2,10 +2,8 @@
 // Created by 赵立伟 on 2018/9/20.
 //
 
-#ifndef FLYDB_DICTENTRY_H
-#define FLYDB_DICTENTRY_H
-
-#include <string>
+#ifndef FLYSENTINEL_DICTENTRY_H
+#define FLYSENTINEL_DICTENTRY_H
 
 template<class KEY, class VAL>
 struct DictEntry {
@@ -23,4 +21,4 @@ struct DictEntry {
 };
 
 
-#endif //FLYDB_DICTENTRY_H
+#endif //FLYSENTINEL_DICTENTRY_H

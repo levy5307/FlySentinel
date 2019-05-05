@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/10/20.
 //
 
-#ifndef FLYDB_FILEEVENT_H
-#define FLYDB_FILEEVENT_H
+#ifndef FLYSENTINEL_FILEEVENT_H
+#define FLYSENTINEL_FILEEVENT_H
 
 #include "EventDef.h"
 #include "../coordinator/interface/AbstractEventLoop.h"
@@ -32,4 +32,4 @@ public:
 };
 
 
-#endif //FLYDB_FILEEVENT_H
+#endif //FLYSENTINEL_FILEEVENT_H

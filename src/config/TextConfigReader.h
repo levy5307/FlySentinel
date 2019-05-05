@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/5.
 //
 
-#ifndef FLYDB_CONFIGREADER_H
-#define FLYDB_CONFIGREADER_H
+#ifndef FLYSENTINEL_CONFIGREADER_H
+#define FLYSENTINEL_CONFIGREADER_H
 
 #include <string>
 #include "base/BaseConfigReader.h"
@@ -25,4 +25,4 @@ private:
     MiscTool *miscTool;
 };
 
-#endif //FLYDB_CONFIGREADER_H
+#endif //FLYSENTINEL_CONFIGREADER_H

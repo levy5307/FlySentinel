@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/3.
 //
 
-#ifndef FLYDB_FLYCLIENTFACTORY_H
-#define FLYDB_FLYCLIENTFACTORY_H
+#ifndef FLYSENTINEL_FLYCLIENTFACTORY_H
+#define FLYSENTINEL_FLYCLIENTFACTORY_H
 
 #include "../coordinator/interface/AbstractFlyClientFactory.h"
 
@@ -17,4 +17,4 @@ public:
 };
 
 
-#endif //FLYDB_FLYCLIENTFACTORY_H
+#endif //FLYSENTINEL_FLYCLIENTFACTORY_H

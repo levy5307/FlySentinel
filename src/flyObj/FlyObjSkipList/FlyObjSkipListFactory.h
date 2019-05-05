@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/9.
 //
 
-#ifndef FLYDB_FLYOBJSKIPLISTFACTORY_H
-#define FLYDB_FLYOBJSKIPLISTFACTORY_H
+#ifndef FLYSENTINEL_FLYOBJSKIPLISTFACTORY_H
+#define FLYSENTINEL_FLYOBJSKIPLISTFACTORY_H
 
 #include "../../coordinator/interface/AbstractFlyObjFactory.h"
 
@@ -15,4 +15,4 @@ public:
 };
 
 
-#endif //FLYDB_FLYOBJSKIPLISTFACTORY_H
+#endif //FLYSENTINEL_FLYOBJSKIPLISTFACTORY_H

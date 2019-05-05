@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/5.
 //
 
-#ifndef FLYDB_ABSTRACTCONFIGREADER_H
-#define FLYDB_ABSTRACTCONFIGREADER_H
+#ifndef FLYSENTINEL_ABSTRACTCONFIGREADER_H
+#define FLYSENTINEL_ABSTRACTCONFIGREADER_H
 
 #include "../ConfigCache.h"
 #include "../ConfigEntry.h"
@@ -30,4 +30,4 @@ protected:
     Dict<std::string, std::shared_ptr<ConfigEntry>>* configEntryTable;
 };
 
-#endif //FLYDB_ABSTRACTCONFIGREADER_H
+#endif //FLYSENTINEL_ABSTRACTCONFIGREADER_H

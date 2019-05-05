@@ -2,11 +2,9 @@
 // Created by 赵立伟 on 2018/10/20.
 //
 
-#ifndef FLYDB_EVENTDEF_H
-#define FLYDB_EVENTDEF_H
+#ifndef FLYSENTINEL_EVENTDEF_H
+#define FLYSENTINEL_EVENTDEF_H
 
-#include <cstdint>
-#include <sys/time.h>
 #include "../coordinator/interface/AbstractFlyClient.h"
 
 enum EventStatus {
@@ -34,4 +32,4 @@ typedef void eventFinalizerProc(const AbstractCoordinator *coorinator,
                                 void *clientData);
 typedef void beforeAndAfterSleepProc(const AbstractCoordinator *coorinator);
 
-#endif //FLYDB_EVENTDEF_H
+#endif //FLYSENTINEL_EVENTDEF_H

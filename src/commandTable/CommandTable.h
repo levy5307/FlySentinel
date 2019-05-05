@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/10/15.
 //
 
-#ifndef FLYDB_COMMANDTABLE_H
-#define FLYDB_COMMANDTABLE_H
+#ifndef FLYSENTINEL_COMMANDTABLE_H
+#define FLYSENTINEL_COMMANDTABLE_H
 
 #include <string>
 #include "../flyClient/FlyClient.h"
@@ -27,4 +27,4 @@ private:
 };
 
 
-#endif //FLYDB_COMMANDTABLE_H
+#endif //FLYSENTINEL_COMMANDTABLE_H

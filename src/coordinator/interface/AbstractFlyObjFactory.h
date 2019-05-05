@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/3.
 //
 
-#ifndef FLYDB_ABSTRACTFLYOBJFACTORY_H
-#define FLYDB_ABSTRACTFLYOBJFACTORY_H
+#ifndef FLYSENTINEL_ABSTRACTFLYOBJFACTORY_H
+#define FLYSENTINEL_ABSTRACTFLYOBJFACTORY_H
 
 #include "../../flyObj/FlyObj.h"
 
@@ -19,4 +19,4 @@ public:
     virtual std::shared_ptr<FlyObj> getObject(void *ptr) = 0;
 };
 
-#endif //FLYDB_ABSTRACTFLYOBJFACTORY_H
+#endif //FLYSENTINEL_ABSTRACTFLYOBJFACTORY_H

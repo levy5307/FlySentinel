@@ -2,8 +2,9 @@
 // Created by 赵立伟 on 2018/9/24.
 //
 
-#ifndef FLYDB_SKIPLIST_H
-#define FLYDB_SKIPLIST_H
+#ifndef FLYSENTINEL_SKIPLIST_H
+#define FLYSENTINEL_SKIPLIST_H
+
 #include "SkipListNode.cpp"
 #include "SkipListDef.h"
 
@@ -40,4 +41,4 @@ private:
     uint8_t level;
 };
 
-#endif //FLYDB_SKIPLIST_H
+#endif //FLYSENTINEL_SKIPLIST_H

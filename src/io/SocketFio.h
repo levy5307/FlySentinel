@@ -2,8 +2,8 @@
 // Created by levy on 2019/3/29.
 //
 
-#ifndef FLYDB_SOCKETFIO_H
-#define FLYDB_SOCKETFIO_H
+#ifndef FLYSENTINEL_SOCKETFIO_H
+#define FLYSENTINEL_SOCKETFIO_H
 
 #include <vector>
 #include "base/Fio.h"
@@ -63,4 +63,4 @@ private:
 };
 
 
-#endif //FLYDB_SOCKETFIO_H
+#endif //FLYSENTINEL_SOCKETFIO_H

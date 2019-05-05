@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/11/18.
 //
 
-#ifndef FLYDB_LOGDEF_H
-#define FLYDB_LOGDEF_H
+#ifndef FLYSENTINEL_LOGDEF_H
+#define FLYSENTINEL_LOGDEF_H
 
 #define LOG_MAX_LEN    1024             // log最大长度
 enum LogLevel {
@@ -14,4 +14,4 @@ enum LogLevel {
     LL_RAW = (1 << 10)
 };
 
-#endif //FLYDB_LOGDEF_H
+#endif //FLYSENTINEL_LOGDEF_H

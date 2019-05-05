@@ -2,19 +2,15 @@
 // Created by 赵立伟 on 2018/12/8.
 //
 
-#ifndef FLYDB_ABSTRACTCOORDINATOR_H
-#define FLYDB_ABSTRACTCOORDINATOR_H
+#ifndef FLYSENTINEL_ABSTRACTCOORDINATOR_H
+#define FLYSENTINEL_ABSTRACTCOORDINATOR_H
 
 #include "AbstractEventLoop.h"
 #include "AbstractNetHandler.h"
-#include "../../config/base/BaseConfigReader.h"
 #include "AbstractFlyClientFactory.h"
 #include "AbstractFlyObjFactory.h"
-#include "../../bio/interface/AbstractBIOHandler.h"
-
-class AbstractFlyServer;
-class AbstractNetHandler;
-class AbstractFlyClientFactory;
+#include "AbstractBIOHandler.h"
+#include "AbstractLogHandler.h"
 
 class AbstractCoordinator {
 public:
@@ -39,4 +35,4 @@ public:
     virtual AbstractBIOHandler *getBioHandler() const = 0;
 };
 
-#endif //FLYDB_ABSTRACTCOORDINATOR_H
+#endif //FLYSENTINEL_ABSTRACTCOORDINATOR_H

@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/5.
 //
 
-#ifndef FLYDB_FILECONFIG_H
-#define FLYDB_FILECONFIG_H
+#ifndef FLYSENTINEL_FILECONFIG_H
+#define FLYSENTINEL_FILECONFIG_H
 
 struct ConfigCache {
 public:
@@ -32,4 +32,4 @@ private:
     int syslogFacility;
 };
 
-#endif //FLYDB_FILECONFIG_H
+#endif //FLYSENTINEL_FILECONFIG_H

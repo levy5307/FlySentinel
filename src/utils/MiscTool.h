@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/11/4.
 //
 
-#ifndef FLYDB_STRINGTOOL_H
-#define FLYDB_STRINGTOOL_H
+#ifndef FLYSENTINEL_STRINGTOOL_H
+#define FLYSENTINEL_STRINGTOOL_H
 
 #include <string>
 #include <vector>
@@ -273,4 +273,4 @@ private:
     }
 };
 
-#endif //FLYDB_STRINGTOOL_H
+#endif //FLYSENTINEL_STRINGTOOL_H

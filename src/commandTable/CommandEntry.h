@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/9/19.
 //
 
-#ifndef FLYDB_COMMANDENTRY_H
-#define FLYDB_COMMANDENTRY_H
+#ifndef FLYSENTINEL_COMMANDENTRY_H
+#define FLYSENTINEL_COMMANDENTRY_H
 
 #include <string>
 
@@ -125,4 +125,4 @@ void versionCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClien
 
 extern std::vector<CommandEntry*> flyDBCommandTable;
 
-#endif //FLYDB_COMMANDENTRY_H
+#endif //FLYSENTINEL_COMMANDENTRY_H

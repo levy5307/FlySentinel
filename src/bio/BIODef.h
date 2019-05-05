@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2019/1/20.
 //
 
-#ifndef FLYDB_BIODEF_H
-#define FLYDB_BIODEF_H
+#ifndef FLYSENTINEL_BIODEF_H
+#define FLYSENTINEL_BIODEF_H
 
 #include <ctime>
 
@@ -28,4 +28,4 @@ enum BIOJobOpCode {
 
 const int FLYDB_THREAD_STACK_SIZE = 1024 * 1024 * 4;
 
-#endif //FLYDB_BIODEF_H
+#endif //FLYSENTINEL_BIODEF_H

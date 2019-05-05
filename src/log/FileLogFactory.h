@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/12/4.
 //
 
-#ifndef FLYDB_FILELOGFACTORY_H
-#define FLYDB_FILELOGFACTORY_H
+#ifndef FLYSENTINEL_FILELOGFACTORY_H
+#define FLYSENTINEL_FILELOGFACTORY_H
 
 
 #include "../coordinator/interface/AbstractLogFactory.h"
@@ -19,5 +19,4 @@ public:
     AbstractLogHandler* getLogger();
 };
 
-
-#endif //FLYDB_FILELOGFACTORY_H
+#endif //FLYSENTINEL_FILELOGFACTORY_H

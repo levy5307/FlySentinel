@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/9/20.
 //
 
-#ifndef FLYDB_DICT_H
-#define FLYDB_DICT_H
+#ifndef FLYSENTINEL_DICT_H
+#define FLYSENTINEL_DICT_H
 
 #include <map>
 #include <array>
@@ -54,4 +54,4 @@ private:
     AbstractLogHandler *logHandler;
 };
 
-#endif //FLYDB_DICT_H
+#endif //FLYSENTINEL_DICT_H

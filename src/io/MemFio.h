@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2019/3/10.
 //
 
-#ifndef FLYDB_STRINGFIO_H
-#define FLYDB_STRINGFIO_H
+#ifndef FLYSENTINEL_STRINGFIO_H
+#define FLYSENTINEL_STRINGFIO_H
 
 #include "base/Fio.h"
 
@@ -21,4 +21,4 @@ private:
 };
 
 
-#endif //FLYDB_STRINGFIO_H
+#endif //FLYSENTINEL_STRINGFIO_H

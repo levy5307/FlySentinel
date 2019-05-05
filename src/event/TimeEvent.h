@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/10/20.
 //
 
-#ifndef FLYDB_TIMEEVENT_H
-#define FLYDB_TIMEEVENT_H
+#ifndef FLYSENTINEL_TIMEEVENT_H
+#define FLYSENTINEL_TIMEEVENT_H
 
 #include "EventDef.h"
 
@@ -33,4 +33,4 @@ public:
     void *clientData;
 };
 
-#endif //FLYDB_TIMEEVENT_H
+#endif //FLYSENTINEL_TIMEEVENT_H

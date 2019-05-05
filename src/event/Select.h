@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/10/20.
 //
 
-#ifndef FLYDB_SELECT_H
-#define FLYDB_SELECT_H
+#ifndef FLYSENTINEL_SELECT_H
+#define FLYSENTINEL_SELECT_H
 
 #include <sys/select.h>
 #include <map>
@@ -23,4 +23,4 @@ private:
     AbstractEventLoop *eventLoop;
 };
 
-#endif //FLYDB_SELECT_H
+#endif //FLYSENTINEL_SELECT_H
