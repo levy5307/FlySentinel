@@ -10,7 +10,7 @@
 #include <ctime>
 #include "FileEvent.h"
 #include "TimeEvent.h"
-#include "interface/AbstractEventLoop.h"
+#include "../coordinator/interface/AbstractEventLoop.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
 
 void beforeSleep(const AbstractCoordinator *coordinator);

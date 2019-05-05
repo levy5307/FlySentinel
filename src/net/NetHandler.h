@@ -7,9 +7,9 @@
 
 #include <sys/socket.h>
 #include "../utils/MiscTool.h"
-#include "interface/AbstractNetHandler.h"
-#include "../log/interface/AbstractLogHandler.h"
-#include "../log/interface/AbstractLogFactory.h"
+#include "../coordinator/interface/AbstractNetHandler.h"
+#include "../coordinator/interface/AbstractLogHandler.h"
+#include "../coordinator/interface/AbstractLogFactory.h"
 
 class NetHandler : public AbstractNetHandler {
 public:

@@ -5,7 +5,7 @@
 #ifndef FLYDB_ABSTRACTFLYOBJFACTORY_H
 #define FLYDB_ABSTRACTFLYOBJFACTORY_H
 
-#include "../FlyObj.h"
+#include "../../flyObj/FlyObj.h"
 
 /**
  *  抽象工厂： FlyObj有两个变化维度：type和encoding，目前每个type只对应一个encoding，后续再扩展

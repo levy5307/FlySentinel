@@ -5,7 +5,7 @@
 #ifndef FLYDB_FLYOBJSKIPLISTFACTORY_H
 #define FLYDB_FLYOBJSKIPLISTFACTORY_H
 
-#include "../interface/AbstractFlyObjFactory.h"
+#include "../../coordinator/interface/AbstractFlyObjFactory.h"
 
 class FlyObjSkipListFactory : public AbstractFlyObjFactory {
 public:

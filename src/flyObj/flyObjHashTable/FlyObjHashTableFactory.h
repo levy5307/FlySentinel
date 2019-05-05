@@ -5,7 +5,7 @@
 #ifndef FLYDB_FLYOBJHASHTABLEFACTORY_H
 #define FLYDB_FLYOBJHASHTABLEFACTORY_H
 
-#include "../interface/AbstractFlyObjFactory.h"
+#include "../../coordinator/interface/AbstractFlyObjFactory.h"
 
 class FlyObjHashTableFactory : public AbstractFlyObjFactory {
 public:

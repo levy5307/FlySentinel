@@ -5,7 +5,7 @@
 #ifndef FLYDB_ABSTRACTEVENTLOOP_H
 #define FLYDB_ABSTRACTEVENTLOOP_H
 
-#include "../EventDef.h"
+#include "../../event/EventDef.h"
 
 class AbstractEventLoop {
 public:

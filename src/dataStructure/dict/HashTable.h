@@ -6,7 +6,7 @@
 
 #include "DictEntry.cpp"
 #include "DictDef.h"
-#include "../../log/interface/AbstractLogHandler.h"
+#include "../../coordinator/interface/AbstractLogHandler.h"
 #include "../../coordinator/interface/AbstractCoordinator.h"
 
 template<class KEY, class VAL>

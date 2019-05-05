@@ -6,8 +6,8 @@
 #define FLYDB_FILEEVENT_H
 
 #include "EventDef.h"
-#include "interface/AbstractEventLoop.h"
-#include "../flyClient/interface/AbstractFlyClient.h"
+#include "../coordinator/interface/AbstractEventLoop.h"
+#include "../coordinator/interface/AbstractFlyClient.h"
 
 struct FileEvent {
 public:

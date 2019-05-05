@@ -5,7 +5,7 @@
 #ifndef FLYDB_FLYCLIENTFACTORY_H
 #define FLYDB_FLYCLIENTFACTORY_H
 
-#include "interface/AbstractFlyClientFactory.h"
+#include "../coordinator/interface/AbstractFlyClientFactory.h"
 
 class FlyClientFactory : public AbstractFlyClientFactory {
 public:

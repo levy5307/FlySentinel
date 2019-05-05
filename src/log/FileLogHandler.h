@@ -6,7 +6,7 @@
 #define FLYDB_LOGHANDLER_H
 
 #include "../flyServer/FlyServer.h"
-#include "interface/AbstractLogHandler.h"
+#include "../coordinator/interface/AbstractLogHandler.h"
 
 class FileLogHandler : public AbstractLogHandler {
 public:

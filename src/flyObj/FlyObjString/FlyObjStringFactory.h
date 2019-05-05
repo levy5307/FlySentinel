@@ -5,7 +5,7 @@
 #ifndef FLYDB_FLYOBJSTRINGFACTORY_H
 #define FLYDB_FLYOBJSTRINGFACTORY_H
 
-#include "../interface/AbstractFlyObjFactory.h"
+#include "../../coordinator/interface/AbstractFlyObjFactory.h"
 
 class FlyObjStringFactory : public AbstractFlyObjFactory {
 public:

@@ -5,11 +5,11 @@
 #ifndef FLYDB_ABSTRACTCOORDINATOR_H
 #define FLYDB_ABSTRACTCOORDINATOR_H
 
-#include "../../event/interface/AbstractEventLoop.h"
-#include "../../net/interface/AbstractNetHandler.h"
+#include "AbstractEventLoop.h"
+#include "AbstractNetHandler.h"
 #include "../../config/base/BaseConfigReader.h"
-#include "../../flyClient/interface/AbstractFlyClientFactory.h"
-#include "../../flyObj/interface/AbstractFlyObjFactory.h"
+#include "AbstractFlyClientFactory.h"
+#include "AbstractFlyObjFactory.h"
 #include "../../bio/interface/AbstractBIOHandler.h"
 
 class AbstractFlyServer;

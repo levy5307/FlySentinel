@@ -9,7 +9,7 @@
 #include <array>
 #include "HashTable.cpp"
 #include "DictDef.h"
-#include "../../log/interface/AbstractLogFactory.h"
+#include "../../coordinator/interface/AbstractLogFactory.h"
 
 template<class KEY, class VAL>
 class Dict {

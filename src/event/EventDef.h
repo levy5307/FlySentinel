@@ -7,7 +7,7 @@
 
 #include <cstdint>
 #include <sys/time.h>
-#include "../flyClient/interface/AbstractFlyClient.h"
+#include "../coordinator/interface/AbstractFlyClient.h"
 
 enum EventStatus {
     ES_NONE = 0,

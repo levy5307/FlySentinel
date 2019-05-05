@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "../flyClient/interface/AbstractFlyClient.h"
+#include "../coordinator/interface/AbstractFlyClient.h"
 #include "../flyServer/interface/AbstractFlyServer.h"
 
 typedef void (*commandProc)(const AbstractCoordinator*,

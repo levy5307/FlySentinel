@@ -10,8 +10,8 @@
 #include "../flyObj/FlyObj.h"
 #include "../commandTable/CommandEntry.h"
 #include "ClientDef.h"
-#include "interface/AbstractFlyClient.h"
-#include "../log/interface/AbstractLogHandler.h"
+#include "../coordinator/interface/AbstractFlyClient.h"
+#include "../coordinator/interface/AbstractLogHandler.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
 #include "../net/NetDef.h"
 

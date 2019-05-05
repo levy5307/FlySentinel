@@ -5,7 +5,7 @@
 #ifndef FLYDB_FLYOBJLINKEDLISTFACTORY_H
 #define FLYDB_FLYOBJLINKEDLISTFACTORY_H
 
-#include "../interface/AbstractFlyObjFactory.h"
+#include "../../coordinator/interface/AbstractFlyObjFactory.h"
 
 class FlyObjLinkedListFactory : public AbstractFlyObjFactory {
 public:

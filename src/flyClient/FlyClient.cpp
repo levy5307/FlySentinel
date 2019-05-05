@@ -609,8 +609,7 @@ void FlyClient::addReplyErrorFormat(const char *fmt, ...) {
 }
 
 void FlyClient::addReplyError(const char *err) {
-    std::shared_ptr<MemFio> fio =
-            std::shared_ptr<MemFio>(new MemFio());
+    std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
     fio->writeBulkError(err);
     this->addReply(fio->getStr().c_str());
 }
@@ -621,8 +620,7 @@ void FlyClient::addReplyBulkCount(int count) {
         std::string *str = reinterpret_cast<std::string *>(sharedObjects->getMbulkHeader(count)->getPtr());
         this->addReply(str->c_str());
     } else {
-        std::shared_ptr<MemFio> fio =
-                std::shared_ptr<MemFio>(new MemFio());
+        std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
         fio->writeBulkCount('*', count);
         this->addReply(fio->getStr().c_str());
     }
@@ -631,10 +629,9 @@ void FlyClient::addReplyBulkCount(int count) {
 }
 
 void FlyClient::addReplyBulkString(std::string str) {
-    MemFio *fio = new MemFio();
+    std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
     fio->writeBulkString(str);
     this->addReply(fio->getStr().c_str());
-    delete fio;
 }
 
 int FlyClient::addReplyToBuffer(const char *s, size_t len) {

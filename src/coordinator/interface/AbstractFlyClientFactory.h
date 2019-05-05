@@ -5,7 +5,7 @@
 #ifndef FLYDB_ABSTRACTFLYCLIENTFACTORY_H
 #define FLYDB_ABSTRACTFLYCLIENTFACTORY_H
 
-#include "../../coordinator/interface/AbstractCoordinator.h"
+#include "AbstractCoordinator.h"
 
 class AbstractFlyDB;
 

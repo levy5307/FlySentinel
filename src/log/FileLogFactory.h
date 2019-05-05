@@ -6,7 +6,7 @@
 #define FLYDB_FILELOGFACTORY_H
 
 
-#include "interface/AbstractLogFactory.h"
+#include "../coordinator/interface/AbstractLogFactory.h"
 
 class FileLogFactory : public AbstractLogFactory {
 public:
