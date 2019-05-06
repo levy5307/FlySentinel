@@ -14,7 +14,7 @@ template<class T>
 struct SkipListLevel {
     SkipListLevel() {
         this->span = 0;
-        this->next = NULL;
+        this->next = nullptr;
     };
 
     uint32_t span;
@@ -31,7 +31,7 @@ public:
     double getScore() const;
     SkipListNode<T> *getPrevious() const;
     void setPrevious(SkipListNode<T> *previous);
-    std::vector<SkipListLevel<T>> &getLevels();
+    std::vector<SkipListLevel<T> > &getLevels();
     bool scoreLtRange(SkipListRange range);
     bool scoreGtRange(SkipListRange range);
     bool scoreInRange(SkipListRange range);
@@ -39,7 +39,7 @@ public:
 private:
     T obj;
     double score;
-    std::vector<SkipListLevel<T>> levels;
+    std::vector<SkipListLevel<T> > levels;
     SkipListNode<T> *previous;
 };
 

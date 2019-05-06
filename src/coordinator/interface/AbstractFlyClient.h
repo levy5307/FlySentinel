@@ -9,9 +9,6 @@
 #include <cstdint>
 #include <string>
 #include <list>
-#include "../../flyObj/FlyObj.h"
-
-class AbstractFlyDB;
 
 class AbstractFlyClient {
 public:
@@ -137,10 +134,6 @@ public:
     virtual void setSendLen(size_t sentLen) = 0;
 
     virtual void addSendLen(size_t sentLen) = 0;
-
-    virtual AbstractFlyDB *getFlyDB() const = 0;
-
-    virtual void setFlyDB(AbstractFlyDB *flyDB) = 0;
 
     virtual void setReplyBytes(uint64_t replyBytes) = 0;
 

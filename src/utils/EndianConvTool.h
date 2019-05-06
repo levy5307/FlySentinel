@@ -11,8 +11,8 @@
 class EndianConvTool {
 public:
     static EndianConvTool* getInstance() {
-        static EndianConvTool* instance = NULL;
-        if (NULL == instance) {
+        static EndianConvTool* instance = nullptr;
+        if (nullptr == instance) {
             instance = new EndianConvTool();
         }
         return instance;

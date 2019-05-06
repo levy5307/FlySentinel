@@ -80,7 +80,7 @@ size_t SocketFio::baseread(void *buf, size_t readLen) {
 }
 
 size_t SocketFio::basewrite(const void *buf, size_t len) {
-    if (NULL == buf || 0 == len) {
+    if (nullptr == buf || 0 == len) {
         return 0;
     }
 

@@ -9,7 +9,7 @@
 #include <list>
 #include <array>
 #include "BIODef.h"
-#include "interface/AbstractBIOHandler.h"
+#include "../coordinator/interface/AbstractBIOHandler.h"
 #include "BIOJob.h"
 
 /**

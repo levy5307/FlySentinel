@@ -45,7 +45,7 @@ public:
         }
 
     private:
-        std::shared_ptr<SocketFio> fio = NULL;
+        std::shared_ptr<SocketFio> fio = nullptr;
     };
 
 private:

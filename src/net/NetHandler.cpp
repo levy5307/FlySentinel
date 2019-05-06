@@ -21,9 +21,11 @@
 #include <poll.h>
 #include "NetHandler.h"
 #include "NetDef.h"
-#include "../def.h"
 #include "../utils/MiscTool.h"
 #include "../event/EventDef.h"
+
+extern AbstractLogFactory *logFactory;
+extern MiscTool *miscTool;
 
 NetHandler::NetHandler() {
     this->logHandler = logFactory->getLogger();
@@ -35,7 +37,7 @@ NetHandler::~NetHandler() {
 
 NetHandler* NetHandler::getInstance() {
     static NetHandler* instance;
-    if (NULL == instance) {
+    if (nullptr == instance) {
         instance = new NetHandler();
     }
 
@@ -169,11 +171,11 @@ int NetHandler::keepAlive(char *err, int fd, int interval) {
 }
 
 int NetHandler::tcpConnect(char *err, char *addr, int port) {
-    return tcpGenericConnect(err, addr, port, NULL, NET_CONNECT_NONE);
+    return tcpGenericConnect(err, addr, port, nullptr, NET_CONNECT_NONE);
 }
 
 int NetHandler::tcpNonBlockConnect(char *err, char *addr, int port) {
-    return tcpGenericConnect(err, addr, port, NULL, NET_CONNECT_NONBLOCK);
+    return tcpGenericConnect(err, addr, port, nullptr, NET_CONNECT_NONBLOCK);
 }
 
 int NetHandler::tcpNonBlockBindConnect(char *err,
@@ -209,18 +211,18 @@ int NetHandler::tcpAccept(char *err,
     // analysis the ip and port
     if (AF_INET == sa.sa_family) {
         struct sockaddr_in *sin = (struct sockaddr_in *) &sa;
-        if (NULL != ip) {
+        if (nullptr != ip) {
             inet_ntop(AF_INET, (void *)&sin->sin_addr, ip, iplen);
         }
-        if (NULL != port) {
+        if (nullptr != port) {
             *port = ntohs(sin->sin_port);
         }
     } else {
         struct sockaddr_in6 *sin = (struct sockaddr_in6 *) &sa;
-        if (NULL != ip) {
+        if (nullptr != ip) {
             inet_ntop(AF_INET6, (void*)&sin->sin6_addr, ip, iplen);
         }
-        if (NULL != port) {
+        if (nullptr != port) {
             *port = ntohs(sin->sin6_port);
         }
     }
@@ -247,7 +249,7 @@ int NetHandler::genericResolve(char *err,
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;  /* specify socktype to avoid dups */
 
-    if ((rv = getaddrinfo(host, NULL, &hints, &info)) != 0) {
+    if ((rv = getaddrinfo(host, nullptr, &hints, &info)) != 0) {
         setError(err, "%s", gai_strerror(rv));
         return -1;
     }
@@ -313,7 +315,7 @@ int NetHandler::tcpGenericConnect(char *err,
     }
 
     /** 逐步尝试所有目标地址信息，直到有一个可以连接上 */
-    for (p = servinfo; p != NULL; p = p->ai_next) {
+    for (p = servinfo; p != nullptr; p = p->ai_next) {
         /**
          * 创建并connect socket, 如果这个servinfo失败了，则尝试下一个
          **/
@@ -332,17 +334,17 @@ int NetHandler::tcpGenericConnect(char *err,
         }
 
         /** 如果设置了源地址，则绑定源地址；否则，使用系统默认绑定 */
-        if (NULL != source_addr) {
+        if (nullptr != source_addr) {
             int bound = 0;
             // 获得source地址信息
             if ((rv = getaddrinfo(source_addr,
-                    NULL, &hints, &bservinfo)) != 0) {
+                    nullptr, &hints, &bservinfo)) != 0) {
                 setError(err, "%s", gai_strerror(rv));
                 goto error;
             }
 
             // 绑定地址
-            for (b = bservinfo; b != NULL; b = b->ai_next) {
+            for (b = bservinfo; b != nullptr; b = b->ai_next) {
                 if (bind(s, b->ai_addr, b->ai_addrlen) != -1) {
                     bound = 1;
                     break;
@@ -371,7 +373,7 @@ int NetHandler::tcpGenericConnect(char *err,
         // conect成功
         goto end;
     }
-    if (p == NULL) {
+    if (p == nullptr) {
         setError(err, "creating socket: %s", strerror(errno));
     }
 
@@ -389,7 +391,7 @@ end:
      * 但是创建socket失败，则使用不传递source_addr的方式重试一次
      */
     if (-1 == s && source_addr && (flags & NET_CONNECT_BE_BINDING)) {
-        return tcpGenericConnect(err, addr, port, NULL, flags);
+        return tcpGenericConnect(err, addr, port, nullptr, flags);
     } else {
         return s;
     }
@@ -428,7 +430,7 @@ int NetHandler::tcpGenericServer(char *err,
         setError(err, "%s", gai_strerror(rv));
         return -1;
     }
-    for (p = servinfo; p != NULL; p = p->ai_next) {
+    for (p = servinfo; p != nullptr; p = p->ai_next) {
         if ((s = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
             continue;
 
@@ -456,7 +458,7 @@ int NetHandler::tcpGenericServer(char *err,
     }
 
     // 如果所有地址都执行失败，运行错误
-    if (NULL == p) {
+    if (nullptr == p) {
         setError(err, "unable to bind socket, errno: %d", errno);
         dealError(s, servinfo);
         return -1;
@@ -687,8 +689,8 @@ int NetHandler::peerToString(int fd, char *ip, size_t iplen, int *port) {
     struct sockaddr_storage sa;
     socklen_t salen = sizeof(sa);
 
-    if (NULL == ip || NULL == port) {
-        this->logHandler->logWarning("ip and port can`t be NULL!");
+    if (nullptr == ip || nullptr == port) {
+        this->logHandler->logWarning("ip and port can`t be nullptr!");
         return -1;
     }
 

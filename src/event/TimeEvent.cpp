@@ -2,6 +2,7 @@
 // Created by 赵立伟 on 2018/10/20.
 //
 
+#include <sys/time.h>
 #include "TimeEvent.h"
 
 TimeEvent::TimeEvent(int64_t id,
@@ -54,7 +55,7 @@ bool TimeEvent::operator== (const TimeEvent& timeEvent) const {
 
 int64_t getCurrentTime() {
     struct timeval tv;
-    gettimeofday(&tv,NULL);
+    gettimeofday(&tv,nullptr);
     return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 

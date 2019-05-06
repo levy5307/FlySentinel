@@ -3,17 +3,16 @@
 //
 
 #include <iostream>
+#include <vector>
 #include "CommandEntry.h"
+#include "CommandTableDef.h"
 
 /**
  * 命令列表：
  *     w-表示会修改db, 有该标志下，会将命令序列追加到aof文件中
  *     A-表示是访问db的key操作，此时在访问之前会判断该键是否已过期
  **/
-std::vector<CommandEntry* > flyDBCommandTable = {
-       new CommandEntry("version",     versionCommand,     1, "rF",  0, NULL, 1, 1, 1, 0, 0)
-};
-
+std::vector<CommandEntry* > flyDBCommandTable;
 
 CommandEntry::CommandEntry() {
 
@@ -138,13 +137,4 @@ int CommandEntry::getKeyStep() const {
 
 void CommandEntry::setKeyStep(int keyStep) {
     CommandEntry::keyStep = keyStep;
-}
-
-void versionCommand(const AbstractCoordinator* coordinator,
-                    std::shared_ptr<AbstractFlyClient> client) {
-    if (NULL == client) {
-        return;
-    }
-
-    client->addReply("FlyDB version: %s", coordinator->getFlyServer()->getVersion().c_str());
 }

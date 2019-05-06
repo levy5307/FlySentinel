@@ -6,12 +6,13 @@
 #include "TextConfigReader.h"
 #include "ConfigCache.h"
 #include "../dataStructure/dict/Dict.cpp"
+#include "../def.h"
 
 TextConfigReader::TextConfigReader(std::string &configfile) {
     if ('-' == configfile[0] && '\0' == configfile[1]) {
         this->fp = stdin;
     } else {
-        if (NULL == (this->fp = fopen(configfile.c_str(), "r"))) {
+        if (nullptr == (this->fp = fopen(configfile.c_str(), "r"))) {
             exit(1);
         }
     }
@@ -26,7 +27,7 @@ ConfigCache* TextConfigReader::loadConfig() {
     std::string config;
 
     // 从配置文件中依次读取配置 --> config
-    while (fgets(buf, CONFIG_MAX_LINE + 1, fp) != NULL) {
+    while (fgets(buf, CONFIG_MAX_LINE + 1, fp) != nullptr) {
         config += buf;
     }
 

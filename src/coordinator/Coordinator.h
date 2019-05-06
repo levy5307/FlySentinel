@@ -6,6 +6,8 @@
 #define FLYSENTINEL_COORDINATOR_H
 
 #include "interface/AbstractCoordinator.h"
+#include "../config/ConfigCache.h"
+#include "../config/base/BaseConfigReader.h"
 
 class Coordinator : public AbstractCoordinator {
 public:
@@ -15,13 +17,6 @@ public:
     AbstractNetHandler *getNetHandler() const;
     AbstractFlyClientFactory *getFlyClientFactory() const;
     AbstractEventLoop *getEventLoop() const;
-
-    /** fly object factory **/
-    AbstractFlyObjFactory *getFlyObjHashTableFactory() const;
-    AbstractFlyObjFactory *getFlyObjLinkedListFactory() const;
-    AbstractFlyObjFactory *getFlyObjSkipListFactory() const;
-    AbstractFlyObjFactory *getFlyObjIntSetFactory() const;
-    AbstractFlyObjFactory *getFlyObjStringFactory() const;
 
     /** LogHandler */
     AbstractLogHandler *getLogHandler() const;
@@ -33,24 +28,18 @@ private:
     AbstractNetHandler *netHandler;
     AbstractEventLoop *eventLoop;
     AbstractFlyClientFactory *flyClientFactory;
-    AbstractFlyObjFactory *flyObjHashTableFactory;
-    AbstractFlyObjFactory *flyObjLinkedListFactory;
-    AbstractFlyObjFactory *flyObjSkipListFactory;
-    AbstractFlyObjFactory *flyObjIntSetFactory;
-    AbstractFlyObjFactory *flyObjStringFactory;
     ConfigCache *configCache;
     BaseConfigReader *configReader;
-
 
     /**
      * logHandler
      */
-    AbstractLogHandler *logHandler = NULL;
+    AbstractLogHandler *logHandler = nullptr;
 
     /**
      * bio
      **/
-    AbstractBIOHandler *bioHandler = NULL;
+    AbstractBIOHandler *bioHandler = nullptr;
 };
 
 #endif //FLYSENTINEL_COORDINATOR_H

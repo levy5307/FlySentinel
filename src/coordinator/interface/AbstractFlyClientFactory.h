@@ -7,14 +7,11 @@
 
 #include "AbstractCoordinator.h"
 
-class AbstractFlyDB;
-
 class AbstractFlyClientFactory {
 public:
     virtual std::shared_ptr<AbstractFlyClient> getFlyClient(
             int fd,
             const AbstractCoordinator *coordinator,
-            AbstractFlyDB *flyDB,
             time_t nowt) = 0;
 };
 

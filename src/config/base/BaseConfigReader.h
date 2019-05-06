@@ -27,7 +27,7 @@ protected:
     void initConfigEntry();
 
     ConfigCache *configCache;
-    Dict<std::string, std::shared_ptr<ConfigEntry>>* configEntryTable;
+    Dict<std::string, std::shared_ptr<ConfigEntry> >* configEntryTable;
 };
 
 #endif //FLYSENTINEL_ABSTRACTCONFIGREADER_H

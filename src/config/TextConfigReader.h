@@ -8,7 +8,6 @@
 #include <string>
 #include "base/BaseConfigReader.h"
 #include "../utils/MiscTool.h"
-#include "../def.h"
 #include "ConfigCache.h"
 
 class TextConfigReader : public BaseConfigReader {

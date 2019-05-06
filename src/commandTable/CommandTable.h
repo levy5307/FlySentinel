@@ -23,7 +23,6 @@ public:
 private:
     const AbstractCoordinator* coordinator;
     Dict<std::string, CommandEntry*>* commands;
-    AbstractLogHandler *logHandler;
 };
 
 

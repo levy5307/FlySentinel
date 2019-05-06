@@ -6,11 +6,11 @@
 #include "Select.h"
 #include "EventDef.h"
 
-PollState::PollState(const AbstractEventLoop *eventLoop) {
+PollState::PollState(const AbstractCoordinator *coordinator) {
     FD_ZERO(&(this->rfds));
     FD_ZERO(&(this->wfds));
 
-    this->eventLoop = eventLoop;
+    this->coordinator = coordinator;
 }
 
 void PollState::add(int fd, int mask) {
@@ -37,8 +37,8 @@ void PollState::poll(struct timeval *tvp, std::map<int, int> &res) {
     memcpy(&this->_wfds, &this->wfds, sizeof(fd_set));
 
     // select并遍历获取事件
-    int retval = select(eventLoop->getMaxfd() + 1,
-            &this->_rfds, &this->_wfds, NULL, tvp);
+    AbstractEventLoop *eventLoop = coordinator->getEventLoop();
+    int retval = select(eventLoop->getMaxfd() + 1, &this->_rfds, &this->_wfds, nullptr, tvp);
     if (retval > 0) {
         for (int i = 0; i <= eventLoop->getMaxfd(); i++) {
             int eventMask = eventLoop->getFileEvents(i);

@@ -12,10 +12,8 @@ extern bool canResize;
 template<class KEY, class VAL>
 Dict<KEY, VAL>::Dict() {
     this->ht[0] = new HashTable<KEY, VAL>(HASH_TABLE_INITIAL_SIZE);
-    this->ht[1] = NULL;
+    this->ht[1] = nullptr;
     this->rehashIndex = -1;
-
-    this->logHandler = logFactory->getLogger();
 }
 
 template<class KEY, class VAL>
@@ -90,7 +88,7 @@ DictEntry<KEY, VAL>* Dict<KEY, VAL>::findEntry(const KEY key) {
     DictEntry<KEY, VAL>* entry = ht->findEntry(key);
 
     // 如果ht[0]中没有找到，并且正在进行rehash，则查找ht[1]
-    if (NULL == entry && isRehashing()) {
+    if (nullptr == entry && isRehashing()) {
         ht = this->ht[1];
         entry = ht->findEntry(key);
     }
@@ -101,11 +99,11 @@ DictEntry<KEY, VAL>* Dict<KEY, VAL>::findEntry(const KEY key) {
 template<class KEY, class VAL>
 DictEntry<KEY, VAL>* Dict<KEY, VAL>::getRandomEntry() {
     if (0 == this->size()) {
-        return NULL;
+        return nullptr;
     }
 
     /** 随机获取某个DictEntry列表(每个index对应一个DictEntry列表) */
-    DictEntry<KEY, VAL>* dictEntry = NULL;
+    DictEntry<KEY, VAL>* dictEntry = nullptr;
     uint32_t index = 0;
     if (this->isRehashing()) {
         // 先进行一步rehash
@@ -116,17 +114,17 @@ DictEntry<KEY, VAL>* Dict<KEY, VAL>::getRandomEntry() {
             dictEntry = (index > this->ht[0]->getSize())
                     ? this->ht[1]->getEntryBy(index - this->ht[0]->getSize())
                     : this->ht[0]->getEntryBy(index);
-        } while (NULL == dictEntry);
+        } while (nullptr == dictEntry);
     } else {
         do {
             index = this->ht[0]->getIndex(random());
             dictEntry = this->ht[0]->getEntryBy(index);
-        } while (NULL == dictEntry);
+        } while (nullptr == dictEntry);
     }
 
     int length = 0;
     DictEntry<KEY, VAL> *realEntry = dictEntry;
-    while (dictEntry != NULL) {
+    while (dictEntry != nullptr) {
         length++;
         dictEntry = dictEntry->getNext();
     }
@@ -150,7 +148,7 @@ int Dict<KEY, VAL>::fetchValue(const KEY key, VAL *val) {
 
     /** 查询key, 获取不到返回-1 */
     DictEntry<KEY, VAL>* entry = findEntry(key);
-    if (NULL == entry) {
+    if (nullptr == entry) {
         return -1;
     }
 
@@ -212,13 +210,13 @@ void Dict<KEY, VAL>::rehashSteps(uint32_t steps) {
 
     for (uint32_t i = 0; i < steps && !this->ht[0]->isEmpty(); i++) {
         // 找到存在元素的index
-        DictEntry<KEY, VAL>* entry = NULL;
-        while (NULL == entry && this->rehashIndex < this->ht[0]->getSize()) {
+        DictEntry<KEY, VAL>* entry = nullptr;
+        while (nullptr == entry && this->rehashIndex < this->ht[0]->getSize()) {
             entry = this->ht[0]->getEntryBy(this->rehashIndex++);
         }
 
         // 对该index下的链表中所有元素进行迁移
-        while (entry != NULL) {
+        while (entry != nullptr) {
             this->ht[1]->addEntry(entry->getKey(), entry->getVal());
             this->ht[0]->deleteEntry(entry->getKey());
             entry = entry->next;
@@ -229,7 +227,7 @@ void Dict<KEY, VAL>::rehashSteps(uint32_t steps) {
     if (this->ht[0]->isEmpty()) {
         delete this->ht[0];
         this->ht[0] = this->ht[1];
-        this->ht[1] = NULL;
+        this->ht[1] = nullptr;
         this->rehashIndex = -1;
     }
 
@@ -388,7 +386,7 @@ int Dict<KEY, VAL>::expand(uint32_t size) {
 template<class KEY, class VAL>
 uint32_t Dict<KEY, VAL>::slotNum() const {
     uint32_t size = this->ht[0]->getSize();
-    if (NULL != this->ht[1]) {
+    if (nullptr != this->ht[1]) {
         size += this->ht[1]->getSize();
     }
 
@@ -398,7 +396,7 @@ uint32_t Dict<KEY, VAL>::slotNum() const {
 template<class KEY, class VAL>
 uint32_t Dict<KEY, VAL>::size() const {
     uint32_t size = this->ht[0]->getUsed();
-    if (NULL != this->ht[1]) {
+    if (nullptr != this->ht[1]) {
         size += this->ht[1]->getUsed();
     }
 

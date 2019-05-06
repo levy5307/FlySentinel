@@ -6,7 +6,6 @@
 
 #include "DictEntry.cpp"
 #include "DictDef.h"
-#include "../../coordinator/interface/AbstractLogHandler.h"
 #include "../../coordinator/interface/AbstractCoordinator.h"
 
 template<class KEY, class VAL>
@@ -40,8 +39,6 @@ private:
     uint32_t size;
     uint32_t used;
     uint32_t mask;
-
-    AbstractLogHandler *logHandler;
 };
 
 #endif //FLYSENTINEL_HASHTABLE_H

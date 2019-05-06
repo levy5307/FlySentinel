@@ -22,7 +22,7 @@ EventLoop::EventLoop(const AbstractCoordinator *coordinator, int setSize) {
         this->fileEvents[i].setCoordinator(coordinator);
     }
     this->beforeSleepProc = beforeSleep;
-    this->afterSleepProc = NULL;
+    this->afterSleepProc = nullptr;
 }
 
 EventLoop::~EventLoop() {
@@ -34,7 +34,7 @@ EventLoop::~EventLoop() {
 void EventLoop::eventMain() {
     this->stopFlag = 0;
     while (!this->stopFlag) {
-        if (NULL != this->beforeSleepProc) {
+        if (nullptr != this->beforeSleepProc) {
             this->beforeSleepProc(this->coordinator);
         }
         this->processEvents(EVENT_ALL_EVENTS | EVENT_CALL_AFTER_SLEEP);
@@ -170,14 +170,14 @@ int EventLoop::processEvents(int flags) {
         struct timeval tv, *tvp;
 
         // 获取最新时间事件
-        TimeEvent* timeEvent = NULL;
+        TimeEvent* timeEvent = nullptr;
         if (0 != this->timeEvents.size()) {
             timeEvent = &this->timeEvents.front();
         }
 
         /* 如果获取到, 则等待至该时间发生
          * */
-        if (NULL != timeEvent) {
+        if (nullptr != timeEvent) {
             int64_t when = timeEvent->getWhen();
             int64_t nowt = getCurrentTime();
             if (when > nowt) {
@@ -195,14 +195,14 @@ int EventLoop::processEvents(int flags) {
                 tv.tv_sec = tv.tv_usec = 0;
                 tvp = &tv;
             } else {
-                tvp = NULL;
+                tvp = nullptr;
             }
         }
 
         // 获取文件事件（及网络io）
         std::map<int, int> pollRes;
         reinterpret_cast<PollState*>(this->apiData)->poll(tvp, pollRes);
-        if (afterSleepProc != NULL && flags & EVENT_CALL_AFTER_SLEEP) {
+        if (afterSleepProc != nullptr && flags & EVENT_CALL_AFTER_SLEEP) {
             this->afterSleepProc(this->coordinator);
         }
 
@@ -286,20 +286,14 @@ void EventLoop::createTimeEvent(uint64_t milliseconds, timeEventProc *proc,
 }
 
 void beforeSleep(const AbstractCoordinator *coordinator) {
-    AbstractFlyServer *flyServer = coordinator->getFlyServer();
-    AbstractReplicationHandler *replicationHandler = coordinator->getReplicationHandler();
-
+    // todo
     /** 删除flydb中的过期键 */
+    /**
+    // AbstractFlyServer *flyServer = coordinator->getFlyServer();
     if (flyServer->isActiveExpireEnable() && !replicationHandler->haveMasterhost()) {
         flyServer->activeExpireCycle(ACTIVE_EXPIRE_CYCLE_FAST);
     }
-
-    /** 真正的flush操作放在beforeSleep中:
-     *     保证flush操作在回复client之前,
-     *     即客户在收到相应的时候一定是已经flush持久化完毕了
-     **/
-    coordinator->getAofHandler()->flush(false);
-
-    /* 处理命令回复 */
+    // 处理命令回复
     flyServer->handleClientsWithPendingWrites();
+    */
 }

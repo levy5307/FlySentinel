@@ -33,7 +33,6 @@ class FlyClient : public AbstractFlyClient {
 public:
     FlyClient(int fd,
               const AbstractCoordinator *coordinator,
-              AbstractFlyDB *flyDB,
               time_t nowt);
     ~FlyClient();
     uint64_t getId() const;
@@ -108,10 +107,6 @@ public:
     void setReplyBytes(uint64_t replyBytes);
     uint64_t getReplyBytes() const;
 
-    /** db相关 */
-    AbstractFlyDB *getFlyDB() const;
-    void setFlyDB(AbstractFlyDB *flyDB);
-
 private:
     int addReplyToBuffer(const char *s, size_t len);
     int addReplyToReplyList(const char *s, size_t len);
@@ -145,7 +140,6 @@ private:
     int64_t bulkLen;
     size_t sendLen;                     // 记录发送长度，用于处理一次没有发送完的情况
 
-    AbstractFlyDB *flyDB;
     AbstractLogHandler *logHandler;
     const AbstractCoordinator *coordinator;
 };

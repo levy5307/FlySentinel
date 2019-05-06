@@ -22,11 +22,11 @@ bool BIOHandler::init() {
 
     /** init */
     for (int i = 0; i < BIO_NUM_OPS; i++) {
-        pthread_mutex_init(&mutex[i], NULL);
-        pthread_cond_init(&newjobCond[i], NULL);
-        pthread_cond_init(&stepCond[i], NULL);
+        pthread_mutex_init(&mutex[i], nullptr);
+        pthread_cond_init(&newjobCond[i], nullptr);
+        pthread_cond_init(&stepCond[i], nullptr);
         pending[i] = 0;
-        threads[i] = NULL;
+        threads[i] = nullptr;
     }
 
     return true;
@@ -83,26 +83,26 @@ uint64_t BIOHandler::waitStep(int type) {
 }
 
 void *BIOHandler::processBackgroundJobs(void *arg) {
-    if (NULL == arg) {
-        return NULL;
+    if (nullptr == arg) {
+        return nullptr;
     }
 
     uint64_t type = reinterpret_cast<uint64_t>(arg);
     if (type >= BIO_NUM_OPS) {
         logHandler->logWarning(
                 "Warning: bio thread started with wrong type %lu", type);
-        return NULL;
+        return nullptr;
     }
 
     /** 终止线程设置 */
-    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, nullptr);
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, nullptr);
 
     /** block SIGALARM for son thread */
     sigset_t sigset;
     sigemptyset(&sigset);
     sigaddset(&sigset, SIGALRM);
-    if (pthread_sigmask(SIG_BLOCK, &sigset, NULL)) {
+    if (pthread_sigmask(SIG_BLOCK, &sigset, nullptr)) {
         logHandler->logWarning(
                 "Warning: can't mask SIGALRM in bio.c thread: %s",
                 strerror(errno));
@@ -143,11 +143,11 @@ void *BIOHandler::processBackgroundJobs(void *arg) {
                 coordinator->getFdbHandler()->setBgsaveDone(true);
                 break;
             case BIO_LAZY_FREE:
-                if (NULL != bioJob->getArg1()) {
-                    reinterpret_cast<Dict<std::string, std::shared_ptr<FlyObj>>*>(bioJob->getArg1())->clear(NULL);
+                if (nullptr != bioJob->getArg1()) {
+                    reinterpret_cast<Dict<std::string, std::shared_ptr<FlyObj>>*>(bioJob->getArg1())->clear(nullptr);
                 }
-                if (NULL != bioJob->getArg2()) {
-                    reinterpret_cast<Dict<std::string, uint64_t>*>(bioJob->getArg2())->clear(NULL);
+                if (nullptr != bioJob->getArg2()) {
+                    reinterpret_cast<Dict<std::string, uint64_t>*>(bioJob->getArg2())->clear(nullptr);
                 }
                 break;
             default:
@@ -170,7 +170,7 @@ pthread_t* BIOHandler::createBackgroundJob(int type,
                                            void *arg2,
                                            void *arg3) {
     /** 懒汉式创建 */
-    if (NULL == threads[type]) {
+    if (nullptr == threads[type]) {
         pthread_attr_t attr;
         /** init stack size */
         initStackSize(&attr);
@@ -187,7 +187,7 @@ pthread_t* BIOHandler::createBackgroundJob(int type,
     }
 
     /** 创建job */
-    BIOJob* job = new BIOJob(time(NULL), arg1, arg2, arg3);
+    BIOJob* job = new BIOJob(time(nullptr), arg1, arg2, arg3);
 
     /** 将job加入队列中，并发送条件信号 */
     pthread_mutex_lock(&mutex[type]);
@@ -203,12 +203,12 @@ void BIOHandler::killThreads(void) {
     int err;
     for (int i = 0; i < BIO_NUM_OPS; i++) {
         /** 当前进程没有创建过 */
-        if (NULL == threads[i]) {
+        if (nullptr == threads[i]) {
             continue;
         }
 
         if (0 == pthread_cancel(threads[i])) {
-            if (0 == (err = pthread_join(threads[i], NULL))) {
+            if (0 == (err = pthread_join(threads[i], nullptr))) {
                 logHandler->logWarning(
                         "Bio thread for job type #%d terminated", i);
             } else {
@@ -223,5 +223,5 @@ void BIOHandler::killThreads(void) {
 void BIOHandler::killThread(int type) {
     pthread_t thread = threads[type];
     pthread_kill(thread, SIGUSR1);
-    threads[type] = NULL;
+    threads[type] = nullptr;
 }

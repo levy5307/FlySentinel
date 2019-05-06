@@ -8,7 +8,7 @@
 #include <string>
 
 #include "../coordinator/interface/AbstractFlyClient.h"
-#include "../flyServer/interface/AbstractFlyServer.h"
+#include "../coordinator/interface/AbstractCoordinator.h"
 
 typedef void (*commandProc)(const AbstractCoordinator*,
                             std::shared_ptr<AbstractFlyClient>);
@@ -120,8 +120,6 @@ private:
     int keyStep;
     uint64_t microseconds, calls;
 };
-
-void versionCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
 
 extern std::vector<CommandEntry*> flyDBCommandTable;
 

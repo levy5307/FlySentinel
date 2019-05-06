@@ -11,7 +11,7 @@ configMap loglevelMap[] = {
         {"verbose", LL_VERBOSE},
         {"notice",  LL_NOTICE},
         {"warning", LL_WARNING},
-        {NULL, 0}
+        {nullptr, 0}
 };
 
 configMap syslogFacilityMap[] = {
@@ -24,7 +24,7 @@ configMap syslogFacilityMap[] = {
         {"local5",  LOG_LOCAL5},
         {"local6",  LOG_LOCAL6},
         {"local7",  LOG_LOCAL7},
-        {NULL, 0}
+        {nullptr, 0}
 };
 
 BaseConfigReader::BaseConfigReader() {
@@ -51,7 +51,7 @@ void BaseConfigReader::parseConfig(std::vector<std::string> &words) {
     /** 查找相应的ConfigEntry */
     DictEntry<std::string, std::shared_ptr<ConfigEntry>>* dictEntry =
             this->configEntryTable->findEntry(words[0]);
-    if (NULL == dictEntry) {
+    if (nullptr == dictEntry) {
         return;
     }
 
@@ -65,7 +65,7 @@ void BaseConfigReader::parseConfig(std::vector<std::string> &words) {
 }
 
 int configMapGetValue(configMap *config, const char *name) {
-    while (config->name != NULL) {
+    while (config->name != nullptr) {
         if (!strcasecmp(config->name, name)) {
             return config->value;
         }
@@ -81,7 +81,7 @@ void logFileConfigProc(ConfigCache* configCache, std::vector<std::string> &words
     if ('\0' != logfile[0]) {       // log文件名不为空
         // 尝试打开一次，查看是否可以正常打开
         FILE *logfd = fopen(logfile, "a");
-        if (NULL == logfd) {
+        if (nullptr == logfd) {
             std::cout << "Can not open log file: " << logfile << std::endl;
             exit(1);
         }

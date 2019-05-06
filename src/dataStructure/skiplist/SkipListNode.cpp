@@ -13,12 +13,12 @@ template<class T>
 SkipListNode<T>::SkipListNode(const T &obj, double score) {
     this->obj = obj;
     this->score = score;
-    this->previous = NULL;
+    this->previous = nullptr;
     this->levels.resize(SKIP_LIST_MAX_LEVEL);
 }
 
 template<class T>
-std::vector<SkipListLevel<T>> &SkipListNode<T>::getLevels() {
+std::vector<SkipListLevel<T> > &SkipListNode<T>::getLevels() {
     return levels;
 }
 

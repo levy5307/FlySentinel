@@ -8,6 +8,8 @@
 #include <sys/select.h>
 #include <map>
 
+#include "../coordinator/interface/AbstractCoordinator.h"
+
 class PollState {
 public:
     PollState(const AbstractCoordinator *coordinator);
@@ -20,7 +22,7 @@ private:
     // 当select()之后再去使用fd会不安全, 因此保留一个fd的备份
     fd_set _rfds, _wfds;
 
-    AbstractEventLoop *eventLoop;
+    const AbstractCoordinator *coordinator;
 };
 
 #endif //FLYSENTINEL_SELECT_H

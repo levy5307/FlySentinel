@@ -43,14 +43,14 @@ public:
         }
 
     private:
-        std::shared_ptr<FileFio> fio = NULL;
+        std::shared_ptr<FileFio> fio = nullptr;
     };
 
 private:
     size_t baseread(void *buf, size_t len);
     size_t basewrite(const void *buf, size_t len);
 
-    FILE *fp = NULL;
+    FILE *fp = nullptr;
     off_t buffered = 0;                     // 距离上一次fsync所写入的字节数
     off_t autosync = 0;                     // 当写入数据>autosync时，执行fsync
 };

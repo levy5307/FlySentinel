@@ -17,7 +17,7 @@ template<class T>
 SkipList<T>::~SkipList() {
     SkipListNode<T>* prev = this->header;
     SkipListNode<T>* node = prev->getLevels()[0].next;
-    while (NULL != node) {
+    while (nullptr != node) {
         delete node;
         node = prev->getLevels()[0].next;
     }
@@ -76,7 +76,7 @@ void SkipList<T>::insertNode(double score, const T &obj) {
     for (int i = finalLevel - 1; i >= 0; i--) {
         rank[i] = rank[i+1];                  // 哨兵用于这里
         SkipListNode<T>* next = temp->getLevels()[i].next;
-        while (NULL != next && (next->getScore() < score
+        while (nullptr != next && (next->getScore() < score
                    || (next->getScore() == score
                        && next->getObj() < obj))) {
             rank[i] += temp->getLevels()[i].span;
@@ -95,8 +95,8 @@ void SkipList<T>::insertNode(double score, const T &obj) {
 
     // 设置tailer以及previous指针
     SkipListNode<T> *nodeToInsert = new SkipListNode<T>(obj, score);
-    nodeToInsert->setPrevious(forwards[0] == header ? NULL : forwards[0]);
-    if (NULL == forwards[0]->getLevels()[0].next) {
+    nodeToInsert->setPrevious(forwards[0] == header ? nullptr : forwards[0]);
+    if (nullptr == forwards[0]->getLevels()[0].next) {
         this->tailer = nodeToInsert;
     } else {
         forwards[0]->getLevels()[0].next->setPrevious(nodeToInsert);
@@ -112,7 +112,7 @@ void SkipList<T>::insertNode(double score, const T &obj) {
 
     // 如果level小于跳跃表的level，将没有进行插入的level的前节点span+1
     for (uint32_t i = randLevel; i < this->level; i++) {
-        if (forwards[i]->getLevels()[i].next != NULL) {
+        if (forwards[i]->getLevels()[i].next != nullptr) {
             forwards[i]->getLevels()[i].span += 1;
         }
     }
@@ -131,7 +131,7 @@ template<class T>
 uint8_t SkipList<T>::randomLevel() {
     uint32_t maxNum = 1 << (SKIP_LIST_MAX_LEVEL - 1);
 
-    srand((unsigned)time(NULL));
+    srand((unsigned)time(nullptr));
     uint32_t randNum = ((rand() & 0xFFFF) << 16 | (rand() & 0xFFFF)) % maxNum;
 
     // 根据随机数获取具体的level
@@ -164,8 +164,8 @@ int SkipList<T>::deleteNode(double score, const T &obj, SkipListNode<T>** res) {
     for (int l = this->level - 1; l >= 0; l--) {
         SkipListNode<T>* prevNode = this->header;
         SkipListNode<T>* node = prevNode->getLevels()[l].next;
-        // 找到node==NULL或者score、obj都相等的node
-        while (node != NULL
+        // 找到node==nullptr或者score、obj都相等的node
+        while (node != nullptr
                && (node->getScore() < score
                    || node->getObj() < obj)) {
             prevNode = node;
@@ -175,13 +175,13 @@ int SkipList<T>::deleteNode(double score, const T &obj, SkipListNode<T>** res) {
     }
 
     // 没有找到符合条件的node
-    if (NULL == forwards[0]->getLevels()[0].next
+    if (nullptr == forwards[0]->getLevels()[0].next
         || (forwards[0]->getLevels()[0].next->getScore() != score
             && forwards[0]->getLevels()[0].next->getObj() < obj)) {
         return -1;
     } else {  // 处理previous指针
         SkipListNode<T>* node = *res = forwards[0]->getLevels()[0].next;
-        if (NULL == node->getLevels()[0].next) {
+        if (nullptr == node->getLevels()[0].next) {
             this->tailer = forwards[0];
         } else {
             node->getLevels()[0].next->setPrevious(forwards[0]);
@@ -192,12 +192,12 @@ int SkipList<T>::deleteNode(double score, const T &obj, SkipListNode<T>** res) {
     uint8_t resvLevel = this->level;
     for (int i = 0; i < resvLevel; i++) {
         SkipListNode<T>* node = forwards[i]->getLevels()[i].next;
-        // 如果从该层开始找不到待删除节点并且forward的下一个节点是NULL，上面的那些层也不必找了
-        if (NULL == node) {
+        // 如果从该层开始找不到待删除节点并且forward的下一个节点是nullptr，上面的那些层也不必找了
+        if (nullptr == node) {
             break;
         } else {
             // 该层只剩header和待删除节点，那么level-1
-            if (forwards[i] == this->header && NULL == node->getLevels()[i].next) {
+            if (forwards[i] == this->header && nullptr == node->getLevels()[i].next) {
                 this->level--;
             }
 
@@ -220,11 +220,11 @@ uint32_t SkipList<T>::getRank(double score, const T &obj) {
 
         /**
           * 如果next小的话，往后遍历。该循环停下来有三个条件：
-          *      1.next==NULL
+          *      1.next==nullptr
           *      2.找到合适的node
           *      3.当前node超过了查找的值，此时需要向下一层寻找
          **/
-        while (next != NULL
+        while (next != nullptr
                && (next->getScore() < score
                    || *(next->getObj()) < *obj)) {
             prev = next;
@@ -233,7 +233,7 @@ uint32_t SkipList<T>::getRank(double score, const T &obj) {
         }
 
         // 如果找到了，直接返回
-        if (next != NULL
+        if (next != nullptr
             && next->getScore() == score
             && *(next->getObj()) < *obj) {
             totalSpan += prev->getLevels()[l].span;
@@ -249,7 +249,7 @@ SkipListNode<T>* SkipList<T>::getNodeByRank(uint32_t rank) {
     SkipListNode<T>* node = this->header;
 
     for (int l = this->level - 1; l >= 0; l--) {
-        while (node->getLevels()[l].next != NULL
+        while (node->getLevels()[l].next != nullptr
                && node->getLevels()[l].span < rank) {
             rank -= node->getLevels()[l].span;
             node = node->getLevels()[l].next;
@@ -260,7 +260,7 @@ SkipListNode<T>* SkipList<T>::getNodeByRank(uint32_t rank) {
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 template<class T>
@@ -292,20 +292,20 @@ SkipListNode<T>* SkipList<T>::firstInRange(SkipListRange range) {
     SkipListNode<T>* node;
     for (int l = this->level - 1; l >= 0; l--) {
         node = prev->getLevels()[l].next;
-        while (node != NULL && node->scoreLtRange(range)) {
+        while (node != nullptr && node->scoreLtRange(range)) {
             prev = node;
             node = prev->getLevels()[l].next;
         }
 
         // 找到第一个属于范围内的节点，并且prev对应的span等于1
-        if (node != NULL
+        if (node != nullptr
             && node->scoreInRange(range)
             && 1 == prev->getLevels()[l].span) {
             return node;
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 template<class T>
@@ -315,7 +315,7 @@ SkipListNode<T>* SkipList<T>::lastInRange(SkipListRange range) {
     for (int l = this->level - 1; l >= 0; l--) {
         node = prev->getLevels()[l].next;
         // 找到该层score > range的节点，或者是找到链表的最后一个节点
-        while (node != NULL && !node->scoreGtRange(range)) {
+        while (node != nullptr && !node->scoreGtRange(range)) {
             prev = node;
             node = prev->getLevels()[l].next;
         }
@@ -325,30 +325,30 @@ SkipListNode<T>* SkipList<T>::lastInRange(SkipListRange range) {
          * 1.prev到node的跨度只有1或者prev是链表最后一个节点
          * 2.prev->score在range范围内
          */
-        if ((1 == prev->getLevels()[l].span || node == NULL)
+        if ((1 == prev->getLevels()[l].span || node == nullptr)
             && prev->scoreInRange(range)) {
             return prev;
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 template<class T>
 uint32_t SkipList<T>::deleteRangeByScore(SkipListRange range) {
     SkipListNode<T>* node = firstInRange(range);
-    if (node == NULL) {
+    if (node == nullptr) {
         return 0;
     }
 
     // 获取前一个节点
     SkipListNode<T>* prev = node->getPrevious();
-    if (NULL == prev) {
+    if (nullptr == prev) {
         prev = this->header;
     }
 
     int removed = 0;
-    while (node != NULL && node->scoreInRange(range)) {
+    while (node != nullptr && node->scoreInRange(range)) {
         deleteNode(node);
         this->length--;
         removed++;
@@ -370,7 +370,7 @@ uint32_t SkipList<T>::deleteRangeByRank(uint32_t start, uint32_t end) {
     // 找到第一个在[start, end]范围内的node
     SkipListNode<T>* node = this->header;
     for (int l = this->level - 1; l >= 0; l--) {
-        while (node->getLevels()[l].next != NULL
+        while (node->getLevels()[l].next != nullptr
                && totalSpan + node->getLevels()[l].span < start) {
             totalSpan += node->getLevels()[l].span;
             node = node->getLevels()[l].next;
@@ -390,7 +390,7 @@ uint32_t SkipList<T>::deleteRangeByRank(uint32_t start, uint32_t end) {
     // 依次删除所有范围内节点
     SkipListNode<T>* prev = node;
     node = prev->getLevels()[0].next;
-    while (node != NULL && totalSpan <= end) {
+    while (node != nullptr && totalSpan <= end) {
         deleteNode(node);
         this->length--;
         removed++;
@@ -413,14 +413,14 @@ void SkipList<T>::scanAll(void (*scanProc)(void* priv, const T &obj),
 
 template<class T>
 int SkipList<T>::deleteNode(SkipListNode<T>* node) {
-    if (NULL == node) {
+    if (nullptr == node) {
         return -1;
     }
 
     // 对每一层做摘除操作
     int res = 0;
     SkipListNode<T>* prev = node->getPrevious();
-    if (NULL == prev) {
+    if (nullptr == prev) {
         prev = this->header;
     }
     uint8_t resvLevel = this->level;
@@ -428,13 +428,13 @@ int SkipList<T>::deleteNode(SkipListNode<T>* node) {
         if (prev->getLevels()[l].next == node) {
             prev->getLevels()[l].span += node->getLevels()[l].span - 1;
             prev->getLevels()[l].next = node->getLevels()[l].next;
-            if (prev == this->header && NULL == node->getLevels()[l].next) {
+            if (prev == this->header && nullptr == node->getLevels()[l].next) {
                 this->level--;
             }
             res = 1;
         } else {
-            // 如果从该层开始找不到待删除节点并且prev的下一个节点是NULL，上面的那些层也不必找了
-            if (prev->getLevels()[l].next == NULL) {
+            // 如果从该层开始找不到待删除节点并且prev的下一个节点是nullptr，上面的那些层也不必找了
+            if (prev->getLevels()[l].next == nullptr) {
                 break;
             } else {
                 prev->getLevels()[l].span--;
@@ -443,7 +443,7 @@ int SkipList<T>::deleteNode(SkipListNode<T>* node) {
     }
 
     // 设置previous及tailer
-    if (NULL == node->getLevels()[0].next) {
+    if (nullptr == node->getLevels()[0].next) {
         this->tailer = prev;
     } else {
         node->getLevels()[0].next->setPrevious(prev);

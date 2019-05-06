@@ -12,6 +12,8 @@
 #include "AbstractBIOHandler.h"
 #include "AbstractLogHandler.h"
 
+class AbstractFlyClientFactory;
+
 class AbstractCoordinator {
 public:
 
@@ -20,13 +22,6 @@ public:
     virtual AbstractFlyClientFactory *getFlyClientFactory() const = 0;
 
     virtual AbstractEventLoop *getEventLoop() const = 0;
-
-    /** fly object factory **/
-    virtual AbstractFlyObjFactory *getFlyObjHashTableFactory() const = 0;
-    virtual AbstractFlyObjFactory *getFlyObjLinkedListFactory() const = 0;
-    virtual AbstractFlyObjFactory *getFlyObjSkipListFactory() const = 0;
-    virtual AbstractFlyObjFactory *getFlyObjIntSetFactory() const = 0;
-    virtual AbstractFlyObjFactory *getFlyObjStringFactory() const = 0;
 
     /** LogHandler */
     virtual AbstractLogHandler *getLogHandler() const = 0;

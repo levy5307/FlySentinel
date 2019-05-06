@@ -7,7 +7,6 @@
 #include <sys/time.h>
 #include <zconf.h>
 #include "FileLogHandler.h"
-#include "../def.h"
 #include "LogDef.h"
 
 char* FileLogHandler::logfile = NULL;

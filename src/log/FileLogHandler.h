@@ -5,6 +5,7 @@
 #ifndef FLYSENTINEL_LOGHANDLER_H
 #define FLYSENTINEL_LOGHANDLER_H
 
+#include <stdarg.h>
 #include "../coordinator/interface/AbstractLogHandler.h"
 
 class FileLogHandler : public AbstractLogHandler {

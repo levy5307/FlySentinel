@@ -12,7 +12,6 @@
 
 CommandTable::CommandTable(const AbstractCoordinator* coordinator) {
     this->commands = new Dict<std::string, CommandEntry*>();
-    this->logHandler = logFactory->getLogger();
     this->coordinator = coordinator;
     this->populateCommand();
 }
@@ -67,7 +66,6 @@ void CommandTable::populateCommand() {
                     entry->addFlag(CMD_FAST);
                     break;
                 default:
-                    logHandler->logWarning("Unrecognized flag type! %c", *f);
                     exit(1);
             }
             f++;
@@ -79,7 +77,7 @@ void CommandTable::populateCommand() {
 bool CommandTable::dealWithCommand(std::shared_ptr<AbstractFlyClient> flyClient) {
     std::string *command = reinterpret_cast<std::string*>(flyClient->getArgv()[0]->getPtr());
     DictEntry<std::string, CommandEntry*>* dictEntry = this->commands->findEntry(*command);
-    if (NULL == dictEntry) {
+    if (nullptr == dictEntry) {
         flyClient->addReply("wrong command type: %s", command);
         return -1;
     }
@@ -92,23 +90,8 @@ bool CommandTable::dealWithCommand(std::shared_ptr<AbstractFlyClient> flyClient)
         return -1;
     }
 
-    time_t now = getCurrentTime();
     /** 处理命令 */
     dictEntry->getVal()->getProc()(this->coordinator, flyClient);
 
-    time_t now2 = getCurrentTime();
-    time_t use_time = now2 - now;
-    coordinator->getFlyServer()->PushSlowlogIfNeed(flyClient, now, use_time);
-
-    /** 添加命令序列到相应的缓冲中 */
-    if (dictEntry->getVal()->IsWrite()) {
-        coordinator->getAofHandler()->feedAppendOnlyFile(
-                flyClient->getFlyDB()->getId(),
-                flyClient->getArgv(),
-                flyClient->getArgc());
-        return true;
-    }
-
     return false;
 }
-

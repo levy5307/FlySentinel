@@ -14,8 +14,8 @@
 class MiscTool {
 public:
     static MiscTool* getInstance () {
-        static MiscTool *instance = NULL;
-        if (NULL == instance) {
+        static MiscTool *instance = nullptr;
+        if (nullptr == instance) {
             instance = new MiscTool();
         }
         return instance;
@@ -61,7 +61,7 @@ public:
 
         // 获取当前路径
         char cwd[1024];
-        if (NULL == getcwd(cwd, sizeof(cwd))) {
+        if (nullptr == getcwd(cwd, sizeof(cwd))) {
             return -1;
         }
 
@@ -77,7 +77,7 @@ public:
 
         // 尝试打开一次文件，用于查看是否存在该文件
         FILE *fp;
-        if (NULL == (fp = fopen(fileName.c_str(), "r"))) {
+        if (nullptr == (fp = fopen(fileName.c_str(), "r"))) {
             return -1;
         }
         fclose(fp);
@@ -114,7 +114,7 @@ public:
         struct timeval tv;
         uint64_t ust;
 
-        gettimeofday(&tv, NULL);
+        gettimeofday(&tv, nullptr);
         ust = ((uint64_t)tv.tv_sec) * 1000000;
         ust += tv.tv_usec;
         return ust;
@@ -132,7 +132,7 @@ public:
         uint64_t val = 0;
         unsigned int digits;
 
-        if (NULL != err) {
+        if (nullptr != err) {
             *err = 0;
         }
 
@@ -160,7 +160,7 @@ public:
         } else if (!strcasecmp(u, "gb")) {
             mul = 1024L*1024*1024;
         } else {
-            if (NULL != err) {
+            if (nullptr != err) {
                 *err = 1;
             }
             return 0;
@@ -170,7 +170,7 @@ public:
          * the digit (without the unit) into a number. */
         digits = u - p;
         if (digits >= sizeof(buf)) {
-            if (NULL != err) {
+            if (nullptr != err) {
                 *err = 1;
             }
             return 0;
@@ -182,7 +182,7 @@ public:
         errno = 0;
         val = strtoll(buf, &endptr, 10);
         if ((val == 0 && errno == EINVAL) || *endptr != '\0') {
-            if (NULL != err) {
+            if (nullptr != err) {
                 *err = 1;
             }
             return 0;
@@ -206,11 +206,11 @@ public:
              * 这样做我们是为了获取非线性彭专的字符串，并不是基于加密安全考虑
              **/
             FILE *fp = fopen("/dev/urandom", "r");
-            if (NULL != fp && fread(seed, sizeof(seed), 1, fp) == 1) {
+            if (nullptr != fp && fread(seed, sizeof(seed), 1, fp) == 1) {
                 seed_initialized = 1;
             }
 
-            if (NULL != fp) {
+            if (nullptr != fp) {
                 fclose(fp);
             }
         }
@@ -245,7 +245,7 @@ public:
             pid_t pid = getpid();
 
             /** 先利用当前时间和进程pid */
-            gettimeofday(&tv, NULL);
+            gettimeofday(&tv, nullptr);
             if (l >= sizeof(tv.tv_usec)) {
                 memcpy(x, &tv.tv_usec, sizeof(tv.tv_usec));
                 l -= sizeof(tv.tv_usec);

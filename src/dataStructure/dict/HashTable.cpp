@@ -4,20 +4,15 @@
 #include <iostream>
 #include <functional>
 #include "HashTable.h"
-#include "../../log/FileLogHandler.h"
-#include "../../log/FileLogFactory.h"
-#include "../../def.h"
 
 template<class KEY, class VAL>
 HashTable<KEY, VAL>::HashTable(uint32_t size) : size(size) {
     this->table = new DictEntry<KEY, VAL>*[size];
     for (uint32_t i = 0; i < size; i++) {
-        this->table[i] = NULL;
+        this->table[i] = nullptr;
     }
     this->used = 0;
     this->mask = size - 1;
-
-    this->logHandler = logFactory->getLogger();
 }
 
 template<class KEY, class VAL>
@@ -41,7 +36,7 @@ int HashTable<KEY, VAL>::scanEntries(
         int (*scanProc)(void* priv, const KEY key, const VAL val),
         void* priv) {
     DictEntry<KEY, VAL>* entry = this->getEntryBy(index);
-    while (NULL != entry) {
+    while (nullptr != entry) {
         if (-1 == scanProc(priv, entry->getKey(), entry->getVal())) {
             return -1;
         }
@@ -56,7 +51,6 @@ int HashTable<KEY, VAL>::addEntry(const KEY key, const VAL val) {
 
     // 判断是否已经有相同的键，如果有，则不能继续插入
     if (hasKey(key)) {
-        this->logHandler->logWarning("have same key in ht!");
         return -1;
     }
 
@@ -74,20 +68,20 @@ template<class KEY, class VAL>
 DictEntry<KEY, VAL>* HashTable<KEY, VAL>::findEntry(const KEY key) {
     uint32_t index = getIndexWithKey(key);
     DictEntry<KEY, VAL>* node = this->table[index];
-    while (node != NULL) {
+    while (node != nullptr) {
         if (node->key == key) {
            return node;
         }
         node = node->next;
     }
-    return NULL;
+    return nullptr;
 }
 
 template<class KEY, class VAL>
 int HashTable<KEY, VAL>::deleteEntry(const KEY key) {
     uint32_t index = getIndexWithKey(key);
     DictEntry<KEY, VAL>* node = this->table[index];
-    if (node != NULL) {
+    if (node != nullptr) {
         // 如果要删除的key是头结点
         if (node->key == key) {
             this->table[index] = node->next;
@@ -97,7 +91,7 @@ int HashTable<KEY, VAL>::deleteEntry(const KEY key) {
         }
 
         // 如果不是头结点，则查找链表中是否有该节点
-        while (node->next != NULL) {
+        while (node->next != nullptr) {
             if (node->next->key == key) {
                 DictEntry<KEY, VAL>* tmp = node->next;
                 node->next = node->next->next;
@@ -114,7 +108,7 @@ int HashTable<KEY, VAL>::deleteEntry(const KEY key) {
 
 template<class KEY, class VAL>
 bool HashTable<KEY, VAL>::hasKey(const KEY key) {
-    return this->findEntry(key) != NULL;
+    return this->findEntry(key) != nullptr;
 }
 
 template<class KEY, class VAL>
@@ -173,13 +167,13 @@ void HashTable<KEY, VAL>::clear(void(callback)(AbstractCoordinator *)) {
             return;
         }
 
-        if (NULL != callback && 0 == i % 65535) {
+        if (nullptr != callback && 0 == i % 65535) {
             extern AbstractCoordinator *coordinator;
             callback(coordinator);
         }
 
         DictEntry<KEY, VAL> *dictEntry = this->table[i];
-        while (dictEntry != NULL) {
+        while (dictEntry != nullptr) {
             DictEntry<KEY, VAL> *next = dictEntry->getNext();
             delete dictEntry;
             dictEntry = next;

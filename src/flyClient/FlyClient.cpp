@@ -2,23 +2,26 @@
 // Created by 赵立伟 on 2018/10/18.
 //
 
+#include <cstdio>
 #include "FlyClient.h"
 #include "../net/NetDef.h"
 #include "ClientDef.h"
 #include "../io/MemFio.h"
+#include "../utils/MiscTool.h"
+
+extern MiscTool *miscTool;
 
 FlyClient::FlyClient(int fd,
                      const AbstractCoordinator *coordinator,
-                     AbstractFlyDB *flyDB,
                      time_t nowt) {
     this->coordinator = coordinator;
     this->id = 0;
     this->fd = fd;
-    this->name = NULL;
+    this->name = nullptr;
     this->flags = 0;
     this->argc = 0;
-    this->argv = NULL;
-    this->cmd = NULL;
+    this->argv = nullptr;
+    this->cmd = nullptr;
     this->authentiated = 0;
     this->createTime = this->lastInteractionTime = nowt;
     this->softLimitTime = 0;
@@ -28,8 +31,6 @@ FlyClient::FlyClient(int fd,
     this->multiBulkLen = 0;
     this->bulkLen = 0;
     this->sendLen = 0;
-    this->flyDB = flyDB;
-    this->slaveIP[0] = '\0';
 }
 
 FlyClient::~FlyClient() {
@@ -74,12 +75,12 @@ std::shared_ptr<FlyObj> *FlyClient::getArgv() const {
 }
 
 void FlyClient::freeArgv() {
-    if (NULL != this->argv) {
+    if (nullptr != this->argv) {
         for (int i = 0; i < this->argc; i++) {
-            this->argv[i] = NULL;
+            this->argv[i] = nullptr;
         }
         delete[] this->argv;
-        this->argv = NULL;
+        this->argv = nullptr;
     }
     this->argc = 0;
 }
@@ -160,10 +161,6 @@ void FlyClient::addToQueryBuf(const std::string &str) {
     this->queryBuf += str;
 }
 
-void FlyClient::addToPendingQueryBuf(const std::string &str) {
-    this->pendingQueryBuf += str;
-}
-
 int FlyClient::getQueryBufSize() const {
     return this->queryBuf.length();
 }
@@ -225,9 +222,6 @@ void FlyClient::trimQueryBuf(int begin, int end) {
 }
 
 int FlyClient::processInputBuffer() {
-    /** 保存处理命令前的offset */
-    int64_t prevOffset = this->getReploff();
-
     while (this->getQueryBufSize() > 0) {
         // 第一个字符是'*'代表是整体multibulk串;
         // reqtype=multibulk代表是上次读取已经处理了部分的multibulk
@@ -243,22 +237,9 @@ int FlyClient::processInputBuffer() {
         }
     }
 
-    /**
-     * 设置repl off
-     *  因为处理的时候有可能没有将pending buf中的所有数据都处理完，而存留了部分，
-     *  所以在处理repl off时需要根据read repl off - 留存的数据size
-     **/
-    if (this->getFlags() & CLIENT_MASTER) {
-        this->setReploff(this->getReadReploff() - this->getPendingBuf().size());
-    }
-
     /** 处理命令 */
-    bool isWrite = coordinator->getFlyServer()->dealWithCommand(this->getFd());
-
-    /** 命令传播 */
-    if (isWrite > 0) {
-        coordinator->getFlyServer()->propagate(this->getFd(), prevOffset);
-    }
+    // todo
+    //coordinator->getFlyServer()->dealWithCommand(this->getFd());
 }
 
 int FlyClient::writeToClient(int handlerInstalled) {
@@ -309,13 +290,11 @@ int FlyClient::writeToClient(int handlerInstalled) {
 
     // 如果写入过程出错，删除flyClient
     if (onceCount <= 0 && EAGAIN != errno) {
-        coordinator->getFlyServer()->freeClientAsync(this->getFd());
+        // todo
+        //coordinator->getFlyServer()->freeClientAsync(this->getFd());
         close(fd);
         return -1;
     }
-
-    // 统计服务端总共发送的字节数
-    coordinator->getFlyServer()->addToStatNetInputBytes(totalCount);
 
     // 如果全部发送完
     if (this->hasNoPending()) {
@@ -326,7 +305,8 @@ int FlyClient::writeToClient(int handlerInstalled) {
         }
 
         if (this->getFlags() & CLIENT_CLOSE_AFTER_REPLY) {
-            coordinator->getFlyServer()->freeClientAsync(this->getFd());
+            // todo
+            //coordinator->getFlyServer()->freeClientAsync(this->getFd());
             close(fd);
             return -1;
         }
@@ -420,7 +400,7 @@ int FlyClient::analyseMultiBulkLen(size_t &pos) {
 
     pos += sizeof("\r\n") - 1;
     /**
-     * 如果multi bulk len < 0, 表示null, 该multi bulk命令读取完毕
+     * 如果multi bulk len < 0, 表示nullptr, 该multi bulk命令读取完毕
      * 此时由于client->multiBulkLen = 0, 不会执行外围函数的后续bulk解析
      */
     if (multiBulkLen < 0) {
@@ -549,7 +529,8 @@ int FlyClient::prepareClientToWrite() {
      * 需要先将其标记并放入flyserver的pending client list中
      */
     if (hasNoPending() && !(this->flags & CLIENT_PENDING_WRITE)) {
-        this->coordinator->getFlyServer()->addToClientsPendingToWrite(this->getFd());
+        // todo
+        //this->coordinator->getFlyServer()->addToClientsPendingToWrite(this->getFd());
     }
 
     return 1;
@@ -581,7 +562,7 @@ void FlyClient::addReplyRaw(const char *s) {
 }
 
 void FlyClient::addReply(const char *fmt, ...) {
-    char msg[LOG_MAX_LEN];
+    char msg[1024];
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(msg, sizeof(msg), fmt, ap);
@@ -615,6 +596,7 @@ void FlyClient::addReplyError(const char *err) {
 }
 
 void FlyClient::addReplyBulkCount(int count) {
+    /**
     AbstractSharedObjects *sharedObjects = coordinator->getSharedObjects();
     if (count < sharedObjects->getSharedMbulkHeadersSize()) {
         std::string *str = reinterpret_cast<std::string *>(sharedObjects->getMbulkHeader(count)->getPtr());
@@ -624,6 +606,10 @@ void FlyClient::addReplyBulkCount(int count) {
         fio->writeBulkCount('*', count);
         this->addReply(fio->getStr().c_str());
     }
+     */
+    std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
+    fio->writeBulkCount('*', count);
+    this->addReply(fio->getStr().c_str());
 
     return;
 }
@@ -664,7 +650,7 @@ int FlyClient::addReplyToReplyList(const char *s, size_t len) {
     }
 
     std::string *reply = this->replies.back();
-    if (NULL != reply && strlen((*reply).c_str()) + len <= PROTO_REPLY_CHUNK_BYTES) {
+    if (nullptr != reply && strlen((*reply).c_str()) + len <= PROTO_REPLY_CHUNK_BYTES) {
         (*reply) += s;
     } else {
         reply = new std::string(s);
@@ -697,19 +683,11 @@ void FlyClient::addSendLen(size_t sentLen) {
     this->sendLen += sentLen;
 }
 
-AbstractFlyDB *FlyClient::getFlyDB() const {
-    return this->flyDB;
-}
-
-void FlyClient::setFlyDB(AbstractFlyDB *flyDB) {
-    this->flyDB = flyDB;
-}
-
 /** 清除输出缓冲区: 固定 & 可变*/
 void FlyClient::clearOutputBuffer() {
     /** 清除可变缓冲区 */
     for (auto reply : this->replies) {
-        if (NULL != reply) {
+        if (nullptr != reply) {
             delete reply;
         }
     }
@@ -723,6 +701,7 @@ void acceptTcpHandler(const AbstractCoordinator *coordinator,
                       int fd,
                       std::shared_ptr<AbstractFlyClient> flyClient,
                       int mask) {
+    /**
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
     AbstractNetHandler *netHandler = coordinator->getNetHandler();
 
@@ -730,28 +709,30 @@ void acceptTcpHandler(const AbstractCoordinator *coordinator,
     char cip[NET_IP_STR_LEN];
 
     for (int i = 0; i < MAX_ACCEPTS_PER_CALL; i++) {
-        cfd = netHandler->tcpAccept(NULL, fd, cip, sizeof(cip), &cport);
+        cfd = netHandler->tcpAccept(nullptr, fd, cip, sizeof(cip), &cport);
         if (-1 == cfd) {
             return;
         }
 
-        std::shared_ptr<AbstractFlyClient> newClient =
-                flyServer->createClient(cfd);
-        if (NULL == newClient) {
+        std::shared_ptr<AbstractFlyClient> newClient = flyServer->createClient(cfd);
+        if (nullptr == newClient) {
             coordinator->getLogHandler()->logWarning("error to create fly client");
             close(cfd);
         }
     }
+     */
 }
 
 void readQueryFromClient(const AbstractCoordinator *coordinator,
                          int fd,
                          std::shared_ptr<AbstractFlyClient> flyClient,
                          int mask) {
-    if (NULL == flyClient) {
+    if (nullptr == flyClient) {
         return;
     }
 
+    // todo
+    /**
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
     AbstractNetHandler *netHandler = coordinator->getNetHandler();
 
@@ -773,17 +754,17 @@ void readQueryFromClient(const AbstractCoordinator *coordinator,
         return;
     }
 
-    /** 加入输入缓冲区，如果flyclient是master，则将其加入replication暂存区 */
+    // 加入输入缓冲区，如果flyclient是master，则将其加入replication暂存区
     flyClient->addToQueryBuf(buf);
     if (flyClient->getFlags() & CLIENT_MASTER) {
         flyClient->addToPendingQueryBuf(buf);
         flyClient->addRepldbOff(readCnt);
     }
 
-    /** 更新最新交互时间 */
+    // 更新最新交互时间
     flyClient->setLastInteractionTime(flyServer->getNowt());
 
-    /** 统计flyServer接收到的byte数量 */
+    // 统计flyServer接收到的byte数量
     flyServer->addToStatNetInputBytes(strlen(buf));
     if (flyClient->getQueryBufSize() > flyServer->getClientMaxQuerybufLen()) {
         flyServer->freeClient(flyClient);
@@ -791,6 +772,7 @@ void readQueryFromClient(const AbstractCoordinator *coordinator,
         coordinator->getLogHandler()->logWarning("Closing client that reached max query buffer length");
         return;
     }
+    **/
 
     /** 处理输入 */
     flyClient->processInputBuffer();
@@ -800,7 +782,7 @@ void sendReplyToClient(const AbstractCoordinator *coordinator,
                        int fd,
                        std::shared_ptr<AbstractFlyClient> flyClient,
                        int mask) {
-    if (NULL == flyClient) {
+    if (nullptr == flyClient) {
         return;
     }
 

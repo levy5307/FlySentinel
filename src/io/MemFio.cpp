@@ -29,7 +29,7 @@ size_t MemFio::baseread(void *buf, size_t readLen) {
 }
 
 size_t MemFio::basewrite(const void *buf, size_t writeLen) {
-    if (NULL == buf) {
+    if (nullptr == buf) {
         return 0;
     }
 
