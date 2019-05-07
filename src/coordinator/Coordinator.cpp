@@ -9,6 +9,7 @@
 #include "../bio/BIOHandler.h"
 #include "../def.h"
 #include "../event/EventLoop.h"
+#include "../flySentinel/FlySentinel.h"
 
 Coordinator::Coordinator() {
     /** 加载config **/
@@ -32,8 +33,11 @@ Coordinator::Coordinator() {
                 configCache->getSyslogFacility());
     }
 
+    /** flyServer */
+    this->flyServer = new FlySentinel(this);
+
     /** event loop **/
-    //this->eventLoop = new EventLoop(this, flyServer->getMaxClients() + CONFIG_FDSET_INCR);
+    this->eventLoop = new EventLoop(this, flyServer->getMaxClients() + CONFIG_FDSET_INCR);
 
     /** background io*/
     this->bioHandler = new BIOHandler();
@@ -60,6 +64,10 @@ AbstractEventLoop *Coordinator::getEventLoop() const {
 
 AbstractFlyClientFactory *Coordinator::getFlyClientFactory() const {
     return this->flyClientFactory;
+}
+
+AbstractFlyServer* Coordinator::getFlyServer() const {
+    return this->flyServer;
 }
 
 AbstractFlyObjFactory *Coordinator::getFlyObjStringFactory() const {

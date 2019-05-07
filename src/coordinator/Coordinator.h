@@ -21,6 +21,9 @@ public:
     /** fly object factory **/
     AbstractFlyObjFactory *getFlyObjStringFactory() const;
 
+    /** fly server */
+    AbstractFlyServer* getFlyServer() const;
+
     /** LogHandler */
     AbstractLogHandler *getLogHandler() const;
 
@@ -34,6 +37,7 @@ private:
     ConfigCache *configCache;
     BaseConfigReader *configReader;
     AbstractFlyObjFactory *flyObjStringFactory;
+    AbstractFlyServer *flyServer;
 
     /**
      * logHandler
@@ -44,6 +48,11 @@ private:
      * bio
      **/
     AbstractBIOHandler *bioHandler = nullptr;
+
+    /**
+     * fly server
+     **/
+
 };
 
 #endif //FLYSENTINEL_COORDINATOR_H

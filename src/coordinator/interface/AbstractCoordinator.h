@@ -11,6 +11,7 @@
 #include "AbstractBIOHandler.h"
 #include "AbstractLogHandler.h"
 #include "AbstractFlyObjFactory.h"
+#include "AbstractFlyServer.h"
 
 class AbstractFlyClientFactory;
 
@@ -25,6 +26,8 @@ public:
 
     /** fly object factory **/
     virtual AbstractFlyObjFactory *getFlyObjStringFactory() const = 0;
+
+    virtual AbstractFlyServer* getFlyServer() const = 0;
 
     /** LogHandler */
     virtual AbstractLogHandler *getLogHandler() const = 0;

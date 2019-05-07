@@ -286,14 +286,6 @@ void EventLoop::createTimeEvent(uint64_t milliseconds, timeEventProc *proc,
 }
 
 void beforeSleep(const AbstractCoordinator *coordinator) {
-    // todo
-    /** 删除flydb中的过期键 */
-    /**
-    // AbstractFlyServer *flyServer = coordinator->getFlyServer();
-    if (flyServer->isActiveExpireEnable() && !replicationHandler->haveMasterhost()) {
-        flyServer->activeExpireCycle(ACTIVE_EXPIRE_CYCLE_FAST);
-    }
     // 处理命令回复
-    flyServer->handleClientsWithPendingWrites();
-    */
+    coordinator->getFlyServer()->handleClientsWithPendingWrites();
 }
