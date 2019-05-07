@@ -11,6 +11,9 @@
 #include "../../config/ConfigCache.h"
 #include "AbstractLogHandler.h"
 #include "AbstractCoordinator.h"
+#include "../../commandTable/CommandTable.h"
+
+class CommandTable;
 
 class AbstractFlyServer {
 public:
@@ -21,9 +24,13 @@ public:
     void freeClientAsync(int fd);
     int getMaxClients() const;
     std::shared_ptr<AbstractFlyClient> getFlyClient(int fd);
+    bool dealWithCommand(int fd);
+    virtual ~AbstractFlyServer() {};
+
+private:
+    void setMaxClientLimit();
     int listenToPort();
     void loadFromConfig(ConfigCache *configCache);
-    virtual ~AbstractFlyServer() {};
 
 protected:
     /**
@@ -58,6 +65,14 @@ protected:
     /** client buff最大长度 */
     size_t clientMaxQuerybufLen;
     uint64_t cronloops = 0;
+
+    int hz;                                           // serverCron运行频率
+    time_t nowt;                                      // 系统当前时间
+
+    /**
+     * 命令表
+     **/
+    CommandTable* commandTable;
 
     AbstractLogHandler *logHandler;
     const AbstractCoordinator *coordinator;

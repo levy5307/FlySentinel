@@ -229,8 +229,7 @@ int FlyClient::processInputBuffer() {
     }
 
     /** 处理命令 */
-    // todo
-    //coordinator->getFlyServer()->dealWithCommand(this->getFd());
+    coordinator->getFlyServer()->dealWithCommand(this->getFd());
 }
 
 int FlyClient::writeToClient(int handlerInstalled) {

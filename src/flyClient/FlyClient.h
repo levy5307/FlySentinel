@@ -15,6 +15,8 @@
 #include "../coordinator/interface/AbstractCoordinator.h"
 #include "../net/NetDef.h"
 
+class CommandEntry;
+
 // 对应socket的绑定接口
 void acceptTcpHandler(const AbstractCoordinator *coordinator,
                       int fd,

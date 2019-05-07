@@ -193,7 +193,7 @@ public:
 
     /** 主要用于产生redis runid和cluster instance id */
     void getRandomHexChars(char *p, unsigned int len) {
-        char *charset = "0123456789abcdef";
+        const char *charset = "0123456789abcdef";
 
         static int seed_initialized = 0;
         /** SHA1种子，从/dev/urandom读取 */
