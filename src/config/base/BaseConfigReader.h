@@ -11,6 +11,11 @@
 template<class KEY, class VAL>
 class Dict;
 
+void portConfigProc(ConfigCache*, std::vector<std::string>&);
+void bindConfigProc(ConfigCache*, std::vector<std::string>&);
+void unixSocketConfigProc(ConfigCache*, std::vector<std::string>&);
+void unixSocketPermConfigProc(ConfigCache*, std::vector<std::string>&);
+void tcpKeepaliveConfigProc(ConfigCache*, std::vector<std::string>&);
 void logFileConfigProc(ConfigCache*, std::vector<std::string>&);
 void syslogEnableConfigProc(ConfigCache*, std::vector<std::string>&);
 void syslogIdentConfigProc(ConfigCache*, std::vector<std::string>&);

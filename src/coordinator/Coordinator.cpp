@@ -39,6 +39,10 @@ Coordinator::Coordinator() {
     /** event loop **/
     this->eventLoop = new EventLoop(this, flyServer->getMaxClients() + CONFIG_FDSET_INCR);
 
+    // 时间循环处理器
+    this->eventLoop->createTimeEvent(1, serverCron, NULL, NULL);
+
+
     /** background io*/
     this->bioHandler = new BIOHandler();
 

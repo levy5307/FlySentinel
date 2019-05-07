@@ -14,6 +14,7 @@
 #include "AbstractFlyServer.h"
 
 class AbstractFlyClientFactory;
+class AbstractFlyServer;
 
 class AbstractCoordinator {
 public:

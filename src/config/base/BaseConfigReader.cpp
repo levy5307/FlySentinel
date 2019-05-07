@@ -39,6 +39,11 @@ BaseConfigReader::BaseConfigReader() {
 
 void BaseConfigReader::initConfigEntry() {
     configEntryTable = new Dict<std::string, std::shared_ptr<ConfigEntry> >();
+    configEntryTable->addEntry("port", std::shared_ptr<ConfigEntry>(new ConfigEntry(portConfigProc, 2)));
+    configEntryTable->addEntry("bind", std::shared_ptr<ConfigEntry>(new ConfigEntry(bindConfigProc, CONFIG_BINDADDR_MAX + 1)));
+    configEntryTable->addEntry("unixsocket", std::shared_ptr<ConfigEntry>(new ConfigEntry(unixSocketConfigProc, 2)));
+    configEntryTable->addEntry("unixsocketperm", std::shared_ptr<ConfigEntry>(new ConfigEntry(unixSocketPermConfigProc, 2)));
+    configEntryTable->addEntry("tcp-keepalive", std::shared_ptr<ConfigEntry>(new ConfigEntry(tcpKeepaliveConfigProc, 2)));
     configEntryTable->addEntry("logfile", std::shared_ptr<ConfigEntry>(new ConfigEntry(logFileConfigProc, 2)));
     configEntryTable->addEntry("syslog-enable", std::shared_ptr<ConfigEntry>(new ConfigEntry(syslogEnableConfigProc, 2)));
     configEntryTable->addEntry("syslog-ident", std::shared_ptr<ConfigEntry>(new ConfigEntry(syslogIdentConfigProc, 2)));
@@ -74,6 +79,46 @@ int configMapGetValue(configMap *config, const char *name) {
         config++;
     }
     return INT_MIN;
+}
+
+void portConfigProc(ConfigCache* configCache, std::vector<std::string> &words) {
+    int port = atoi(words[1].c_str());
+    if (0 <= port && port <= 65535) {
+        configCache->setPort(port);
+    }
+}
+
+void bindConfigProc(ConfigCache* configCache, std::vector<std::string> &words) {
+    int addressCount = words.size() - 1;
+    if (addressCount > CONFIG_BINDADDR_MAX) {
+        std::cout << "Too many bind addresses specified!" << std::endl;
+        exit(1);
+    }
+    for (int j = 0; j < addressCount; j++) {
+        configCache->addBindAddr(words[j + 1]);
+    }
+}
+
+void unixSocketConfigProc(ConfigCache* configCache, std::vector<std::string> &words) {
+    configCache->setUnixsocket(strdup(words[1].c_str()));
+}
+
+void unixSocketPermConfigProc(ConfigCache* configCache, std::vector<std::string> &words) {
+    mode_t unixsocketperm = (mode_t) strtol(words[1].c_str(), NULL, 0);
+    if (unixsocketperm > 0777) {
+        std::cout << "Invalid socket file permissions" << std::endl;
+        exit(1);
+    }
+    configCache->setUnixsocketperm(unixsocketperm);
+}
+
+void tcpKeepaliveConfigProc(ConfigCache* configCache, std::vector<std::string> &words) {
+    int tcpKeepAlive = atoi(words[1].c_str());
+    if (tcpKeepAlive < 0) {
+        std::cout << "Invalid tcp-keepalive value" << std::endl;
+        exit(1);
+    }
+    configCache->setTcpKeepAlive(tcpKeepAlive);
 }
 
 void logFileConfigProc(ConfigCache* configCache, std::vector<std::string> &words) {
