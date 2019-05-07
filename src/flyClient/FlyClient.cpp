@@ -280,8 +280,7 @@ int FlyClient::writeToClient(int handlerInstalled) {
 
     // 如果写入过程出错，删除flyClient
     if (onceCount <= 0 && EAGAIN != errno) {
-        // todo
-        //coordinator->getFlyServer()->freeClientAsync(this->getFd());
+        coordinator->getFlyServer()->freeClientAsync(this->getFd());
         close(fd);
         return -1;
     }
@@ -295,8 +294,7 @@ int FlyClient::writeToClient(int handlerInstalled) {
         }
 
         if (this->getFlags() & CLIENT_CLOSE_AFTER_REPLY) {
-            // todo
-            //coordinator->getFlyServer()->freeClientAsync(this->getFd());
+            coordinator->getFlyServer()->freeClientAsync(this->getFd());
             close(fd);
             return -1;
         }
@@ -519,8 +517,7 @@ int FlyClient::prepareClientToWrite() {
      * 需要先将其标记并放入flyserver的pending client list中
      */
     if (hasNoPending() && !(this->flags & CLIENT_PENDING_WRITE)) {
-        // todo
-        //this->coordinator->getFlyServer()->addToClientsPendingToWrite(this->getFd());
+        this->coordinator->getFlyServer()->addToClientsPendingToWrite(this->getFd());
     }
 
     return 1;
@@ -730,8 +727,6 @@ void readQueryFromClient(const AbstractCoordinator *coordinator,
         return;
     }
 
-    // todo
-    /**
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
     AbstractNetHandler *netHandler = coordinator->getNetHandler();
 
@@ -753,13 +748,6 @@ void readQueryFromClient(const AbstractCoordinator *coordinator,
         return;
     }
 
-    // 加入输入缓冲区，如果flyclient是master，则将其加入replication暂存区
-    flyClient->addToQueryBuf(buf);
-    if (flyClient->getFlags() & CLIENT_MASTER) {
-        flyClient->addToPendingQueryBuf(buf);
-        flyClient->addRepldbOff(readCnt);
-    }
-
     // 更新最新交互时间
     flyClient->setLastInteractionTime(flyServer->getNowt());
 
@@ -771,7 +759,6 @@ void readQueryFromClient(const AbstractCoordinator *coordinator,
         coordinator->getLogHandler()->logWarning("Closing client that reached max query buffer length");
         return;
     }
-    **/
 
     /** 处理输入 */
     flyClient->processInputBuffer();

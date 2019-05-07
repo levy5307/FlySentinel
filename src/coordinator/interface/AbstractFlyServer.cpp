@@ -7,6 +7,7 @@
 #include "AbstractFlyServer.h"
 #include "../../def.h"
 #include "../../flyClient/FlyClient.h"
+#include "../../atomic/AtomicHandler.h"
 
 AbstractFlyServer::AbstractFlyServer(const AbstractCoordinator *coordinator) {
     this->coordinator = coordinator;
@@ -64,6 +65,23 @@ void AbstractFlyServer::init(ConfigCache *configCache) {
     return;
 }
 
+void AbstractFlyServer::addToClientsPendingToWrite(int fd) {
+    std::shared_ptr<AbstractFlyClient> flyClient = this->getFlyClient(fd);
+    /** 如果没有找到，返回 */
+    if (nullptr == flyClient) {
+        return;
+    }
+
+    /**
+     * 只有处于初始状态或者已连接状态的client才会加入写入队列，
+     * 其他情况则不加入，代表只会将数据写入输出缓冲区，并不会真正发送
+     **/
+    if ((0 == (flyClient->getFlags() & CLIENT_PENDING_WRITE))) {
+        flyClient->addFlag(CLIENT_PENDING_WRITE);
+        this->clientsPendingWrite.push_back(flyClient);
+    }
+}
+
 int AbstractFlyServer::handleClientsWithPendingWrites() {
     int pendingCount = this->clientsPendingWrite.size();
     if (0 == pendingCount) {
@@ -106,6 +124,48 @@ void AbstractFlyServer::freeClientAsync(int fd) {
     freeClientAsync(flyClient);
 }
 
+std::shared_ptr<AbstractFlyClient> AbstractFlyServer::createClient(int fd) {
+    if (fd <= 0) {
+        return nullptr;
+    }
+
+    // 超过了客户端最大数量
+    if (this->clients.size() >= this->maxClients) {
+        this->statRejectedConn++;
+        return nullptr;
+    }
+
+    // create FlyClient
+    std::shared_ptr<AbstractFlyClient> flyClient = this->coordinator
+            ->getFlyClientFactory()
+            ->getFlyClient(fd, coordinator, this->nowt);
+    uint64_t clientId = 0;
+    atomicGetIncr(this->nextClientId, clientId, 1);
+    flyClient->setId(clientId);
+
+    // 设置读socket，并为其创建相应的file event
+    this->coordinator->getNetHandler()->setBlock(NULL, fd, 0);
+    this->coordinator->getNetHandler()->enableTcpNoDelay(NULL, fd);
+    if (this->tcpKeepAlive > 0) {
+        this->coordinator->getNetHandler()->keepAlive(
+                NULL, fd, this->tcpKeepAlive);
+    }
+    if (-1 == this->coordinator->getEventLoop()->createFileEvent(
+            fd, ES_READABLE, readQueryFromClient, flyClient)) {
+        return nullptr;
+    }
+
+    // 加入到clients队列中
+    this->clients[fd] = flyClient;
+
+    return flyClient;
+}
+
+int AbstractFlyServer::freeClient(std::shared_ptr<AbstractFlyClient> flyClient) {
+    /** 将其从global list中删除*/
+    this->unlinkClient(flyClient);
+}
+
 void AbstractFlyServer::freeClientAsync(std::shared_ptr<AbstractFlyClient> flyClient) {
     if (flyClient->getFlags() & CLIENT_CLOSE_ASAP) {
         return;
@@ -113,6 +173,56 @@ void AbstractFlyServer::freeClientAsync(std::shared_ptr<AbstractFlyClient> flyCl
 
     flyClient->setFlags(CLIENT_CLOSE_ASAP);
     this->clientsToClose.push_back(flyClient);
+}
+
+/**
+ * 将client从一切global list中删除掉
+ * (除async delete列表之外, 否则可能导致无法删除)
+ **/
+void AbstractFlyServer::unlinkClient(std::shared_ptr<AbstractFlyClient> flyClient) {
+    /** 在clients列表中删除，并删除该client对应的文件事件 */
+    int fd = flyClient->getFd();
+    if (-1 != fd) {
+        if (this->clients.find(fd) != this->clients.end()) {
+            coordinator->getEventLoop()->deleteFileEvent(flyClient->getFd(), ES_WRITABLE | ES_READABLE);
+            close(flyClient->getFd());
+            flyClient->setFd(-1);
+            this->clients.erase(flyClient->getFd());
+        }
+    }
+
+    /** 将其从pending write列表中删除 */
+    if (flyClient->IsPendingWrite()) {
+        this->deleteFromPending(flyClient->getFd());
+    }
+
+    /** 在async close列表中删除 */
+    this->deleteFromAsyncClose(flyClient->getFd());
+
+}
+
+void AbstractFlyServer::deleteFromPending(int fd) {
+    std::list<std::shared_ptr<AbstractFlyClient> >::iterator iter = this->clientsPendingWrite.begin();
+    for (; iter != this->clientsPendingWrite.end(); iter++) {
+        if ((*iter)->getFd() == fd) {
+            this->clientsPendingWrite.erase(iter);
+            return;
+        }
+    }
+}
+
+void AbstractFlyServer::deleteFromAsyncClose(int fd) {
+    std::list<std::shared_ptr<AbstractFlyClient> >::iterator iter = this->clientsToClose.begin();
+    for (iter; iter != this->clientsToClose.end(); iter++) {
+        if ((*iter)->getFd() == fd) {
+            this->clientsToClose.erase(iter);
+            return;
+        }
+    }
+}
+
+void AbstractFlyServer::linkClient(std::shared_ptr<AbstractFlyClient> flyClient) {
+    this->clients[flyClient->getFd()] = flyClient;
 }
 
 std::shared_ptr<AbstractFlyClient> AbstractFlyServer::getFlyClient(int fd) {
@@ -242,4 +352,32 @@ void AbstractFlyServer::setMaxClientLimit() {
             this->maxClients = curLimit - CONFIG_MIN_RESERVED_FDS;
         }
     }
+}
+
+int AbstractFlyServer::getHz() const {
+    return hz;
+}
+
+void AbstractFlyServer::setHz(int hz) {
+    this->hz = hz;
+}
+
+time_t AbstractFlyServer::getNowt() const {
+    return nowt;
+}
+
+void AbstractFlyServer::setNowt(time_t nowt) {
+    this->nowt = nowt;
+}
+
+size_t AbstractFlyServer::getClientMaxQuerybufLen() const {
+    return clientMaxQuerybufLen;
+}
+
+int64_t AbstractFlyServer::getStatNetInputBytes() const {
+    return statNetInputBytes;
+}
+
+void AbstractFlyServer::addToStatNetInputBytes(int64_t size) {
+    this->clientMaxQuerybufLen += size;
 }

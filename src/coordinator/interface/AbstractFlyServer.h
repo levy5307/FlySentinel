@@ -19,18 +19,42 @@ class AbstractFlyServer {
 public:
     AbstractFlyServer(const AbstractCoordinator *coordinator);
     void init(ConfigCache *configCache);
+
+    /** network */
+    size_t getClientMaxQuerybufLen() const;
+    int64_t getStatNetInputBytes() const;
+    void addToStatNetInputBytes(int64_t size);
+
+    /** clients */
+    void addToClientsPendingToWrite(int fd);
     int handleClientsWithPendingWrites();
+    std::shared_ptr<AbstractFlyClient> createClient(int fd);
+    int freeClient(std::shared_ptr<AbstractFlyClient> flyClient);
     void freeClientAsync(std::shared_ptr<AbstractFlyClient> flyClient);
     void freeClientAsync(int fd);
     int getMaxClients() const;
+    void unlinkClient(std::shared_ptr<AbstractFlyClient> flyClient);
+    void linkClient(std::shared_ptr<AbstractFlyClient> flyClient);
     std::shared_ptr<AbstractFlyClient> getFlyClient(int fd);
+
+    /** command */
     bool dealWithCommand(int fd);
+
+    int getHz() const;
+    void setHz(int hz);
+    time_t getNowt() const;
+    void setNowt(time_t nowt);
+
+    /** statistic work */
+
     virtual ~AbstractFlyServer() {};
 
 private:
     void setMaxClientLimit();
     int listenToPort();
     void loadFromConfig(ConfigCache *configCache);
+    void deleteFromPending(int fd);
+    void deleteFromAsyncClose(int fd);
 
 protected:
     /**
