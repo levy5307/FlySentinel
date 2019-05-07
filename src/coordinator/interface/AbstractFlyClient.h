@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <string>
 #include <list>
+#include "../../flyObj/FlyObj.h"
 
 class AbstractFlyClient {
 public:
@@ -21,10 +22,6 @@ public:
     virtual int getFd() const = 0;
 
     virtual void setFd(int fd) = 0;
-
-    virtual std::shared_ptr<FlyObj> getName() const = 0;
-
-    virtual void setName(std::shared_ptr<FlyObj> name) = 0;
 
     virtual int getFlags() const = 0;
 
@@ -44,8 +41,6 @@ public:
 
     /** 向输入缓冲中添加数据 */
     virtual void addToQueryBuf(const std::string &str) = 0;
-
-    virtual void addToPendingQueryBuf(const std::string &str) = 0;
 
     virtual void trimQueryBuf(int begin, int end) = 0;
 

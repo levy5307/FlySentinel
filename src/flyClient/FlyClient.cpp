@@ -17,7 +17,6 @@ FlyClient::FlyClient(int fd,
     this->coordinator = coordinator;
     this->id = 0;
     this->fd = fd;
-    this->name = nullptr;
     this->flags = 0;
     this->argc = 0;
     this->argv = nullptr;
@@ -44,14 +43,6 @@ int FlyClient::getFd() const {
 
 void FlyClient::setFd(int fd) {
     this->fd = fd;
-}
-
-std::shared_ptr<FlyObj> FlyClient::getName() const {
-    return name;
-}
-
-void FlyClient::setName(std::shared_ptr<FlyObj> name) {
-    this->name = name;
 }
 
 int FlyClient::getFlags() const {
@@ -547,6 +538,15 @@ int FlyClient::getBufpos() const {
 void FlyClient::setBufpos(int bufpos) {
     this->bufpos = bufpos;
 }
+
+uint64_t FlyClient::getReplyBytes() const {
+    return this->replyBytes;
+}
+
+void FlyClient::setReplyBytes(uint64_t replyBytes) {
+    this->replyBytes = replyBytes;
+}
+
 
 void FlyClient::addReplyRaw(const char *s) {
     size_t len = strlen(s);

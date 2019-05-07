@@ -39,8 +39,6 @@ public:
     void setId(uint64_t id);
     int getFd() const;
     void setFd(int fd);
-    std::shared_ptr<FlyObj> getName() const;
-    void setName(std::shared_ptr<FlyObj> name);
 
     /** 客户端标志操作 */
     int getFlags() const;
@@ -52,7 +50,6 @@ public:
     const std::string &getQueryBuf() const;
     void setQueryBuf(const std::string &queryBuf);
     void addToQueryBuf(const std::string &str);
-    void addToPendingQueryBuf(const std::string &str);
     void trimQueryBuf(int begin, int end);
     int getQueryBufSize() const;
 
@@ -121,7 +118,6 @@ private:
 
     uint64_t id;
     int fd;                             // 套接字
-    std::shared_ptr<FlyObj> name;       // client名字
     int flags;                          // 标志
     std::string queryBuf;               // 输入缓冲区
     std::shared_ptr<FlyObj> *argv;      // 命令参数

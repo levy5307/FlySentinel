@@ -12,8 +12,7 @@ enum BIOJobOpCode {
     BIO_CLOSE_FILE = 0,     /** Deferred close(2) syscall. */
     BIO_AOF_FSYNC = 1,      /** Deferred AOF fsync. */
     BIO_LAZY_FREE = 2,      /** Deferred objects freeing. */
-    BIO_BG_SAVE = 3,        /** background fdb save */
-    BIO_NUM_OPS = 4
+    BIO_NUM_OPS = 3
 };
 
 /**

@@ -7,9 +7,12 @@
 
 #include "utils/MiscTool.h"
 #include "log/FileLogFactory.h"
+#include "coordinator/interface/AbstractCoordinator.h"
 
 AbstractLogFactory *logFactory = new FileLogFactory();
 MiscTool *miscTool = MiscTool::getInstance();
+bool canResize = true;
+AbstractCoordinator *coordinator = NULL;
 
 int main(int argc, char **argv) {
     while(1) {

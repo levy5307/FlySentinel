@@ -3,8 +3,11 @@
 //
 
 #include <iostream>
+#include <syslog.h>
 #include "BaseConfigReader.h"
 #include "../../dataStructure/dict/Dict.cpp"
+#include "../../log/LogDef.h"
+#include "../../def.h"
 
 configMap loglevelMap[] = {
         {"debug",   LL_DEBUG},
@@ -35,7 +38,7 @@ BaseConfigReader::BaseConfigReader() {
 }
 
 void BaseConfigReader::initConfigEntry() {
-    configEntryTable = new Dict<std::string, std::shared_ptr<ConfigEntry>>();
+    configEntryTable = new Dict<std::string, std::shared_ptr<ConfigEntry> >();
     configEntryTable->addEntry("logfile", std::shared_ptr<ConfigEntry>(new ConfigEntry(logFileConfigProc, 2)));
     configEntryTable->addEntry("syslog-enable", std::shared_ptr<ConfigEntry>(new ConfigEntry(syslogEnableConfigProc, 2)));
     configEntryTable->addEntry("syslog-ident", std::shared_ptr<ConfigEntry>(new ConfigEntry(syslogIdentConfigProc, 2)));
@@ -49,8 +52,7 @@ BaseConfigReader::~BaseConfigReader() {
 
 void BaseConfigReader::parseConfig(std::vector<std::string> &words) {
     /** 查找相应的ConfigEntry */
-    DictEntry<std::string, std::shared_ptr<ConfigEntry>>* dictEntry =
-            this->configEntryTable->findEntry(words[0]);
+    DictEntry<std::string, std::shared_ptr<ConfigEntry> >* dictEntry = this->configEntryTable->findEntry(words[0]);
     if (nullptr == dictEntry) {
         return;
     }

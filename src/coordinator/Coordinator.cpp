@@ -6,10 +6,6 @@
 #include "../net/NetHandler.h"
 #include "../config/TextConfigReader.h"
 #include "../flyClient/FlyClientFactory.h"
-#include "../flyObj/flyObjHashTable/FlyObjHashTableFactory.h"
-#include "../flyObj/FlyObjLinkedList/FlyObjLinkedListFactory.h"
-#include "../flyObj/FlyObjSkipList/FlyObjSkipListFactory.h"
-#include "../flyObj/FlyObjString/FlyObjStringFactory.h"
 #include "../bio/BIOHandler.h"
 #include "../def.h"
 #include "../event/EventLoop.h"
@@ -64,6 +60,10 @@ AbstractEventLoop *Coordinator::getEventLoop() const {
 
 AbstractFlyClientFactory *Coordinator::getFlyClientFactory() const {
     return this->flyClientFactory;
+}
+
+AbstractFlyObjFactory *Coordinator::getFlyObjStringFactory() const {
+    return flyObjStringFactory;
 }
 
 AbstractLogHandler *Coordinator::getLogHandler() const {

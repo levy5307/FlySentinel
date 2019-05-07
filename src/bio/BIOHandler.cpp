@@ -5,6 +5,7 @@
 #include <csignal>
 #include "BIOHandler.h"
 #include "../dataStructure/dict/Dict.cpp"
+#include "../def.h"
 
 AbstractLogHandler *BIOHandler::logHandler;
 std::array<pthread_t, BIO_NUM_OPS> BIOHandler::threads;
@@ -137,14 +138,9 @@ void *BIOHandler::processBackgroundJobs(void *arg) {
             case BIO_AOF_FSYNC:
                 aof_fsync(reinterpret_cast<long>(bioJob->getArg1()));
                 break;
-            case BIO_BG_SAVE:
-                /** 这里不用加锁，因为进程和线程不会同时操作该变量(持久化过程同时只会存在一个) */
-                coordinator->getFdbHandler()->setLastBgsaveStatus(coordinator->getFdbHandler()->save());
-                coordinator->getFdbHandler()->setBgsaveDone(true);
-                break;
             case BIO_LAZY_FREE:
                 if (nullptr != bioJob->getArg1()) {
-                    reinterpret_cast<Dict<std::string, std::shared_ptr<FlyObj>>*>(bioJob->getArg1())->clear(nullptr);
+                    reinterpret_cast<Dict<std::string, std::shared_ptr<FlyObj> >*>(bioJob->getArg1())->clear(nullptr);
                 }
                 if (nullptr != bioJob->getArg2()) {
                     reinterpret_cast<Dict<std::string, uint64_t>*>(bioJob->getArg2())->clear(nullptr);

@@ -18,6 +18,9 @@ public:
     AbstractFlyClientFactory *getFlyClientFactory() const;
     AbstractEventLoop *getEventLoop() const;
 
+    /** fly object factory **/
+    AbstractFlyObjFactory *getFlyObjStringFactory() const;
+
     /** LogHandler */
     AbstractLogHandler *getLogHandler() const;
 
@@ -30,6 +33,7 @@ private:
     AbstractFlyClientFactory *flyClientFactory;
     ConfigCache *configCache;
     BaseConfigReader *configReader;
+    AbstractFlyObjFactory *flyObjStringFactory;
 
     /**
      * logHandler

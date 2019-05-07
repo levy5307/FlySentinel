@@ -11,6 +11,12 @@
 template<class KEY, class VAL>
 class Dict;
 
+void logFileConfigProc(ConfigCache*, std::vector<std::string>&);
+void syslogEnableConfigProc(ConfigCache*, std::vector<std::string>&);
+void syslogIdentConfigProc(ConfigCache*, std::vector<std::string>&);
+void logLevelConfigProc(ConfigCache*, std::vector<std::string>&);
+void syslogFacilityConfigProc(ConfigCache*, std::vector<std::string>&);
+
 struct configMap {
     const char *name;
     const int value;

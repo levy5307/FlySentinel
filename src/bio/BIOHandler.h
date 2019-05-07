@@ -9,8 +9,9 @@
 #include <list>
 #include <array>
 #include "BIODef.h"
-#include "../coordinator/interface/AbstractBIOHandler.h"
 #include "BIOJob.h"
+#include "../coordinator/interface/AbstractBIOHandler.h"
+#include "../coordinator/interface/AbstractLogHandler.h"
 
 /**
  * background I/O

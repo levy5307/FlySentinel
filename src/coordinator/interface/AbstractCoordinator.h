@@ -8,9 +8,9 @@
 #include "AbstractEventLoop.h"
 #include "AbstractNetHandler.h"
 #include "AbstractFlyClientFactory.h"
-#include "AbstractFlyObjFactory.h"
 #include "AbstractBIOHandler.h"
 #include "AbstractLogHandler.h"
+#include "AbstractFlyObjFactory.h"
 
 class AbstractFlyClientFactory;
 
@@ -22,6 +22,9 @@ public:
     virtual AbstractFlyClientFactory *getFlyClientFactory() const = 0;
 
     virtual AbstractEventLoop *getEventLoop() const = 0;
+
+    /** fly object factory **/
+    virtual AbstractFlyObjFactory *getFlyObjStringFactory() const = 0;
 
     /** LogHandler */
     virtual AbstractLogHandler *getLogHandler() const = 0;
