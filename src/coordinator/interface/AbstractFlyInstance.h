@@ -1,0 +1,12 @@
+//
+// Created by levy on 2019/5/8.
+//
+
+#ifndef FLYSENTINEL_ABSTRACTFLYINSTANCE_H
+#define FLYSENTINEL_ABSTRACTFLYINSTANCE_H
+
+class AbstractFlyInstance {
+
+};
+
+#endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

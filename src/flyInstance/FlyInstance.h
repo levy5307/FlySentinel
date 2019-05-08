@@ -5,7 +5,9 @@
 #ifndef FLYSENTINEL_FLYINSTANCE_H
 #define FLYSENTINEL_FLYINSTANCE_H
 
-class FlyInstance {
+#include "../coordinator/interface/AbstractFlyInstance.h"
+
+class FlyInstance : public AbstractFlyInstance {
 public:
     FlyInstance();
 
