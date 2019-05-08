@@ -36,14 +36,18 @@ public:
     void unlinkClient(std::shared_ptr<AbstractFlyClient> flyClient);
     void linkClient(std::shared_ptr<AbstractFlyClient> flyClient);
     std::shared_ptr<AbstractFlyClient> getFlyClient(int fd);
+    void freeClientsInAsyncFreeList();
 
     /** command */
     bool dealWithCommand(int fd);
 
+    /** cron loop */
     int getHz() const;
     void setHz(int hz);
     time_t getNowt() const;
     void setNowt(time_t nowt);
+    void addCronLoops();
+    uint64_t getCronLoops() const;
 
     /** statistic work */
 

@@ -8,6 +8,7 @@
 #include "utils/MiscTool.h"
 #include "log/FileLogFactory.h"
 #include "coordinator/interface/AbstractCoordinator.h"
+#include "coordinator/Coordinator.h"
 
 AbstractLogFactory *logFactory = new FileLogFactory();
 MiscTool *miscTool = MiscTool::getInstance();
@@ -15,8 +16,6 @@ bool canResize = true;
 AbstractCoordinator *coordinator = NULL;
 
 int main(int argc, char **argv) {
-    while(1) {
-        std::cout << "Hello, flySentinel. Wish you be better!" << std::endl;
-        sleep(1);
-    }
+    coordinator = new Coordinator();
+    coordinator->getEventLoop()->eventMain();
 }

@@ -16,5 +16,18 @@ FlySentinel::~FlySentinel() {
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
+    AbstractFlyServer *flyServer = coordinator->getFlyServer();
 
+    /** 更新缓存时间 */
+    flyServer->setNowt(time(NULL));
+
+    /** 释放所有异步删除的clients */
+    flyServer->freeClientsInAsyncFreeList();
+
+    /** cron loop static */
+    flyServer->addCronLoops();
+    std::cout << "serverCron is running "
+              << flyServer->getCronLoops()
+              << " times!" << std::endl;
+    return 1000 / flyServer->getHz();
 }

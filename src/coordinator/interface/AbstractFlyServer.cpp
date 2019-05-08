@@ -233,6 +233,17 @@ std::shared_ptr<AbstractFlyClient> AbstractFlyServer::getFlyClient(int fd) {
     return nullptr;
 }
 
+void AbstractFlyServer::freeClientsInAsyncFreeList() {
+    for (auto client : this->clientsToClose) {
+        if (nullptr == client) {
+            continue;
+        }
+        freeClient(client);
+    }
+
+    this->clientsToClose.clear();
+}
+
 int AbstractFlyServer::getMaxClients() const {
     return this->maxClients;
 }
@@ -381,3 +392,12 @@ int64_t AbstractFlyServer::getStatNetInputBytes() const {
 void AbstractFlyServer::addToStatNetInputBytes(int64_t size) {
     this->clientMaxQuerybufLen += size;
 }
+
+void AbstractFlyServer::addCronLoops() {
+    this->cronloops++;
+}
+
+uint64_t AbstractFlyServer::getCronLoops() const {
+    return this->cronloops;
+}
+
