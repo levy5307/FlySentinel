@@ -8,7 +8,8 @@
 #include "../flyClient/FlyClient.h"
 #include "../def.h"
 
-FlySentinel::FlySentinel(const AbstractCoordinator *coordinator) : AbstractFlyServer(coordinator) {
+FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
+        : AbstractFlyServer(coordinator, configCache) {
 }
 
 FlySentinel::~FlySentinel() {

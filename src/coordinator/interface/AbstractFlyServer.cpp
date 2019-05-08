@@ -9,7 +9,7 @@
 #include "../../flyClient/FlyClient.h"
 #include "../../atomic/AtomicHandler.h"
 
-AbstractFlyServer::AbstractFlyServer(const AbstractCoordinator *coordinator) {
+AbstractFlyServer::AbstractFlyServer(const AbstractCoordinator *coordinator, ConfigCache *configCache) {
     this->coordinator = coordinator;
 
     // init command table
@@ -29,9 +29,7 @@ AbstractFlyServer::AbstractFlyServer(const AbstractCoordinator *coordinator) {
     // 当前时间
     this->nowt = time(NULL);
     this->clientMaxQuerybufLen = PROTO_MAX_QUERYBUF_LEN;
-}
 
-void AbstractFlyServer::init(ConfigCache *configCache) {
     // 从configCache获取参数
     this->loadFromConfig(configCache);
 
@@ -53,16 +51,7 @@ void AbstractFlyServer::init(ConfigCache *configCache) {
         this->coordinator->getNetHandler()->setBlock(NULL, this->usfd, 0);
     }
 
-    // 创建定时任务，用于创建客户端连接
-    for (auto fd : this->ipfd) {
-        if (-1 == this->coordinator->getEventLoop()->createFileEvent(
-                fd, ES_READABLE, acceptTcpHandler, nullptr)) {
-            exit(1);
-        }
-    }
-
     this->logHandler = logFactory->getLogger();
-    return;
 }
 
 void AbstractFlyServer::addToClientsPendingToWrite(int fd) {
@@ -399,5 +388,9 @@ void AbstractFlyServer::addCronLoops() {
 
 uint64_t AbstractFlyServer::getCronLoops() const {
     return this->cronloops;
+}
+
+const std::vector<int> &AbstractFlyServer::getIpfd() const {
+    return ipfd;
 }
 

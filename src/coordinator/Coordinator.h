@@ -31,6 +31,8 @@ public:
     AbstractBIOHandler *getBioHandler() const;
     
 private:
+    void createEvent(const std::vector<int> &ipfd);
+
     AbstractNetHandler *netHandler;
     AbstractEventLoop *eventLoop;
     AbstractFlyClientFactory *flyClientFactory;

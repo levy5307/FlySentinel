@@ -17,13 +17,13 @@ class CommandTable;
 
 class AbstractFlyServer {
 public:
-    AbstractFlyServer(const AbstractCoordinator *coordinator);
-    void init(ConfigCache *configCache);
+    AbstractFlyServer(const AbstractCoordinator *coordinato, ConfigCache *configCache);
 
     /** network */
     size_t getClientMaxQuerybufLen() const;
     int64_t getStatNetInputBytes() const;
     void addToStatNetInputBytes(int64_t size);
+    const std::vector<int> &getIpfd() const;
 
     /** clients */
     void addToClientsPendingToWrite(int fd);

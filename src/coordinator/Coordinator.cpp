@@ -34,14 +34,13 @@ Coordinator::Coordinator() {
     }
 
     /** flyServer */
-    this->flyServer = new FlySentinel(this);
+    this->flyServer = new FlySentinel(this, this->configCache);
 
     /** event loop **/
     this->eventLoop = new EventLoop(this, flyServer->getMaxClients() + CONFIG_FDSET_INCR);
 
-    // 时间循环处理器
-    this->eventLoop->createTimeEvent(1, serverCron, NULL, NULL);
-
+    /** 创建事件 */
+    this->createEvent(flyServer->getIpfd());
 
     /** background io*/
     this->bioHandler = new BIOHandler();
@@ -56,6 +55,18 @@ Coordinator::~Coordinator() {
     delete this->flyClientFactory;
     delete this->bioHandler;
     delete this->logHandler;
+}
+
+void Coordinator::createEvent(const std::vector<int> &ipfd) {
+    // 时间循环处理器
+    this->eventLoop->createTimeEvent(1, serverCron, NULL, NULL);
+    // 创建定时任务，用于创建客户端连接
+    for (auto fd : ipfd) {
+        if (-1 == this->eventLoop->createFileEvent(
+                fd, ES_READABLE, acceptTcpHandler, nullptr)) {
+            exit(1);
+        }
+    }
 }
 
 AbstractNetHandler *Coordinator::getNetHandler() const {
