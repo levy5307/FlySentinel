@@ -16,6 +16,7 @@ typedef int (*getKeysProc)(struct CommandEntry *cmd,
                            std::shared_ptr<FlyObj> *argv,
                            int argc,
                            int *numkeys);
+void pingCommand(const AbstractCoordinator* coordinator, std::shared_ptr<AbstractFlyClient> flyClient);
 
 class CommandEntry {
 public:
@@ -121,6 +122,6 @@ private:
     uint64_t microseconds, calls;
 };
 
-extern std::vector<CommandEntry*> flyDBCommandTable;
+extern std::vector<CommandEntry*> sentinelCommandTable;
 
 #endif //FLYSENTINEL_COMMANDENTRY_H

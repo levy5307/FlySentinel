@@ -29,7 +29,10 @@ public:
 
     /** bio */
     AbstractBIOHandler *getBioHandler() const;
-    
+
+    /** shared objects */
+    AbstractSharedObjects *getSharedObjects() const;
+
 private:
     void createEvent(const std::vector<int> &ipfd);
 
@@ -39,7 +42,9 @@ private:
     ConfigCache *configCache;
     BaseConfigReader *configReader;
     AbstractFlyObjFactory *flyObjStringFactory;
-    AbstractFlyServer *flyServer;
+
+    /** shared objects */
+    AbstractSharedObjects *sharedObjects;
 
     /**
      * logHandler
@@ -54,6 +59,7 @@ private:
     /**
      * fly server
      **/
+    AbstractFlyServer *flyServer;
 
 };
 

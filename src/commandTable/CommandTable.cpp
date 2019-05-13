@@ -21,9 +21,9 @@ CommandTable::~CommandTable() {
 }
 
 void CommandTable::populateCommand() {
-    int num = flyDBCommandTable.size();
+    int num = sentinelCommandTable.size();
     for (int i = 0; i < num; i++) {
-        CommandEntry *entry = flyDBCommandTable[i];
+        CommandEntry *entry = sentinelCommandTable[i];
         const char *f = entry->getSflags().c_str();
         while (*f != '\0') {
             switch (*f) {

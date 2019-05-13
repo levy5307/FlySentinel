@@ -12,7 +12,7 @@
  *     w-表示会修改db, 有该标志下，会将命令序列追加到aof文件中
  *     A-表示是访问db的key操作，此时在访问之前会判断该键是否已过期
  **/
-std::vector<CommandEntry* > flyDBCommandTable;
+std::vector<CommandEntry* > sentinelCommandTable;
 
 CommandEntry::CommandEntry() {
 
@@ -137,4 +137,10 @@ int CommandEntry::getKeyStep() const {
 
 void CommandEntry::setKeyStep(int keyStep) {
     CommandEntry::keyStep = keyStep;
+}
+
+void pingCommand(const AbstractCoordinator* coordinator,
+                 std::shared_ptr<AbstractFlyClient> flyClient) {
+    std::shared_ptr<FlyObj> pongObj = coordinator->getSharedObjects()->getPong();
+    flyClient->addReply(reinterpret_cast<std::string *>(pongObj->getPtr())->c_str());
 }

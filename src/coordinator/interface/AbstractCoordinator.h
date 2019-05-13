@@ -12,6 +12,7 @@
 #include "AbstractLogHandler.h"
 #include "AbstractFlyObjFactory.h"
 #include "AbstractFlyServer.h"
+#include "AbstractSharedObjects.h"
 
 class AbstractFlyClientFactory;
 class AbstractFlyServer;
@@ -35,6 +36,9 @@ public:
 
     /** bio */
     virtual AbstractBIOHandler *getBioHandler() const = 0;
+
+    /** shared objects */
+    virtual AbstractSharedObjects *getSharedObjects() const = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTCOORDINATOR_H

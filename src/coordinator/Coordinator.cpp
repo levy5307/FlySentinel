@@ -10,6 +10,8 @@
 #include "../def.h"
 #include "../event/EventLoop.h"
 #include "../flySentinel/FlySentinel.h"
+#include "../shared/SharedObjects.h"
+#include "../flyObj/FlyObjString/FlyObjStringFactory.h"
 
 Coordinator::Coordinator() {
     /** 加载config **/
@@ -19,6 +21,9 @@ Coordinator::Coordinator() {
 
     /** client factory **/
     this->flyClientFactory = new FlyClientFactory();
+
+    /** fly obj factory **/
+    this->flyObjStringFactory = new FlyObjStringFactory();
 
     /** net handler **/
     this->netHandler = NetHandler::getInstance();
@@ -44,6 +49,9 @@ Coordinator::Coordinator() {
 
     /** background io*/
     this->bioHandler = new BIOHandler();
+
+    /** shared objects */
+    this->sharedObjects = new SharedObjects(this);
 
     /** log handler */
     this->logHandler = logFactory->getLogger();
@@ -95,4 +103,8 @@ AbstractLogHandler *Coordinator::getLogHandler() const {
 
 AbstractBIOHandler *Coordinator::getBioHandler() const {
     return this->bioHandler;
+}
+
+AbstractSharedObjects *Coordinator::getSharedObjects() const {
+    return sharedObjects;
 }
