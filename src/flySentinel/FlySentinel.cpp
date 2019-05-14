@@ -7,9 +7,12 @@
 #include "../flyClient/ClientDef.h"
 #include "../flyClient/FlyClient.h"
 #include "../def.h"
+#include "../dataStructure/dict/Dict.cpp"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
         : AbstractFlyServer(coordinator, configCache) {
+    memset(this->myid, 0, sizeof(this->myid));
+    this->masters = new Dict<std::string, std::shared_ptr<AbstractFlyInstance>>();
 }
 
 FlySentinel::~FlySentinel() {
