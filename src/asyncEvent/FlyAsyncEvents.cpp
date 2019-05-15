@@ -1,7 +1,6 @@
 //
 // Created by levy on 2019/5/15.
 //
-
 #include "FlyAsyncEvents.h"
 
 FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop) {
@@ -10,11 +9,11 @@ FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *even
 }
 
 void FlyAsyncEvents::handleReadEvent() {
-    redisAsyncHandleRead(this->context);
+    //redisAsyncHandleRead(this->context);
 }
 
 void FlyAsyncEvents::handleWriteEvent() {
-    redisAsyncHandleWrite(this->context);
+    //redisAsyncHandleWrite(this->context);
 }
 
 void FlyAsyncEvents::addReadEvent() {

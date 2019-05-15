@@ -5,7 +5,6 @@
 #ifndef FLYSENTINEL_FLYASYNCEVENTS_H
 #define FLYSENTINEL_FLYASYNCEVENTS_H
 
-#include <hiredis/async.h>
 #include "../coordinator/interface/AbstractEventLoop.h"
 #include "convert.h"
 
