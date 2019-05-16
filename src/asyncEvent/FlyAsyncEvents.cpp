@@ -3,17 +3,27 @@
 //
 #include "FlyAsyncEvents.h"
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    void redisAsyncHandleRead(redisAsyncContext *ac);
+    void redisAsyncHandleWrite(redisAsyncContext *ac);
+#ifdef __cplusplus
+}
+#endif
+
 FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop) {
     this->context = context;
     this->eventLoop = eventLoop;
 }
 
 void FlyAsyncEvents::handleReadEvent() {
-    //redisAsyncHandleRead(this->context);
+    redisAsyncHandleRead(this->context);
 }
 
 void FlyAsyncEvents::handleWriteEvent() {
-    //redisAsyncHandleWrite(this->context);
+    redisAsyncHandleWrite(this->context);
 }
 
 void FlyAsyncEvents::addReadEvent() {
