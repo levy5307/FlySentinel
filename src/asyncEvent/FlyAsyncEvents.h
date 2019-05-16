@@ -11,8 +11,6 @@
 class FlyAsyncEvents {
 public:
     FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop);
-    void handleReadEvent();
-    void handleWriteEvent();
     void addReadEvent();
     void deleteReadEvent();
     void addWriteEvent();

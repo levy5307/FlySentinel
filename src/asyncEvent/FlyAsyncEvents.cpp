@@ -3,33 +3,29 @@
 //
 #include "FlyAsyncEvents.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-    void redisAsyncHandleRead(redisAsyncContext *ac);
-    void redisAsyncHandleWrite(redisAsyncContext *ac);
-#ifdef __cplusplus
+void handleReadEvent(const AbstractCoordinator *coorinator,
+                     int fd,
+                     std::shared_ptr<AbstractFlyClient> flyClient,
+                     int mask) {
+    //flyAsyncHandleRead(this->context);
 }
-#endif
+
+void handleWriteEvent(const AbstractCoordinator *coorinator,
+                     int fd,
+                     std::shared_ptr<AbstractFlyClient> flyClient,
+                     int mask) {
+    //flyAsyncHandleRead(this->context);
+}
 
 FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop) {
     this->context = context;
     this->eventLoop = eventLoop;
 }
 
-void FlyAsyncEvents::handleReadEvent() {
-    redisAsyncHandleRead(this->context);
-}
-
-void FlyAsyncEvents::handleWriteEvent() {
-    redisAsyncHandleWrite(this->context);
-}
-
 void FlyAsyncEvents::addReadEvent() {
     if (!this->reading) {
         this->reading = true;
-        //eventLoop->createFileEvent(this->fd, ES_READABLE, NULL, NULL);
+        eventLoop->createFileEvent(this->fd, ES_READABLE, handleReadEvent, NULL);
     }
 }
 
@@ -43,7 +39,7 @@ void FlyAsyncEvents::deleteReadEvent() {
 void FlyAsyncEvents::addWriteEvent() {
     if (!this->writing) {
         this->writing = true;
-        //eventLoop->createFileEvent(this->fd, ES_WRITABLE, NULL, NULL);
+        eventLoop->createFileEvent(this->fd, ES_WRITABLE, handleWriteEvent, NULL);
     }
 }
 
