@@ -695,9 +695,8 @@ void FlyClient::clearOutputBuffer() {
 
 void acceptTcpHandler(const AbstractCoordinator *coordinator,
                       int fd,
-                      std::shared_ptr<AbstractFlyClient> flyClient,
+                      void *privdata,
                       int mask) {
-    /**
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
     AbstractNetHandler *netHandler = coordinator->getNetHandler();
 
@@ -716,18 +715,14 @@ void acceptTcpHandler(const AbstractCoordinator *coordinator,
             close(cfd);
         }
     }
-     */
 }
 
 void readQueryFromClient(const AbstractCoordinator *coordinator,
                          int fd,
-                         std::shared_ptr<AbstractFlyClient> flyClient,
+                         void *privdata,
                          int mask) {
-    if (nullptr == flyClient) {
-        return;
-    }
-
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
+    std::shared_ptr<AbstractFlyClient> flyClient = flyServer->getFlyClient(fd);
     AbstractNetHandler *netHandler = coordinator->getNetHandler();
 
     char buf[PROTO_IOBUF_LEN] = "\0";
@@ -766,12 +761,8 @@ void readQueryFromClient(const AbstractCoordinator *coordinator,
 
 void sendReplyToClient(const AbstractCoordinator *coordinator,
                        int fd,
-                       std::shared_ptr<AbstractFlyClient> flyClient,
+                       void *privdata,
                        int mask) {
-    if (nullptr == flyClient) {
-        return;
-    }
-
-    flyClient->writeToClient(1);
+    coordinator->getFlyServer()->getFlyClient(fd)->writeToClient(1);
 }
 

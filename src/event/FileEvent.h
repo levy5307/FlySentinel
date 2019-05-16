@@ -16,7 +16,7 @@ public:
     int getMask() const;
     int addFileProc(int mask,
                     fileEventProc *proc,
-                    std::shared_ptr<AbstractFlyClient> flyClient);
+                    void *privdata);
     void delFileProc(int mask);
     bool noneMask();
     void process(int mask);
@@ -26,7 +26,7 @@ public:
 
     int fd;
     int mask;       // EVENT_READABLE或者EVENT_WRITABLE
-    std::shared_ptr<AbstractFlyClient> flyClient;
+    void *privdata;
     fileEventProc *rfileProc, *wfileProc;
     const AbstractCoordinator *coordinator;
 };

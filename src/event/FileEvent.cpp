@@ -20,7 +20,7 @@ int FileEvent::getMask() const {
 
 int FileEvent::addFileProc(int mask,
                            fileEventProc *proc,
-                           std::shared_ptr<AbstractFlyClient> flyClient) {
+                           void *privdata) {
     // 设置相应的proc
     this->mask |= mask;
     if (mask & ES_READABLE) {
@@ -29,7 +29,7 @@ int FileEvent::addFileProc(int mask,
     if (mask & ES_WRITABLE) {
         this->wfileProc = proc;
     }
-    this->flyClient = flyClient;
+    this->privdata = privdata;
 
     return 1;
 }
@@ -48,11 +48,11 @@ void FileEvent::process(int mask) {
     // 如果是有可读/可写事件，则执行事件回调
     if (mask & ES_READABLE) {
         rfired = 1;
-        rfileProc(this->coordinator, this->fd, flyClient, mask);
+        rfileProc(this->coordinator, this->fd, this->privdata, mask);
     }
     if (mask & ES_WRITABLE) {
         if (this->wfileProc != this->rfileProc || 0 == rfired) {
-            wfileProc(this->coordinator, fd, flyClient, mask);
+            wfileProc(this->coordinator, fd, this->privdata, mask);
         }
     }
 }

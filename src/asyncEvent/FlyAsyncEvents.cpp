@@ -5,14 +5,14 @@
 
 void handleReadEvent(const AbstractCoordinator *coorinator,
                      int fd,
-                     std::shared_ptr<AbstractFlyClient> flyClient,
+                     void *privdata,
                      int mask) {
     //flyAsyncHandleRead(this->context);
 }
 
 void handleWriteEvent(const AbstractCoordinator *coorinator,
                      int fd,
-                     std::shared_ptr<AbstractFlyClient> flyClient,
+                     void *privdata,
                      int mask) {
     //flyAsyncHandleRead(this->context);
 }

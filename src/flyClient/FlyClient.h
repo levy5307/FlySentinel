@@ -20,15 +20,15 @@ class CommandEntry;
 // 对应socket的绑定接口
 void acceptTcpHandler(const AbstractCoordinator *coordinator,
                       int fd,
-                      std::shared_ptr<AbstractFlyClient> flyClient,
+                      void *privdata,
                       int mask);
 void readQueryFromClient(const AbstractCoordinator *coordinator,
                          int fd,
-                         std::shared_ptr<AbstractFlyClient> flyClient,
+                         void *privata,
                          int mask);
 void sendReplyToClient(const AbstractCoordinator *coordinator,
                        int fd,
-                       std::shared_ptr<AbstractFlyClient> flyClient,
+                       void *privdata,
                        int mask);
 
 class FlyClient : public AbstractFlyClient {

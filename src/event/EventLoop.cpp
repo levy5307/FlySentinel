@@ -56,14 +56,14 @@ void EventLoop::stop() {
 int EventLoop::createFileEvent(int fd,
                                int mask,
                                fileEventProc* proc,
-                               std::shared_ptr<AbstractFlyClient> flyClient) {
+                               void *privdata) {
     if (fd >= this->setSize) {
         return -1;
     }
 
     // 设置fileEvent, 添加file proc
     FileEvent& fileEvent = this->fileEvents[fd];
-    fileEvent.addFileProc(mask, proc, flyClient);
+    fileEvent.addFileProc(mask, proc, privdata);
 
     // 设置监听fd
     PollState* eventState = reinterpret_cast<PollState*>(this->apiData);

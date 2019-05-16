@@ -91,7 +91,7 @@ int AbstractFlyServer::handleClientsWithPendingWrites() {
         // 异步发送
         if (!(*iter)->hasNoPending()) {
             if (-1 == this->coordinator->getEventLoop()->createFileEvent(
-                    (*iter)->getFd(), ES_WRITABLE, sendReplyToClient, *iter)) {
+                    (*iter)->getFd(), ES_WRITABLE, sendReplyToClient, NULL)) {
                 freeClientAsync(*iter);
             }
         }
@@ -140,7 +140,7 @@ std::shared_ptr<AbstractFlyClient> AbstractFlyServer::createClient(int fd) {
                 NULL, fd, this->tcpKeepAlive);
     }
     if (-1 == this->coordinator->getEventLoop()->createFileEvent(
-            fd, ES_READABLE, readQueryFromClient, flyClient)) {
+            fd, ES_READABLE, readQueryFromClient, NULL)) {
         return nullptr;
     }
 

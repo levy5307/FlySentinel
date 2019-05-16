@@ -28,7 +28,7 @@ public:
     int createFileEvent(int fd,
                         int mask,
                         fileEventProc* proc,
-                        std::shared_ptr<AbstractFlyClient> flyClient);
+                        void *privdata);
     int deleteFileEvent(int fd, int mask);
     int deleteWriteFileEvent(int fd);
     int deleteReadFileEvent(int fd);
