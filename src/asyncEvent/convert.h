@@ -6,6 +6,7 @@
 #define FLYSENTINEL_CONVERT_H
 
 #include <hiredis/async.h>
+#include "FlyAsyncEvents.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,9 +17,11 @@ void redisAsyncHandleWrite(redisAsyncContext *ac);
 }
 #endif
 
-void (*flyAsyncHandleRead)(redisAsyncContext *) = redisAsyncHandleRead;
-void (*flyAsyncHandleWrite)(redisAsyncContext *) = redisAsyncHandleWrite;
+typedef redisAsyncContext FlyAsyncContext;
+extern void (*flyAsyncHandleRead)(redisAsyncContext *);
+extern void (*flyAsyncHandleWrite)(redisAsyncContext *);
 
-typedef redisAsyncContext FlyAsyncContext ;
+class FlyAsyncEvents;
+void initEventLibraryHooks(FlyAsyncContext *asyncContext, FlyAsyncEvents *asyncEvents);
 
 #endif //FLYSENTINEL_CONVERT_H

@@ -8,6 +8,15 @@
 #include "../coordinator/interface/AbstractEventLoop.h"
 #include "convert.h"
 
+void handleReadEvent(const AbstractCoordinator *coorinator,
+                     int fd,
+                     void *privdata,
+                     int mask);
+void handleWriteEvent(const AbstractCoordinator *coorinator,
+                      int fd,
+                      void *privdata,
+                      int mask);
+
 class FlyAsyncEvents {
 public:
     FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop);
@@ -16,10 +25,10 @@ public:
     void addWriteEvent();
     void deleteWriteEvent();
     void cleanup();
-    FlyAsyncContext *getContext() const;
+    FlyAsyncContext *getAsyncContext() const;
 
 private:
-    FlyAsyncContext *context;
+    FlyAsyncContext *asyncContext;
     AbstractEventLoop *eventLoop;
     int fd;
     bool reading, writing;

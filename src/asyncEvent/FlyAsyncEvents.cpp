@@ -3,33 +3,12 @@
 //
 #include "FlyAsyncEvents.h"
 
-void handleReadEvent(const AbstractCoordinator *coorinator,
-                     int fd,
-                     void *privdata,
-                     int mask) {
-    if (privdata == NULL) {
-        return;
-    }
-
-    FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
-    flyAsyncHandleRead(e->getContext());
-}
-
-void handleWriteEvent(const AbstractCoordinator *coorinator,
-                     int fd,
-                     void *privdata,
-                     int mask) {
-    if (privdata == NULL) {
-        return;
-    }
-
-    FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
-    flyAsyncHandleRead(e->getContext());
-}
-
-FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop) {
-    this->context = context;
+FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *asyncContext, AbstractEventLoop *eventLoop) {
+    this->asyncContext = asyncContext;
     this->eventLoop = eventLoop;
+    this->reading = this->writing = false;
+    this->fd = (asyncContext->c).fd;
+    initEventLibraryHooks(asyncContext, this);
 }
 
 void FlyAsyncEvents::addReadEvent() {
@@ -65,6 +44,31 @@ void FlyAsyncEvents::cleanup() {
     this->deleteWriteEvent();
 }
 
-FlyAsyncContext *FlyAsyncEvents::getContext() const {
-    return this->context;
+FlyAsyncContext *FlyAsyncEvents::getAsyncContext() const {
+    return this->asyncContext;
 }
+
+void handleReadEvent(const AbstractCoordinator *coorinator,
+                     int fd,
+                     void *privdata,
+                     int mask) {
+    if (privdata == NULL) {
+        return;
+    }
+
+    FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
+    flyAsyncHandleRead(e->getAsyncContext());
+}
+
+void handleWriteEvent(const AbstractCoordinator *coorinator,
+                      int fd,
+                      void *privdata,
+                      int mask) {
+    if (privdata == NULL) {
+        return;
+    }
+
+    FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
+    flyAsyncHandleRead(e->getAsyncContext());
+}
+
