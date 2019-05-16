@@ -7,14 +7,24 @@ void handleReadEvent(const AbstractCoordinator *coorinator,
                      int fd,
                      void *privdata,
                      int mask) {
-    //flyAsyncHandleRead(this->context);
+    if (privdata == NULL) {
+        return;
+    }
+
+    FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
+    flyAsyncHandleRead(e->getContext());
 }
 
 void handleWriteEvent(const AbstractCoordinator *coorinator,
                      int fd,
                      void *privdata,
                      int mask) {
-    //flyAsyncHandleRead(this->context);
+    if (privdata == NULL) {
+        return;
+    }
+
+    FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
+    flyAsyncHandleRead(e->getContext());
 }
 
 FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop) {
@@ -53,4 +63,8 @@ void FlyAsyncEvents::deleteWriteEvent() {
 void FlyAsyncEvents::cleanup() {
     this->deleteReadEvent();
     this->deleteWriteEvent();
+}
+
+FlyAsyncContext *FlyAsyncEvents::getContext() const {
+    return this->context;
 }

@@ -16,6 +16,7 @@ public:
     void addWriteEvent();
     void deleteWriteEvent();
     void cleanup();
+    FlyAsyncContext *getContext() const;
 
 private:
     FlyAsyncContext *context;
