@@ -8,15 +8,17 @@
 #include "../flyClient/FlyClient.h"
 #include "../def.h"
 #include "../dataStructure/dict/Dict.cpp"
+#include "FlysentinelDef.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
         : AbstractFlyServer(coordinator, configCache) {
     memset(this->myid, 0, sizeof(this->myid));
-    this->masters = new Dict<std::string, std::shared_ptr<AbstractFlyInstance>>();
+    this->masters = new std::map<std::string, std::shared_ptr<AbstractFlyInstance>>();
+    this->port = FLYDB_SENTINEL_PORT;
 }
 
 FlySentinel::~FlySentinel() {
-
+    delete this->masters;
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
