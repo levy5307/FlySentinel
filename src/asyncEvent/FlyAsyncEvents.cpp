@@ -69,6 +69,6 @@ void handleWriteEvent(const AbstractCoordinator *coorinator,
     }
 
     FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
-    flyAsyncHandleRead(e->getAsyncContext());
+    flyAsyncHandleWrite(e->getAsyncContext());
 }
 
