@@ -13,6 +13,7 @@
 #include "AbstractFlyObjFactory.h"
 #include "AbstractFlyServer.h"
 #include "AbstractSharedObjects.h"
+#include "AbstractPubSubHandler.h"
 
 class AbstractFlyClientFactory;
 class AbstractFlyServer;
@@ -39,6 +40,9 @@ public:
 
     /** shared objects */
     virtual AbstractSharedObjects *getSharedObjects() const = 0;
+
+    /** pub/sub */
+    virtual AbstractPubSubHandler *getPubSubHandler() const = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTCOORDINATOR_H

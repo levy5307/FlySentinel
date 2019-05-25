@@ -8,6 +8,7 @@
 #include "interface/AbstractCoordinator.h"
 #include "../config/ConfigCache.h"
 #include "../config/base/BaseConfigReader.h"
+#include "interface/AbstractPubSubHandler.h"
 
 class Coordinator : public AbstractCoordinator {
 public:
@@ -32,6 +33,9 @@ public:
 
     /** shared objects */
     AbstractSharedObjects *getSharedObjects() const;
+
+    /** pub/sub */
+    AbstractPubSubHandler *getPubSubHandler() const;
 
 private:
     void createEvent(const std::vector<int> &ipfd);
@@ -61,6 +65,8 @@ private:
      **/
     AbstractFlyServer *flyServer;
 
+    /** pub/sub handler */
+    AbstractPubSubHandler *pubSubHandler;
 };
 
 #endif //FLYSENTINEL_COORDINATOR_H

@@ -12,6 +12,7 @@
 #include "../flySentinel/FlySentinel.h"
 #include "../shared/SharedObjects.h"
 #include "../flyObj/FlyObjString/FlyObjStringFactory.h"
+#include "../pubsub/PubSubHandler.h"
 
 Coordinator::Coordinator() {
     /** 加载config **/
@@ -55,6 +56,9 @@ Coordinator::Coordinator() {
 
     /** log handler */
     this->logHandler = logFactory->getLogger();
+    
+    /** pub/sub handler */
+    this->pubSubHandler = new PubSubHandler(this);
 }
 
 Coordinator::~Coordinator() {
@@ -63,6 +67,7 @@ Coordinator::~Coordinator() {
     delete this->flyClientFactory;
     delete this->bioHandler;
     delete this->logHandler;
+    delete this->pubSubHandler;
 }
 
 void Coordinator::createEvent(const std::vector<int> &ipfd) {
@@ -107,4 +112,8 @@ AbstractBIOHandler *Coordinator::getBioHandler() const {
 
 AbstractSharedObjects *Coordinator::getSharedObjects() const {
     return sharedObjects;
+}
+
+AbstractPubSubHandler *Coordinator::getPubSubHandler() const {
+    return this->pubSubHandler;
 }
