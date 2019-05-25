@@ -92,10 +92,12 @@ public:
     const std::list<std::string*> &getReply() const;
     void setReply(const std::list<std::string*> &reply);
     void addReply(const char *fmt, ...);
+    void addReplyFlyStringObj(std::shared_ptr<FlyObj> flyObj);
     void addReplyErrorFormat(const char *fmt, ...);
     void addReplyError(const char *err);
     void addReplyBulkCount(int count);
     void addReplyBulkString(std::string str);
+    void addReplyLongLong(int64_t length);
     const char *getBuf() const;
     void clearBuf();
     void setBuf(const char* buf, int size);
@@ -105,6 +107,15 @@ public:
     void setBufpos(int bufpos);
     void setReplyBytes(uint64_t replyBytes);
     uint64_t getReplyBytes() const;
+
+    /** pub/sub */
+    int getSubscriptionsCount() const;          /** 获取所有订阅频道、模式订阅频道的数量 */
+    bool addChannel(const std::string &str);          /** 添加订阅频道 */
+    bool delChannel(const std::string &channel);      /** 删除订阅频道 */
+    const std::map<const std::string, void *> &getChannels() const;
+    const std::list<const std::string> &getPatterns() const;
+    void addPattern(const std::string &pattern);
+    int delPattern(const std::string &pattern);
 
 private:
     int addReplyToBuffer(const char *s, size_t len);
@@ -137,6 +148,10 @@ private:
     int32_t multiBulkLen;               // 剩余可读的multi bulk参数数量
     int64_t bulkLen;
     size_t sendLen;                     // 记录发送长度，用于处理一次没有发送完的情况
+
+    /** pub/sub */
+    std::map<const std::string, void*> channels;
+    std::list<const std::string> patterns;
 
     AbstractLogHandler *logHandler;
     const AbstractCoordinator *coordinator;

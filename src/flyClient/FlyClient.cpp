@@ -567,6 +567,11 @@ void FlyClient::addReply(const char *fmt, ...) {
     this->addReplyRaw(msg);
 }
 
+void FlyClient::addReplyFlyStringObj(std::shared_ptr<FlyObj> flyObj) {
+    const char *ch = reinterpret_cast<std::string *>(flyObj->getPtr())->c_str();
+    this->addReply(ch);
+}
+
 void FlyClient::addReplyErrorFormat(const char *fmt, ...) {
     va_list ap;
     char msg[1024];
@@ -614,6 +619,11 @@ void FlyClient::addReplyBulkString(std::string str) {
     std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
     fio->writeBulkString(str);
     this->addReply(fio->getStr().c_str());
+}
+
+void FlyClient::addReplyLongLong(int64_t length) {
+    std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
+    fio->writeBulkCount(':', length);
 }
 
 int FlyClient::addReplyToBuffer(const char *s, size_t len) {
@@ -691,6 +701,53 @@ void FlyClient::clearOutputBuffer() {
 
     /** 清除固定缓冲区 */
     this->clearBuf();
+}
+
+int FlyClient::getSubscriptionsCount() const {
+    return this->channels.size() + this->patterns.size();
+}
+
+bool FlyClient::addChannel(const std::string &channel) {
+    if (this->channels.find(channel) != this->channels.end()) {
+        return false;
+    }
+
+    /** 插入 */
+    this->channels[channel] = NULL;
+    return true;
+}
+
+bool FlyClient::delChannel(const std::string &channel) {
+    std::map<const std::string, void*>::iterator iter = this->channels.find(channel);
+    if (iter == this->channels.end()) {
+        return false;
+    }
+
+    this->channels.erase(iter);
+    return true;
+}
+
+const std::map<const std::string, void *> &FlyClient::getChannels() const {
+    return channels;
+}
+
+const std::list<const std::string> &FlyClient::getPatterns() const {
+    return patterns;
+}
+
+void FlyClient::addPattern(const std::string &pattern) {
+    this->patterns.push_back(pattern);
+}
+
+int FlyClient::delPattern(const std::string &pattern) {
+    for (std::list<const std::string>::const_iterator citer = this->patterns.begin(); citer != this->patterns.end(); citer++) {
+        if (*citer == pattern) {
+            this->patterns.erase(citer);
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 void acceptTcpHandler(const AbstractCoordinator *coordinator,

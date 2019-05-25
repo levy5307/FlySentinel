@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <string>
 #include <list>
+#include <map>
 #include "../../flyObj/FlyObj.h"
 
 class AbstractFlyClient {
@@ -108,6 +109,8 @@ public:
 
     virtual void addReply(const char *fmt, ...) = 0;
 
+    virtual void addReplyFlyStringObj(std::shared_ptr<FlyObj> flyObj) = 0;
+
     virtual void addReplyErrorFormat(const char *fmt, ...) = 0;
 
     virtual void addReplyError(const char *err) = 0;
@@ -115,6 +118,8 @@ public:
     virtual void addReplyBulkCount(int count) = 0;
 
     virtual void addReplyBulkString(std::string str) = 0;
+
+    virtual void addReplyLongLong(int64_t length) = 0;
 
     virtual void clearBuf() = 0;
 
@@ -134,6 +139,20 @@ public:
 
     virtual uint64_t getReplyBytes() const = 0;
 
+    /** pub/sub */
+    virtual int getSubscriptionsCount() const = 0;
+
+    virtual bool addChannel(const std::string &channel) = 0;
+
+    virtual bool delChannel(const std::string &channel) = 0;
+
+    virtual const std::map<const std::string, void *> &getChannels() const = 0;
+
+    virtual const std::list<const std::string> &getPatterns() const = 0;
+
+    virtual void addPattern(const std::string &pattern) = 0;
+
+    virtual int delPattern(const std::string &pattern) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYCLIENT_H
