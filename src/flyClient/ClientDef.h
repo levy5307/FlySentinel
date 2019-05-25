@@ -19,6 +19,8 @@ const int CLIENT_CLOSE_ASAP = 1 << 10;
 const int CLIENT_MASTER_FORCE_REPLY = 1 << 13;
 /** Instance don't understand PSYNC */
 const int CLIENT_PRE_PSYNC = 1 << 16;
+/** 客户端处于Pub/Sub模式 */
+const int CLIENT_PUBSUB = 1 << 18;
 
 const int FLY_REPLY_CHUNK_BYTES = 16 * 1024;
 

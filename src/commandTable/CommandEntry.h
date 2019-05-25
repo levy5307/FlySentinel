@@ -122,6 +122,12 @@ private:
     uint64_t microseconds, calls;
 };
 
+void subscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
+void unsubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
+void psubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
+void punsubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
+void publishCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
+
 extern std::vector<CommandEntry*> sentinelCommandTable;
 
 #endif //FLYSENTINEL_COMMANDENTRY_H
