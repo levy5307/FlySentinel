@@ -122,6 +122,7 @@ private:
     uint64_t microseconds, calls;
 };
 
+void pingCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
 void subscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
 void unsubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
 void psubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);

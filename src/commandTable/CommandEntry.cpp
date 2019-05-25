@@ -13,6 +13,7 @@
  *     A-表示是访问db的key操作，此时在访问之前会判断该键是否已过期
  **/
 std::vector<CommandEntry* > sentinelCommandTable = {
+        new CommandEntry("ping",        pingCommand,        1, "tF",  0, NULL, 0, 0, 0, 0, 0),
         new CommandEntry("subscribe",   subscribeCommand,   2, "",    0, NULL, 0, 0, 0, 0, 0),
         new CommandEntry("unsubscribe", unsubscribeCommand, 1, "",    0, NULL, 0, 0, 0, 0, 0),
         new CommandEntry("psubscribe",  psubscribeCommand,  2, "",    0, NULL, 0, 0, 0, 0, 0),
