@@ -2,8 +2,8 @@
 // Created by levy on 2019/5/18.
 //
 
-#ifndef FLYDB_ABSTRACTPUBSUBHANDLER_H
-#define FLYDB_ABSTRACTPUBSUBHANDLER_H
+#ifndef FLYSENTINEL_ABSTRACTPUBSUBHANDLER_H
+#define FLYSENTINEL_ABSTRACTPUBSUBHANDLER_H
 
 class AbstractFlyClient;
 
@@ -42,4 +42,4 @@ public:
     virtual int unsubscribeAllPatterns(std::shared_ptr<AbstractFlyClient> flyClient, bool notify) = 0;
 };
 
-#endif //FLYDB_ABSTRACTPUBSUBHANDLER_H
+#endif //FLYSENTINEL_ABSTRACTPUBSUBHANDLER_H

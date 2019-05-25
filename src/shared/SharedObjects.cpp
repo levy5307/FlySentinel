@@ -29,6 +29,14 @@ SharedObjects::SharedObjects(AbstractCoordinator *coordinator) {
         snprintf(buf, sizeof(buf), "*2\r\n$6\r\nSELECT\r\n$%d\r\n%s\r\n", dbidStr.length(), dbidStr.c_str());
         this->select.push_back(this->coordinator->getFlyObjStringFactory()->getObject(new std::string(buf)));
     }
+
+    /** pub/sub share object */
+    this->messagebulk = this->coordinator->getFlyObjStringFactory()->getObject(new std::string("$7\r\nmessage\r\n"));
+    this->pmessagebulk = this->coordinator->getFlyObjStringFactory()->getObject(new std::string("$8\r\npmessage\r\n"));
+    this->subscribebulk = this->coordinator->getFlyObjStringFactory()->getObject(new std::string("$9\r\nsubscribe\r\n"));
+    this->unsubscribebulk = this->coordinator->getFlyObjStringFactory()->getObject(new std::string("$11\r\nunsubscribe\r\n"));
+    this->psubscribebulk = this->coordinator->getFlyObjStringFactory()->getObject(new std::string("$10\r\npsubscribe\r\n"));
+    this->punsubscribebulk = this->coordinator->getFlyObjStringFactory()->getObject(new std::string("$12\r\npunsubscribe\r\n"));
 }
 
 SharedObjects::~SharedObjects() {
@@ -74,4 +82,28 @@ std::shared_ptr<FlyObj> SharedObjects::getSelect(int num) const {
     }
 
     return this->select.at(num);
+}
+
+std::shared_ptr<FlyObj> SharedObjects::getMessagebulk() const {
+    return messagebulk;
+}
+
+std::shared_ptr<FlyObj> SharedObjects::getPmessagebulk() const {
+    return pmessagebulk;
+}
+
+std::shared_ptr<FlyObj> SharedObjects::getSubscribebulk() const {
+    return subscribebulk;
+}
+
+std::shared_ptr<FlyObj> SharedObjects::getUnsubscribebulk() const {
+    return unsubscribebulk;
+}
+
+std::shared_ptr<FlyObj> SharedObjects::getPsubscribebulk() const {
+    return psubscribebulk;
+}
+
+std::shared_ptr<FlyObj> SharedObjects::getPunsubscribebulk() const {
+    return punsubscribebulk;
 }

@@ -21,6 +21,12 @@ public:
     std::shared_ptr<FlyObj> getOk() const;
     int getSelectSize() const;
     std::shared_ptr<FlyObj> getSelect(int num) const;
+    std::shared_ptr<FlyObj> getMessagebulk() const;
+    std::shared_ptr<FlyObj> getPmessagebulk() const;
+    std::shared_ptr<FlyObj> getSubscribebulk() const;
+    std::shared_ptr<FlyObj> getUnsubscribebulk() const;
+    std::shared_ptr<FlyObj> getPsubscribebulk() const;
+    std::shared_ptr<FlyObj> getPunsubscribebulk() const;
 
 private:
     /** 共享multi bulk len字段，其格式为: "*<value>\r\n" */
@@ -28,7 +34,13 @@ private:
     std::shared_ptr<FlyObj> pong;
     std::shared_ptr<FlyObj> ping;
     std::shared_ptr<FlyObj> ok;
-    std::vector<std::shared_ptr<FlyObj> > select;
+    std::vector<std::shared_ptr<FlyObj>> select;
+    std::shared_ptr<FlyObj> messagebulk;
+    std::shared_ptr<FlyObj> pmessagebulk;
+    std::shared_ptr<FlyObj> subscribebulk;
+    std::shared_ptr<FlyObj> unsubscribebulk;
+    std::shared_ptr<FlyObj> psubscribebulk;
+    std::shared_ptr<FlyObj> punsubscribebulk;
 
     const AbstractCoordinator *coordinator;
 };

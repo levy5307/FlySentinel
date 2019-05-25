@@ -2,8 +2,8 @@
 // Created by levy on 2019/5/18.
 //
 
-#ifndef FLYDB_PUBSUBHANDLER_H
-#define FLYDB_PUBSUBHANDLER_H
+#ifndef FLYSENTINEL_PUBSUBHANDLER_H
+#define FLYSENTINEL_PUBSUBHANDLER_H
 
 #include <string>
 #include <list>
@@ -11,6 +11,7 @@
 #include "../coordinator/interface/AbstractPubSubHandler.h"
 #include "PubSubDef.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
+#include "../def.h"
 
 class PubSubHandler : public AbstractPubSubHandler {
 public:
@@ -71,4 +72,4 @@ private:
 };
 
 
-#endif //FLYDB_PUBSUBHANDLER_H
+#endif //FLYSENTINEL_PUBSUBHANDLER_H

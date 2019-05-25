@@ -2,8 +2,8 @@
 // Created by levy on 2019/3/17.
 //
 
-#ifndef FLYDB_ABSTRACTSHAREDOBJECT_H
-#define FLYDB_ABSTRACTSHAREDOBJECT_H
+#ifndef FLYSENTINEL_ABSTRACTSHAREDOBJECT_H
+#define FLYSENTINEL_ABSTRACTSHAREDOBJECT_H
 
 #include <memory>
 
@@ -19,6 +19,12 @@ public:
     virtual std::shared_ptr<FlyObj> getOk() const = 0;
     virtual int getSelectSize() const = 0;
     virtual std::shared_ptr<FlyObj> getSelect(int num) const = 0;
+    virtual std::shared_ptr<FlyObj> getMessagebulk() const = 0;
+    virtual std::shared_ptr<FlyObj> getPmessagebulk() const = 0;
+    virtual std::shared_ptr<FlyObj> getSubscribebulk() const = 0;
+    virtual std::shared_ptr<FlyObj> getUnsubscribebulk() const = 0;
+    virtual std::shared_ptr<FlyObj> getPsubscribebulk() const = 0;
+    virtual std::shared_ptr<FlyObj> getPunsubscribebulk() const = 0;
 };
 
-#endif //FLYDB_ABSTRACTSHAREDOBJECT_H
+#endif //FLYSENTINEL_ABSTRACTSHAREDOBJECT_H

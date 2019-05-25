@@ -2,8 +2,8 @@
 // Created by levy on 2019/5/18.
 //
 
-#ifndef FLYDB_PUBSUBDEF_H
-#define FLYDB_PUBSUBDEF_H
+#ifndef FLYSENTINEL_PUBSUBDEF_H
+#define FLYSENTINEL_PUBSUBDEF_H
 
 #include "../coordinator/interface/AbstractFlyClient.h"
 
@@ -16,4 +16,4 @@ struct PubSubPattern {
     const std::string& pattern;
 };
 
-#endif //FLYDB_PUBSUBDEF_H
+#endif //FLYSENTINEL_PUBSUBDEF_H

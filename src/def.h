@@ -2,8 +2,8 @@
 // Created by 赵立伟 on 2018/10/4.
 //
 
-#ifndef FLYDB_CONFIG_H
-#define FLYDB_CONFIG_H
+#ifndef FLYSENTINEL_CONFIG_H
+#define FLYSENTINEL_CONFIG_H
 
 #include <string>
 #include <syslog.h>
@@ -76,4 +76,4 @@ extern AbstractLogFactory *logFactory;
 extern MiscTool *miscTool;
 
 
-#endif //FLYDB_CONFIG_H
+#endif //FLYSENTINEL_CONFIG_H

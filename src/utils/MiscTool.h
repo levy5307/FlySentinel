@@ -268,6 +268,137 @@ public:
         }
     }
 
+    int stringmatchlen(const char *pattern, int patternLen, const char *str, int stringLen, bool nocase) {
+        while(patternLen && stringLen) {
+            switch(pattern[0]) {
+                case '*':
+                    while (pattern[1] == '*') {
+                        pattern++;
+                        patternLen--;
+                    }
+                    if (patternLen == 1) {
+                        return true; /* match */
+                    }
+                    while(stringLen) {
+                        if (stringmatchlen(pattern+1, patternLen-1, str, stringLen, nocase)) {
+                            return true; /* match */
+                        }
+                        str++;
+                        stringLen--;
+                    }
+                    return false; /* no match */
+                case '?':
+                    if (stringLen == 0) {
+                        return false; /* no match */
+                    }
+                    str++;
+                    stringLen--;
+                    break;
+                case '[': {
+                    int notflag, match;
+
+                    pattern++;
+                    patternLen--;
+                    notflag = pattern[0] == '^';
+                    if (notflag) {
+                        pattern++;
+                        patternLen--;
+                    }
+                    match = 0;
+                    while(1) {
+                        if (pattern[0] == '\\' && patternLen >= 2) {
+                            pattern++;
+                            patternLen--;
+                            if (pattern[0] == str[0]) {
+                                match = 1;
+                            }
+                        } else if (pattern[0] == ']') {
+                            break;
+                        } else if (patternLen == 0) {
+                            pattern--;
+                            patternLen++;
+                            break;
+                        } else if (pattern[1] == '-' && patternLen >= 3) {
+                            int start = pattern[0];
+                            int end = pattern[2];
+                            int c = str[0];
+                            if (start > end) {
+                                int t = start;
+                                start = end;
+                                end = t;
+                            }
+                            if (nocase) {
+                                start = tolower(start);
+                                end = tolower(end);
+                                c = tolower(c);
+                            }
+                            pattern += 2;
+                            patternLen -= 2;
+                            if (c >= start && c <= end) {
+                                match = 1;
+                            }
+                        } else {
+                            if (!nocase) {
+                                if (pattern[0] == str[0])
+                                    match = 1;
+                            } else {
+                                if (tolower((int)pattern[0]) == tolower((int)str[0]))
+                                    match = 1;
+                            }
+                        }
+                        pattern++;
+                        patternLen--;
+                    }
+                    if (notflag) {
+                        match = !match;
+                    }
+                    if (!match) {
+                        return false; /* no match */
+                    }
+
+                    str++;
+                    stringLen--;
+                    break;
+                }
+                case '\\':
+                    if (patternLen >= 2) {
+                        pattern++;
+                        patternLen--;
+                    }
+                    /* fall through */
+                default:
+                    if (!nocase) {
+                        if (pattern[0] != str[0])
+                            return false; /* no match */
+                    } else {
+                        if (tolower((int)pattern[0]) != tolower((int)str[0]))
+                            return false; /* no match */
+                    }
+                    str++;
+                    stringLen--;
+                    break;
+            }
+            pattern++;
+            patternLen--;
+            if (stringLen == 0) {
+                while(*pattern == '*') {
+                    pattern++;
+                    patternLen--;
+                }
+                break;
+            }
+        }
+
+        if (patternLen == 0 && stringLen == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    bool stringmatch(const std::string &pattern, const std::string &str, bool nocase) {
+        return stringmatchlen(pattern.c_str(), pattern.length(), str.c_str(), str.length(), nocase);
+    }
+
 private:
     MiscTool() {
     }
