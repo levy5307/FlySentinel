@@ -6,7 +6,7 @@
 #define FLYSENTINEL_ABSTRACTFLYINSTANCE_H
 
 #include <string>
-#include "../../flySentinel/FlysentinelDef.h"
+#include "../../flySentinel/SentinelAddr.h"
 
 class AbstractFlyDBInstance {
 public:
@@ -16,7 +16,8 @@ public:
     virtual void setName(const std::string &name) = 0;
     virtual SentinelAddr *getAddr() const = 0;
     virtual void setAddr(SentinelAddr *addr) = 0;
-    virtual AbstractFlyDBInstance *getMaster() const = 0;
+    virtual AbstractFlyDBInstance* getMaster() const = 0;
+    virtual bool haveMaster() const = 0;
     virtual void setMaster(AbstractFlyDBInstance *master) = 0;
 
 };

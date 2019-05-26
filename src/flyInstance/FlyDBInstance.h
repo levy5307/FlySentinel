@@ -6,6 +6,7 @@
 #define FLYSENTINEL_FLYINSTANCE_H
 
 #include "../coordinator/interface/AbstractFlyDBInstance.h"
+#include "../flySentinel/SentinelAddr.h"
 
 class FlyDBInstance : public AbstractFlyDBInstance {
 public:
@@ -17,7 +18,8 @@ public:
     void setName(const std::string &name);
     SentinelAddr *getAddr() const;
     void setAddr(SentinelAddr *addr);
-    AbstractFlyDBInstance *getMaster() const;
+    AbstractFlyDBInstance* getMaster() const;
+    bool haveMaster() const;
     void setMaster(AbstractFlyDBInstance *master);
 
 private:

@@ -12,7 +12,7 @@ FlyDBInstance::~FlyDBInstance() {
     if (NULL != this->addr) {
         delete this->addr;
     }
-    
+
     if (NULL != this->master) {
         delete this->master;
     }
@@ -42,8 +42,12 @@ void FlyDBInstance::setAddr(SentinelAddr *addr) {
     this->addr = addr;
 }
 
-AbstractFlyDBInstance *FlyDBInstance::getMaster() const {
-    return master;
+AbstractFlyDBInstance* FlyDBInstance::getMaster() const {
+    return this->master;
+}
+
+bool FlyDBInstance::haveMaster() const {
+    return NULL != this->master;
 }
 
 void FlyDBInstance::setMaster(AbstractFlyDBInstance *master) {

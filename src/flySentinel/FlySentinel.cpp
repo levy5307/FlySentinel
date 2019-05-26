@@ -24,7 +24,22 @@ FlySentinel::~FlySentinel() {
 void FlySentinel::sendEvent(int level, char *type, AbstractFlyDBInstance* flyInstance, const char *fmt, ...) {
     char msg[LOG_MAX_LEN];
     if ('%' == fmt[0] && '@' == fmt[1]) {
-
+        if (flyInstance->haveMaster()) {
+            AbstractFlyDBInstance *master = flyInstance->getMaster();
+            snprintf(msg, sizeof(msg), "%s %s %d @ %s %s %d",
+                     flyInstance->getName().c_str(),
+                     flyInstance->getAddr()->getIp().c_str(),
+                     flyInstance->getAddr()->getPort(),
+                     master->getName().c_str(),
+                     master->getAddr()->getIp().c_str(),
+                     master->getAddr()->getPort());
+        } else {
+            snprintf(msg, sizeof(msg), "%s %s %d",
+                     flyInstance->getName().c_str(),
+                     flyInstance->getAddr()->getIp().c_str(),
+                     flyInstance->getAddr()->getPort());
+        }
+        fmt += 2;
     }
 
 }
