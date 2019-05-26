@@ -16,6 +16,8 @@ public:
     virtual void setName(const std::string &name) = 0;
     virtual SentinelAddr *getAddr() const = 0;
     virtual void setAddr(SentinelAddr *addr) = 0;
+    virtual AbstractFlyDBInstance *getMaster() const = 0;
+    virtual void setMaster(AbstractFlyDBInstance *master) = 0;
 
 };
 

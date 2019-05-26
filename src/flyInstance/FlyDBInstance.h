@@ -17,6 +17,8 @@ public:
     void setName(const std::string &name);
     SentinelAddr *getAddr() const;
     void setAddr(SentinelAddr *addr);
+    AbstractFlyDBInstance *getMaster() const;
+    void setMaster(AbstractFlyDBInstance *master);
 
 private:
     int flags;

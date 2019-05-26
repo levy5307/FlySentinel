@@ -23,7 +23,7 @@ int FlyDBInstance::getFlags() const {
 }
 
 void FlyDBInstance::setFlags(int flags) {
-    FlyDBInstance::flags = flags;
+    this->flags = flags;
 }
 
 const std::string &FlyDBInstance::getName() const {
@@ -31,7 +31,7 @@ const std::string &FlyDBInstance::getName() const {
 }
 
 void FlyDBInstance::setName(const std::string &name) {
-    FlyDBInstance::name = name;
+    this->name = name;
 }
 
 SentinelAddr *FlyDBInstance::getAddr() const {
@@ -39,5 +39,13 @@ SentinelAddr *FlyDBInstance::getAddr() const {
 }
 
 void FlyDBInstance::setAddr(SentinelAddr *addr) {
-    FlyDBInstance::addr = addr;
+    this->addr = addr;
+}
+
+AbstractFlyDBInstance *FlyDBInstance::getMaster() const {
+    return master;
+}
+
+void FlyDBInstance::setMaster(AbstractFlyDBInstance *master) {
+    this->master = master;
 }
