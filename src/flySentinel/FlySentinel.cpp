@@ -40,8 +40,27 @@ void FlySentinel::sendEvent(int level, char *type, AbstractFlyDBInstance* flyIns
                      flyInstance->getAddr()->getPort());
         }
         fmt += 2;
+    } else {
+        msg[0] = '\0';
     }
 
+    /** if fmt is not null */
+    if (fmt[0] != '\0') {
+        va_list ap;
+        va_start(ap, fmt);
+        vsnprintf(msg + strlen(msg), sizeof(msg) - strlen(msg), fmt, ap);
+        va_end(ap);
+    }
+
+    /** log */
+    this->logHandler->log(level, "%s %s", type, msg);
+
+    /** 如果当前不是调试状态，则发送pub/sub消息 */
+    if (level != LL_DEBUG) {
+        coordinator->getPubSubHandler()->publishMessage(type, msg);
+    }
+
+    // todo: send script notification
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
