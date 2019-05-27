@@ -10,7 +10,7 @@
 
 class ScriptJob {
 public:
-    ScriptJob(int argc);
+    ScriptJob(int argc, char** argv);
     ~ScriptJob();
 
 private:
