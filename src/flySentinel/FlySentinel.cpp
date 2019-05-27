@@ -23,7 +23,7 @@ void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDB
     char msg[LOG_MAX_LEN];
     if ('%' == fmt[0] && '@' == fmt[1]) {
         if (flyInstance->haveMaster()) {
-            AbstractFlyDBInstance *master = flyInstance->getMaster();
+            std::shared_ptr<AbstractFlyDBInstance> master = flyInstance->getMaster();
             snprintf(msg, sizeof(msg), "%s %s %d @ %s %s %d",
                      flyInstance->getName().c_str(),
                      flyInstance->getAddr()->getIp().c_str(),
@@ -58,13 +58,23 @@ void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDB
         coordinator->getPubSubHandler()->publishMessage(type, msg);
     }
 
-    // todo: send script notification
+    /** 调用脚本 */
+    if (LL_WARNING == level && NULL != flyInstance) {
+        std::shared_ptr<AbstractFlyDBInstance> master = flyInstance->haveMaster() ? flyInstance->getMaster() : flyInstance;
+        if (master && NULL != master->getNotificationScript()) {
+            this->scheduleScriptExecution(master->getNotificationScript(), type, msg, NULL);
+        }
+    }
 }
 
 void FlySentinel::generateInitMonitorEvents() {
     for (auto item : this->masters) {
         this->sendEvent(LL_WARNING, "+monitor", item.second, "%@ quorum %d", item.second->getQuorum());
     }
+}
+
+void FlySentinel::scheduleScriptExecution(char *path, ...) {
+
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {

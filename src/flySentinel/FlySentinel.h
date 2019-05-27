@@ -23,6 +23,8 @@ public:
     void generateInitMonitorEvents();
 
 private:
+    void scheduleScriptExecution(char *path, ...);
+
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
     std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> masters;

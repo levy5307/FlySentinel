@@ -3,6 +3,7 @@
 //
 
 #include "FlyDBInstance.h"
+#include "../flySentinel/FlysentinelDef.h"
 
 FlyDBInstance::FlyDBInstance() {
 
@@ -13,9 +14,7 @@ FlyDBInstance::~FlyDBInstance() {
         delete this->addr;
     }
 
-    if (NULL != this->master) {
-        delete this->master;
-    }
+    this->master = NULL;
 }
 
 int FlyDBInstance::getFlags() const {
@@ -42,15 +41,15 @@ void FlyDBInstance::setAddr(SentinelAddr *addr) {
     this->addr = addr;
 }
 
-AbstractFlyDBInstance* FlyDBInstance::getMaster() const {
+std::shared_ptr<AbstractFlyDBInstance> FlyDBInstance::getMaster() const {
     return this->master;
 }
 
 bool FlyDBInstance::haveMaster() const {
-    return NULL != this->master;
+    return 0 != this->flags & FSI_MASTER;
 }
 
-void FlyDBInstance::setMaster(AbstractFlyDBInstance *master) {
+void FlyDBInstance::setMaster(std::shared_ptr<AbstractFlyDBInstance> master) {
     this->master = master;
 }
 
@@ -59,5 +58,13 @@ uint32_t FlyDBInstance::getQuorum() const {
 }
 
 void FlyDBInstance::setQuorum(uint32_t quorum) {
-    FlyDBInstance::quorum = quorum;
+    this->quorum = quorum;
+}
+
+char *FlyDBInstance::getNotificationScript() const {
+    return notificationScript;
+}
+
+void FlyDBInstance::setNotificationScript(char *notificationScript) {
+    this->notificationScript = notificationScript;
 }

@@ -18,18 +18,21 @@ public:
     void setName(const std::string &name);
     SentinelAddr *getAddr() const;
     void setAddr(SentinelAddr *addr);
-    AbstractFlyDBInstance* getMaster() const;
+    std::shared_ptr<AbstractFlyDBInstance> getMaster() const;
     bool haveMaster() const;
-    void setMaster(AbstractFlyDBInstance *master);
+    void setMaster(std::shared_ptr<AbstractFlyDBInstance> master);
     uint32_t getQuorum() const;
     void setQuorum(uint32_t quorum);
+    char *getNotificationScript() const;
+    void setNotificationScript(char *notificationScript);
 
 private:
     int flags;
     std::string name;
     SentinelAddr *addr = NULL;
-    AbstractFlyDBInstance *master = NULL;
+    std::shared_ptr<AbstractFlyDBInstance> master = NULL;
     uint32_t quorum;            /** 对于判定flydb失败，需要的sentinel票数 */
+    char *notificationScript = NULL;
 };
 
 
