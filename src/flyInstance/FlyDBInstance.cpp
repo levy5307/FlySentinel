@@ -53,3 +53,11 @@ bool FlyDBInstance::haveMaster() const {
 void FlyDBInstance::setMaster(AbstractFlyDBInstance *master) {
     this->master = master;
 }
+
+uint32_t FlyDBInstance::getQuorum() const {
+    return quorum;
+}
+
+void FlyDBInstance::setQuorum(uint32_t quorum) {
+    FlyDBInstance::quorum = quorum;
+}

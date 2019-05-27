@@ -13,15 +13,13 @@
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
         : AbstractFlyServer(coordinator, configCache) {
     memset(this->myid, 0, sizeof(this->myid));
-    this->masters = new std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>>();
     this->port = FLYDB_SENTINEL_PORT;
 }
 
 FlySentinel::~FlySentinel() {
-    delete this->masters;
 }
 
-void FlySentinel::sendEvent(int level, char *type, AbstractFlyDBInstance* flyInstance, const char *fmt, ...) {
+void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...) {
     char msg[LOG_MAX_LEN];
     if ('%' == fmt[0] && '@' == fmt[1]) {
         if (flyInstance->haveMaster()) {
@@ -61,6 +59,12 @@ void FlySentinel::sendEvent(int level, char *type, AbstractFlyDBInstance* flyIns
     }
 
     // todo: send script notification
+}
+
+void FlySentinel::generateInitMonitorEvents() {
+    for (auto item : this->masters) {
+        this->sendEvent(LL_WARNING, "+monitor", item.second, "%@ quorum %d", item.second->getQuorum());
+    }
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {

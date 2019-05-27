@@ -18,12 +18,13 @@ class FlySentinel : public AbstractFlyServer {
 public:
     FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache);
     ~FlySentinel();
-    void sendEvent(int level, char *type, AbstractFlyDBInstance* flyInstance, const char *fmt, ...);
+    void sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...);
+    void generateInitMonitorEvents();
 
 private:
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
-    std::map<std::string, std::shared_ptr<AbstractFlyDBInstance> > *masters;
+    std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> masters;
     bool tilt = false;                 /** tilt mode */
     uint64_t tiltStartTime = 0;
     uint64_t previousTime = miscTool->mstime();

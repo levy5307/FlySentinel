@@ -21,12 +21,15 @@ public:
     AbstractFlyDBInstance* getMaster() const;
     bool haveMaster() const;
     void setMaster(AbstractFlyDBInstance *master);
+    uint32_t getQuorum() const;
+    void setQuorum(uint32_t quorum);
 
 private:
     int flags;
     std::string name;
     SentinelAddr *addr = NULL;
-    AbstractFlyDBInstance *master = NULL; /* Master instance if it's slave. */
+    AbstractFlyDBInstance *master = NULL;
+    uint32_t quorum;            /** 对于判定flydb失败，需要的sentinel票数 */
 };
 
 

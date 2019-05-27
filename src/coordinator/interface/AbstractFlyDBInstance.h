@@ -19,6 +19,8 @@ public:
     virtual AbstractFlyDBInstance* getMaster() const = 0;
     virtual bool haveMaster() const = 0;
     virtual void setMaster(AbstractFlyDBInstance *master) = 0;
+    virtual uint32_t getQuorum() const = 0;
+    virtual void setQuorum(uint32_t quorum) = 0;
 
 };
 
