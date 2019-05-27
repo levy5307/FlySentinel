@@ -75,5 +75,4 @@ const std::string VERSION = "0.0.1";
 extern AbstractLogFactory *logFactory;
 extern MiscTool *miscTool;
 
-
 #endif //FLYSENTINEL_CONFIG_H

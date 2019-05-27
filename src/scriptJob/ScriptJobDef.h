@@ -1,0 +1,10 @@
+//
+// Created by levy on 2019/5/27.
+//
+
+#ifndef FLYSENTINEL_SCRIPTJOBDEF_H
+#define FLYSENTINEL_SCRIPTJOBDEF_H
+
+const int SENTINEL_SCRIPT_NONE = 0;
+
+#endif //FLYSENTINEL_SCRIPTJOBDEF_H

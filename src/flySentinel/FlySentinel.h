@@ -11,6 +11,7 @@
 #include "../config/ConfigCache.h"
 #include "../def.h"
 #include "../coordinator/interface/AbstractFlyDBInstance.h"
+#include "../scriptJob/ScriptJob.h"
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData);
 
@@ -30,6 +31,8 @@ private:
     uint64_t previousTime = miscTool->mstime();
     char *announceIP = NULL;
     int announcePort = 0;
+    int runningScripts = 0;
+    std::list<ScriptJob*> scriptsQueue;
 };
 
 
