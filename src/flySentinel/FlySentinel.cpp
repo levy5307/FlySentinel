@@ -114,6 +114,17 @@ void FlySentinel::scheduleScriptExecution(char *path, ...) {
     }
 }
 
+std::shared_ptr<ScriptJob> FlySentinel::getScriptListNodeByPid(pid_t pid) {
+    std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
+    for (; iter != this->scriptsQueue.end(); iter++) {
+        if ((*iter)->isRunning() && (*iter)->getPid() == pid) {
+            return *iter;
+        }
+    }
+
+    return NULL;
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 
