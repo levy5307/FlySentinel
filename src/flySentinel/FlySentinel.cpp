@@ -9,6 +9,7 @@
 #include "../def.h"
 #include "../dataStructure/dict/Dict.cpp"
 #include "FlysentinelDef.h"
+#include "../scriptJob/ScriptJobDef.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
         : AbstractFlyServer(coordinator, configCache) {
@@ -18,9 +19,6 @@ FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *co
 
 FlySentinel::~FlySentinel() {
     this->masters.clear();
-    for (auto item : this->scriptsQueue) {
-        delete item;
-    }
     this->scriptsQueue.clear();
 }
 
@@ -84,7 +82,36 @@ void FlySentinel::generateInitMonitorEvents() {
 }
 
 void FlySentinel::scheduleScriptExecution(char *path, ...) {
+    int argc = 1;
+    char *argv[SENTINEL_SCRIPT_MAX_ARGS + 1];
+    va_list ap;
 
+    /** 解析参数, 可变长度参数以NULL结尾 */
+    argv[0] = (char*)new std::string(path);
+    va_start(ap, path);
+    while (argc < SENTINEL_SCRIPT_MAX_ARGS) {
+        char *arg = va_arg(ap, char*);
+        if (NULL == arg) {
+            break;
+        }
+        argv[argc++] = (char*)new std::string(arg);
+    }
+    va_end(ap);
+
+    /** 生成一个job并存入job队列 */
+    std::shared_ptr<ScriptJob> job = std::shared_ptr<ScriptJob>(new ScriptJob(argc, argv));
+    this->scriptsQueue.push_back(job);
+    /** 如果队列长度超过最大限度，则删除列首的一个没在执行的job */
+    if (this->scriptsQueue.size() > SENTINEL_SCRIPT_MAX_QUEUE) {
+        std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
+        for (; iter != this->scriptsQueue.end(); iter++) {
+            if ((*iter)->isRunning()) { /** 如果该job处于运行状态，则寻找下一个 */
+                continue;
+            }
+            this->scriptsQueue.erase(iter);
+            break;
+        }
+    }
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {

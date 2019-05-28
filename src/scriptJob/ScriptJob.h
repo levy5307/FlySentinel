@@ -10,15 +10,27 @@
 
 class ScriptJob {
 public:
+    ScriptJob();
     ScriptJob(int argc, char** argv);
     ~ScriptJob();
+    int getFlags() const;
+    bool isRunning() const;
+    void setFlags(int flags);
+    uint32_t getRetryCount() const;
+    void setRetryCount(uint32_t retryCount);
+    char **getArgv() const;
+    void setArgv(char **argv);
+    uint64_t getStartTime() const;
+    void setStartTime(uint64_t startTime);
+    pid_t getPid() const;
+    void setPid(pid_t pid);
 
 private:
-    int flags;
-    uint32_t retryCount;
-    char **argv;
-    uint64_t startTime;
-    pid_t pid;
+    int flags = 0;
+    uint32_t retryCount = 0;
+    char **argv = NULL;
+    uint64_t startTime = 0;
+    pid_t pid = 0;
 };
 
 

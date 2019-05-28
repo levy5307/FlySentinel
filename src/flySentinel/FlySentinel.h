@@ -34,7 +34,7 @@ private:
     char *announceIP = NULL;
     int announcePort = 0;
     int runningScripts = 0;
-    std::list<ScriptJob*> scriptsQueue;
+    std::list<std::shared_ptr<ScriptJob>> scriptsQueue;
 };
 
 

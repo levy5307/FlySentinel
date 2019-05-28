@@ -6,6 +6,8 @@
 #define FLYSENTINEL_FLYSENTINELDEF_H
 
 const int FLYDB_SENTINEL_PORT = 26379;
+const int SENTINEL_SCRIPT_MAX_ARGS = 16;
+const int SENTINEL_SCRIPT_MAX_QUEUE = 256;
 
 enum FlySentinelInstance {
     FSI_MASTER = 1 << 0,
