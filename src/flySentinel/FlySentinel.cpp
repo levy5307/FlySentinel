@@ -17,6 +17,11 @@ FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *co
 }
 
 FlySentinel::~FlySentinel() {
+    this->masters.clear();
+    for (auto item : this->scriptsQueue) {
+        delete item;
+    }
+    this->scriptsQueue.clear();
 }
 
 void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...) {
