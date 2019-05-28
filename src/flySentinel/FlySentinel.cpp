@@ -67,6 +67,11 @@ void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDB
     }
 }
 
+/**
+ * 调用该函数有两个场景：
+ *   1.这个函数值在启动时调用，用于向每个master发送一个+monitor事件
+ *   2.同时在运行时动态监控master时，也会向该master发送一个+monitor事件
+ **/
 void FlySentinel::generateInitMonitorEvents() {
     for (auto item : this->masters) {
         this->sendEvent(LL_WARNING, "+monitor", item.second, "%@ quorum %d", item.second->getQuorum());
