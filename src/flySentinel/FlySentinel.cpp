@@ -82,6 +82,7 @@ void FlySentinel::generateInitMonitorEvents() {
     }
 }
 
+/** 可变参数列表需要以NULL结尾 */
 void FlySentinel::scheduleScriptExecution(char *path, ...) {
     int argc = 1;
     char *argv[SENTINEL_SCRIPT_MAX_ARGS + 1];
@@ -218,6 +219,35 @@ void FlySentinel::killTimedoutScripts() {
             kill(item->getPid(), SIGKILL);
         }
     }
+}
+
+/**
+ * 客户端重配置脚本job, 每次failover执行时都会被调用：
+ *   <master-name> <role> <state> <from-ip> <from-port> <to-ip> <to-port>
+ *   <state>始终是"failover"
+ *   <role>是"leader"或者"observer"
+ * */
+void FlySentinel::callClientReconfScript(AbstractFlyDBInstance *master, int role, char *state,
+                                         SentinelAddr *from, SentinelAddr *to) {
+    if (master->isClientReconfigScriptNULL()) {
+        return;
+    }
+
+    /** 获取port的字符串 */
+    std::string fromport = std::to_string(from->getPort());
+    std::string toport = std::to_string(to->getPort());
+
+    /** 调度任务进任务队列 */
+    this->scheduleScriptExecution(master->getClientReconfigScript(),
+                                  master->getName().c_str(),
+                                  SENTINEL_OBSERVER == role ? "leader" : "observer",
+                                  state,
+                                  from->getIp().c_str(),
+                                  fromport.c_str(),
+                                  to->getIp().c_str(),
+                                  toport.c_str(),
+                                  NULL);
+
 }
 
 void FlySentinel::deleteScriptJob(pid_t pid) {

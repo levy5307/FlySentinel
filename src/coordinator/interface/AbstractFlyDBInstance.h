@@ -23,6 +23,8 @@ public:
     virtual void setQuorum(uint32_t quorum) = 0;
     virtual char *getNotificationScript() const = 0;
     virtual void setNotificationScript(char *notificationScript) = 0;
+    virtual char *getClientReconfigScript() const = 0;
+    virtual bool isClientReconfigScriptNULL() const = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

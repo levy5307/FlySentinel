@@ -68,3 +68,11 @@ char *FlyDBInstance::getNotificationScript() const {
 void FlyDBInstance::setNotificationScript(char *notificationScript) {
     this->notificationScript = notificationScript;
 }
+
+char *FlyDBInstance::getClientReconfigScript() const {
+    return clientReconfigScript;
+}
+
+bool FlyDBInstance::isClientReconfigScriptNULL() const {
+    return NULL == this->clientReconfigScript;
+}

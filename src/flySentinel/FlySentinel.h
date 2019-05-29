@@ -29,6 +29,7 @@ private:
     void collectTerminatedScripts();
     void deleteScriptJob(pid_t pid);
     void killTimedoutScripts();
+    void callClientReconfScript(AbstractFlyDBInstance *master, int role, char *state, SentinelAddr *from, SentinelAddr *to);
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;

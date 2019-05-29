@@ -25,6 +25,8 @@ public:
     void setQuorum(uint32_t quorum);
     char *getNotificationScript() const;
     void setNotificationScript(char *notificationScript);
+    char *getClientReconfigScript() const;
+    bool isClientReconfigScriptNULL() const;
 
 private:
     int flags;
@@ -33,6 +35,7 @@ private:
     std::shared_ptr<AbstractFlyDBInstance> master = NULL;
     uint32_t quorum;            /** 对于判定flydb失败，需要的sentinel票数 */
     char *notificationScript = NULL;
+    char *clientReconfigScript = NULL;
 };
 
 
