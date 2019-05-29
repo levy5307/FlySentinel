@@ -23,6 +23,12 @@ FlySentinel::~FlySentinel() {
     this->scriptsQueue.clear();
 }
 
+/**
+ * 发送事件，主要做了三件事：
+ *   1.打印log
+ *   2.发送pub/sub信息给相应的客户端，type是具体的消息
+ *   3.生成通知脚本job到脚本job队列中
+ **/
 void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...) {
     char msg[LOG_MAX_LEN];
     if ('%' == fmt[0] && '@' == fmt[1] && NULL != flyInstance) {
