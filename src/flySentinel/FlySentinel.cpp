@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <signal.h>
 #include "FlySentinel.h"
 #include "../flyClient/ClientDef.h"
 #include "../flyClient/FlyClient.h"
@@ -202,6 +203,19 @@ void FlySentinel::collectTerminatedScripts() {
 
             /** delete job from queue */
             this->deleteScriptJob(pid);
+        }
+    }
+}
+
+/** 杀死超时的job，这些被杀死的job后续在collectTerminatedScripts中将会被处理 */
+void FlySentinel::killTimedoutScripts() {
+    uint64_t nowt = miscTool->mstime();
+
+    /** 遍历脚本任务列表，删除过时的job */
+    for (auto item : this->scriptsQueue) {
+        if (item->isRunning() && nowt - item->getStartTime() > SENTINEL_SCRIPT_MAX_RUNTIME) {
+            logHandler->logWarning("-script-timeout", NULL, "%s %ld", item->getArgv()[0], (long)item->getPid());
+            kill(item->getPid(), SIGKILL);
         }
     }
 }

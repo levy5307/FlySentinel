@@ -28,6 +28,7 @@ private:
     void runPendingScripts();
     void collectTerminatedScripts();
     void deleteScriptJob(pid_t pid);
+    void killTimedoutScripts();
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
