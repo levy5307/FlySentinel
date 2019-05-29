@@ -6,6 +6,9 @@
 #define FLYSENTINEL_ABSTRACTINSTANCELINK_H
 
 class AbstractInstanceLink {
+public:
+    virtual ~AbstractInstanceLink() {};
+    void closeConnection();
 
 };
 

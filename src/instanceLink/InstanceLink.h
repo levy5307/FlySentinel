@@ -9,6 +9,11 @@
 #include "../coordinator/interface/AbstractInstanceLink.h"
 
 class InstanceLink : public AbstractInstanceLink {
+public:
+    InstanceLink();
+    ~InstanceLink();
+    void closeConnection();
+
 private:
     bool disconnected;              // true-需要重连连接
     int pendingCommands;            // 等待响应的命令数量

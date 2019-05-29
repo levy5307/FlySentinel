@@ -3,3 +3,15 @@
 //
 
 #include "InstanceLink.h"
+
+InstanceLink::InstanceLink() {
+
+}
+
+InstanceLink::~InstanceLink() {
+
+}
+
+void InstanceLink::closeConnection() {
+
+}
