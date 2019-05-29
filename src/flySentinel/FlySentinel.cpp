@@ -149,6 +149,7 @@ void FlySentinel::runPendingScripts() {
         item->setStartTime(nowt);
         item->addRetryCount();
 
+        /** create child process to deal with script job */
         pid_t pid = fork();
         if (-1 == pid) {
             /** error */
@@ -158,7 +159,7 @@ void FlySentinel::runPendingScripts() {
         } else if (0 == pid) {
             /** child */
             execve(item->getArgv()[0], item->getArgv(), NULL);
-
+            exit(2);
         } else {
             /** parent */
             this->runningScripts++;
