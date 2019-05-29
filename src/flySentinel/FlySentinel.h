@@ -21,10 +21,11 @@ public:
     ~FlySentinel();
     void sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...);
     void generateInitMonitorEvents();
-    void scheduleScriptExecution(char *path, ...);
 
 private:
+    void scheduleScriptExecution(char *path, ...);
     std::shared_ptr<ScriptJob> getScriptListNodeByPid(pid_t pid);
+    void runPendingScripts();
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;

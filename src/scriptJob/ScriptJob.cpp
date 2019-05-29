@@ -42,12 +42,24 @@ void ScriptJob::setFlags(int flags) {
     this->flags = flags;
 }
 
+void ScriptJob::addFlags(int flags) {
+    this->flags |= flags;
+}
+
+void ScriptJob::delFlags(int flags) {
+    this->flags &= ~flags;
+}
+
 uint32_t ScriptJob::getRetryCount() const {
     return retryCount;
 }
 
 void ScriptJob::setRetryCount(uint32_t retryCount) {
     this->retryCount = retryCount;
+}
+
+void ScriptJob::addRetryCount() {
+    this->retryCount++;
 }
 
 char **ScriptJob::getArgv() const {

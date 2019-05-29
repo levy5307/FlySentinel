@@ -16,8 +16,11 @@ public:
     int getFlags() const;
     bool isRunning() const;
     void setFlags(int flags);
+    void addFlags(int flags);
+    void delFlags(int flags);
     uint32_t getRetryCount() const;
     void setRetryCount(uint32_t retryCount);
+    void addRetryCount();
     char **getArgv() const;
     void setArgv(char **argv);
     uint64_t getStartTime() const;

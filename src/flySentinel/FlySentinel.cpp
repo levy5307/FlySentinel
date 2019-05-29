@@ -24,7 +24,7 @@ FlySentinel::~FlySentinel() {
 
 void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...) {
     char msg[LOG_MAX_LEN];
-    if ('%' == fmt[0] && '@' == fmt[1]) {
+    if ('%' == fmt[0] && '@' == fmt[1] && NULL != flyInstance) {
         if (flyInstance->haveMaster()) {
             std::shared_ptr<AbstractFlyDBInstance> master = flyInstance->getMaster();
             snprintf(msg, sizeof(msg), "%s %s %d @ %s %s %d",
@@ -123,6 +123,49 @@ std::shared_ptr<ScriptJob> FlySentinel::getScriptListNodeByPid(pid_t pid) {
     }
 
     return NULL;
+}
+
+void FlySentinel::runPendingScripts() {
+    /** 获取当前时间 */
+    uint64_t nowt = miscTool->mstime();
+
+    for (auto item : this->scriptsQueue) {
+        if (this->runningScripts >= SENTINEL_SCRIPT_MAX_RUNNING) {
+            return;
+        }
+
+        /** 该job处于运行状态 */
+        if (item->isRunning()) {
+            continue;
+        }
+
+        /** 如果是重试，并且还没到下次重试时间 */
+        if (item->getStartTime() > nowt) {
+            continue;
+        }
+
+        /** set job parameters */
+        item->addFlags(SENTINEL_SCRIPT_RUNNING);
+        item->setStartTime(nowt);
+        item->addRetryCount();
+
+        pid_t pid = fork();
+        if (-1 == pid) {
+            /** error */
+            this->sendEvent(LL_WARNING, "-script-error", NULL, "%s %d %d", item->getArgv()[0], 99, 0);
+            item->delFlags(SENTINEL_SCRIPT_RUNNING);
+            item->setPid(0);
+        } else if (0 == pid) {
+            /** child */
+            execve(item->getArgv()[0], item->getArgv(), NULL);
+
+        } else {
+            /** parent */
+            this->runningScripts++;
+            item->setPid(pid);
+            this->sendEvent(LL_DEBUG, "+script-child", NULL, "%ld", (long)pid);
+        }
+    }
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
