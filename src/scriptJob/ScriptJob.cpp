@@ -6,6 +6,7 @@
 #include <cstring>
 #include "ScriptJob.h"
 #include "ScriptJobDef.h"
+#include "../def.h"
 
 ScriptJob::ScriptJob() {
 }
@@ -84,4 +85,21 @@ pid_t ScriptJob::getPid() const {
 
 void ScriptJob::setPid(pid_t pid) {
     this->pid = pid;
+}
+
+void ScriptJob::reschedule() {
+    this->delFlags(SENTINEL_SCRIPT_RUNNING);
+    this->setPid(0);
+    this->startTime = miscTool->mstime() + this->retryDelay();
+}
+
+uint64_t ScriptJob::retryDelay() {
+    uint64_t delay = SENTINEL_SCRIPT_RETRY_DELAY;
+
+    int count = this->retryCount;
+    while (--count > 0) {
+        delay *= 2;
+    }
+
+    return delay;
 }

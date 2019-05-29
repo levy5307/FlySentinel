@@ -27,8 +27,10 @@ public:
     void setStartTime(uint64_t startTime);
     pid_t getPid() const;
     void setPid(pid_t pid);
+    void reschedule();
 
 private:
+    uint64_t retryDelay();
     int flags = 0;
     uint32_t retryCount = 0;
     char **argv = NULL;

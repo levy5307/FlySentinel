@@ -61,7 +61,7 @@ void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDB
         coordinator->getPubSubHandler()->publishMessage(type, msg);
     }
 
-    /** 调用脚本 */
+    /** 调度脚本到脚本队列中 */
     if (LL_WARNING == level && NULL != flyInstance) {
         std::shared_ptr<AbstractFlyDBInstance> master = flyInstance->haveMaster() ? flyInstance->getMaster() : flyInstance;
         if (master && NULL != master->getNotificationScript()) {
@@ -167,6 +167,55 @@ void FlySentinel::runPendingScripts() {
             this->sendEvent(LL_DEBUG, "+script-child", NULL, "%ld", (long)pid);
         }
     }
+}
+
+/**
+ * 查看运行完的scripts
+ *  1.对于成功结束的，从队列中移除
+ *  2.对于信号终止或者exit=1的，则调度其继续运行，直到达到最大重试次数(SENTINEL_SCRIPT_MAX_RETRY)
+ **/
+void FlySentinel::collectTerminatedScripts() {
+    int statloc = 0;
+    pid_t pid = 0;
+    while (pid = wait3(&statloc, WNOHANG, NULL) > 0) {
+        int exitcode = WEXITSTATUS(statloc);
+        int bysignal = 0;
+        if (WIFSIGNALED(statloc)) {
+            bysignal = WTERMSIG(statloc);
+        }
+
+        /** get scriptjob by pid */
+        std::shared_ptr<ScriptJob> job = this->getScriptListNodeByPid(pid);
+        if (NULL == job) {
+            logHandler->logWarning("wait3() returned a pid (%ld) we can't find in our scripts execution queue!", (long)pid);
+            continue;
+        }
+
+        /** 重新调度该任务运行 */
+        if ((0 != bysignal || 1 == exitcode) && job->getRetryCount() < SENTINEL_SCRIPT_MAX_RETRY) {
+            job->reschedule();
+        } else { /** 将job从队列中移除 */
+            /** 如果非正常终止，则打印log */
+            if (0 != bysignal || 0 != exitcode) {
+                logHandler->logWarning("-script-error %s %d %d", job->getArgv()[0], bysignal, exitcode);
+            }
+
+            /** delete job from queue */
+            this->deleteScriptJob(pid);
+        }
+    }
+}
+
+void FlySentinel::deleteScriptJob(pid_t pid) {
+    std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
+    for (iter; iter != this->scriptsQueue.end(); iter++) {
+        if ((*iter)->getPid() == pid) {
+            this->scriptsQueue.erase(iter);
+            break;
+        }
+    }
+
+    this->runningScripts--;
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {

@@ -26,6 +26,8 @@ private:
     void scheduleScriptExecution(char *path, ...);
     std::shared_ptr<ScriptJob> getScriptListNodeByPid(pid_t pid);
     void runPendingScripts();
+    void collectTerminatedScripts();
+    void deleteScriptJob(pid_t pid);
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;

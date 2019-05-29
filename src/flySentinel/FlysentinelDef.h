@@ -9,6 +9,7 @@ const int FLYDB_SENTINEL_PORT = 26379;
 const int SENTINEL_SCRIPT_MAX_ARGS = 16;
 const int SENTINEL_SCRIPT_MAX_QUEUE = 256;
 const int SENTINEL_SCRIPT_MAX_RUNNING = 16;
+const int SENTINEL_SCRIPT_MAX_RETRY = 10;
 
 enum FlySentinelInstance {
     FSI_MASTER = 1 << 0,
