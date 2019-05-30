@@ -6,6 +6,7 @@
 
 void (*flyAsyncHandleRead)(redisAsyncContext *) = redisAsyncHandleRead;
 void (*flyAsyncHandleWrite)(redisAsyncContext *) = redisAsyncHandleWrite;
+void (*flyAsyncFree)(redisAsyncContext*) = redisAsyncFree;
 
 void flyAeAddRead(void *privdata) {
     FlyAsyncEvents *e = (FlyAsyncEvents*)privdata;
@@ -32,7 +33,7 @@ void flyAeCleanup(void *privdata) {
     flyAeDelWrite(privdata);
 }
 
-void initEventLibraryHooks(FlyAsyncContext *asyncContext, FlyAsyncEvents *asyncEvents) {
+void initEventLibraryHooks(redisAsyncContext *asyncContext, FlyAsyncEvents *asyncEvents) {
     asyncContext->ev.addRead = flyAeAddRead;
     asyncContext->ev.delRead = flyAeDelRead;
     asyncContext->ev.addWrite = flyAeAddWrite;

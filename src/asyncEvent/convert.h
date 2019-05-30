@@ -13,15 +13,17 @@ extern "C" {
 #endif
 void redisAsyncHandleRead(redisAsyncContext *ac);
 void redisAsyncHandleWrite(redisAsyncContext *ac);
+void redisAsyncFree(redisAsyncContext *ac);
 #ifdef __cplusplus
 }
 #endif
 
-typedef redisAsyncContext FlyAsyncContext;
+//typedef redisAsyncContext flyAsyncContext;
 extern void (*flyAsyncHandleRead)(redisAsyncContext *);
 extern void (*flyAsyncHandleWrite)(redisAsyncContext *);
+extern void (*flyAsyncFree)(redisAsyncContext *);
 
 class FlyAsyncEvents;
-void initEventLibraryHooks(FlyAsyncContext *asyncContext, FlyAsyncEvents *asyncEvents);
+void initEventLibraryHooks(redisAsyncContext *asyncContext, FlyAsyncEvents *asyncEvents);
 
 #endif //FLYSENTINEL_CONVERT_H

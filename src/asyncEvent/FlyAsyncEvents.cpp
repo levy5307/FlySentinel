@@ -3,7 +3,7 @@
 //
 #include "FlyAsyncEvents.h"
 
-FlyAsyncEvents::FlyAsyncEvents(FlyAsyncContext *asyncContext, AbstractEventLoop *eventLoop) {
+FlyAsyncEvents::FlyAsyncEvents(redisAsyncContext *asyncContext, AbstractEventLoop *eventLoop) {
     this->asyncContext = asyncContext;
     this->eventLoop = eventLoop;
     this->reading = this->writing = false;
@@ -44,7 +44,7 @@ void FlyAsyncEvents::cleanup() {
     this->deleteWriteEvent();
 }
 
-FlyAsyncContext *FlyAsyncEvents::getAsyncContext() const {
+redisAsyncContext *FlyAsyncEvents::getAsyncContext() const {
     return this->asyncContext;
 }
 

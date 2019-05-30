@@ -19,16 +19,16 @@ void handleWriteEvent(const AbstractCoordinator *coorinator,
 
 class FlyAsyncEvents {
 public:
-    FlyAsyncEvents(FlyAsyncContext *context, AbstractEventLoop *eventLoop);
+    FlyAsyncEvents(redisAsyncContext *context, AbstractEventLoop *eventLoop);
     void addReadEvent();
     void deleteReadEvent();
     void addWriteEvent();
     void deleteWriteEvent();
     void cleanup();
-    FlyAsyncContext *getAsyncContext() const;
+    redisAsyncContext *getAsyncContext() const;
 
 private:
-    FlyAsyncContext *asyncContext;
+    redisAsyncContext *asyncContext;
     AbstractEventLoop *eventLoop;
     int fd;
     bool reading, writing;
