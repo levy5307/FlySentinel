@@ -13,8 +13,8 @@ InstanceLink::InstanceLink() {
 }
 
 InstanceLink::~InstanceLink() {
-    this->commandContext = NULL;
-    this->pubsubContext = NULL;
+    closeConnection(this->commandContext);
+    closeConnection(this->pubsubContext);
 }
 
 void InstanceLink::closeConnection(std::shared_ptr<redisAsyncContext> context) {
