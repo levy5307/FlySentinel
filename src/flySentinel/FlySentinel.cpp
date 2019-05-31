@@ -88,6 +88,10 @@ void FlySentinel::generateInitMonitorEvents() {
     }
 }
 
+int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> flyInstance) {
+
+}
+
 /** 可变参数列表需要以NULL结尾 */
 void FlySentinel::scheduleScriptExecution(char *path, ...) {
     int argc = 1;
@@ -284,3 +288,4 @@ int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *client
               << " times!" << std::endl;
     return 1000 / flyServer->getHz();
 }
+

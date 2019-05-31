@@ -7,6 +7,8 @@
 
 #include "../coordinator/interface/AbstractFlyDBInstance.h"
 
+void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata);
+
 class FlyDBInstance : public AbstractFlyDBInstance {
 public:
     FlyDBInstance();

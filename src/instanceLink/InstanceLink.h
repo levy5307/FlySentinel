@@ -9,6 +9,10 @@
 #include "../coordinator/interface/AbstractInstanceLink.h"
 #include "../asyncEvent/convert.h"
 
+/**
+ * 只对FlyDBInstance中的引用使用智能指针，这样智能指针的引用计数代表共享的FlyDBInstance数量，
+ * 其他地方的引用不要使用
+ **/
 class InstanceLink : public AbstractInstanceLink {
 public:
     InstanceLink();
@@ -16,6 +20,7 @@ public:
     void closeConnection(std::shared_ptr<redisAsyncContext> context);
     const std::shared_ptr<redisAsyncContext> &getCommandContext() const;
     const std::shared_ptr<redisAsyncContext> &getPubsubContext() const;
+    void decreasePendingCommands();
 
 private:
     bool disconnected = true;                                   // true-需要重连连接

@@ -92,7 +92,7 @@ void FlyDBInstance::releaseLink() {
             redisCallback *callback = callbacks->head;
             while (NULL != callback) {
                 if (this == callback->privdata) {
-                    callback->fn = NULL;
+                    callback->fn = sentinelDiscardReplyCallback;
                     callback->privdata = NULL;
                 }
                 callback = callback->next;
@@ -103,3 +103,9 @@ void FlyDBInstance::releaseLink() {
     this->link = NULL;
 }
 
+void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
+    AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
+    if (NULL != instanceLink) {
+        instanceLink->decreasePendingCommands();
+    }
+}

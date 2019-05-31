@@ -22,6 +22,7 @@ public:
     ~FlySentinel();
     void sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...);
     void generateInitMonitorEvents();
+    int tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> flyInstance);
 
 private:
     void scheduleScriptExecution(char *path, ...);

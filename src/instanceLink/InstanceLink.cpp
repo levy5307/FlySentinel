@@ -39,3 +39,7 @@ const std::shared_ptr<redisAsyncContext> &InstanceLink::getCommandContext() cons
 const std::shared_ptr<redisAsyncContext> &InstanceLink::getPubsubContext() const {
     return pubsubContext;
 }
+
+void InstanceLink::decreasePendingCommands() {
+    this->pendingCommands--;
+}
