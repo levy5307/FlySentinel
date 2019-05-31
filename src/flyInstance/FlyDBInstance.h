@@ -6,7 +6,6 @@
 #define FLYSENTINEL_FLYINSTANCE_H
 
 #include "../coordinator/interface/AbstractFlyDBInstance.h"
-#include "../flySentinel/SentinelAddr.h"
 
 class FlyDBInstance : public AbstractFlyDBInstance {
 public:
@@ -27,15 +26,19 @@ public:
     void setNotificationScript(char *notificationScript);
     char *getClientReconfigScript() const;
     bool isClientReconfigScriptNULL() const;
+    const std::shared_ptr<AbstractInstanceLink> &getLink() const;
+    void setLink(const std::shared_ptr<AbstractInstanceLink> &link);
+    void releaseLink();
 
 private:
     int flags;
     std::string name;
     SentinelAddr *addr = NULL;
     std::shared_ptr<AbstractFlyDBInstance> master = NULL;
-    uint32_t quorum;            /** 对于判定flydb失败，需要的sentinel票数 */
+    uint32_t quorum;                                /** 对于判定flydb失败，需要的sentinel票数 */
     char *notificationScript = NULL;
     char *clientReconfigScript = NULL;
+    std::shared_ptr<AbstractInstanceLink> link;     /** 与instance的连接，sentinel之间共享 */
 };
 
 

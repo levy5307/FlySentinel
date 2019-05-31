@@ -14,6 +14,8 @@ public:
     InstanceLink();
     ~InstanceLink();
     void closeConnection(std::shared_ptr<redisAsyncContext> context);
+    const std::shared_ptr<redisAsyncContext> &getCommandContext() const;
+    const std::shared_ptr<redisAsyncContext> &getPubsubContext() const;
 
 private:
     bool disconnected = true;                                   // true-需要重连连接

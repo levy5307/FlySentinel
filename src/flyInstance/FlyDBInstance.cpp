@@ -76,3 +76,30 @@ char *FlyDBInstance::getClientReconfigScript() const {
 bool FlyDBInstance::isClientReconfigScriptNULL() const {
     return NULL == this->clientReconfigScript;
 }
+
+const std::shared_ptr<AbstractInstanceLink> &FlyDBInstance::getLink() const {
+    return link;
+}
+
+void FlyDBInstance::setLink(const std::shared_ptr<AbstractInstanceLink> &link) {
+    this->link = link;
+}
+
+void FlyDBInstance::releaseLink() {
+    if (link.use_count() > 1) {
+        if (this->link->getCommandContext()) {
+            redisCallbackList *callbacks = &link->getCommandContext()->replies;
+            redisCallback *callback = callbacks->head;
+            while (NULL != callback) {
+                if (this == callback->privdata) {
+                    callback->fn = NULL;
+                    callback->privdata = NULL;
+                }
+                callback = callback->next;
+            }
+        }
+    }
+
+    this->link = NULL;
+}
+

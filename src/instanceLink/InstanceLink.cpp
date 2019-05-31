@@ -31,3 +31,11 @@ void InstanceLink::closeConnection(std::shared_ptr<redisAsyncContext> context) {
     this->disconnected = 1;
     flyAsyncFree(context.get());
 }
+
+const std::shared_ptr<redisAsyncContext> &InstanceLink::getCommandContext() const {
+    return commandContext;
+}
+
+const std::shared_ptr<redisAsyncContext> &InstanceLink::getPubsubContext() const {
+    return pubsubContext;
+}

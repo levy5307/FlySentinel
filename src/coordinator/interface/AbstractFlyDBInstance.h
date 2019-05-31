@@ -7,6 +7,7 @@
 
 #include <string>
 #include "../../flySentinel/SentinelAddr.h"
+#include "AbstractInstanceLink.h"
 
 class AbstractFlyDBInstance {
 public:
@@ -25,6 +26,9 @@ public:
     virtual void setNotificationScript(char *notificationScript) = 0;
     virtual char *getClientReconfigScript() const = 0;
     virtual bool isClientReconfigScriptNULL() const = 0;
+    virtual const std::shared_ptr<AbstractInstanceLink> &getLink() const = 0;
+    virtual void setLink(const std::shared_ptr<AbstractInstanceLink> &link) = 0;
+    virtual void releaseLink() = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

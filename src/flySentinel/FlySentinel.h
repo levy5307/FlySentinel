@@ -12,6 +12,7 @@
 #include "../def.h"
 #include "../coordinator/interface/AbstractFlyDBInstance.h"
 #include "../scriptJob/ScriptJob.h"
+#include "../coordinator/interface/AbstractInstanceLink.h"
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData);
 
