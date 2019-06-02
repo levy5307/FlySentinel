@@ -140,6 +140,22 @@ std::shared_ptr<AbstractFlyInstance> FlyInstance::lookupSlave(char *ip, int port
     return NULL;
 }
 
+int FlyInstance::removeMatchingSentinel(char *runid) {
+    /** 移除数量 */
+    int removed = 0;
+
+    /** 遍历查找并删除 */
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::iterator iter = this->sentinels.begin();
+    for (iter; iter != this->sentinels.end(); iter++) {
+        if (0 == iter->second->getRunid().compare(runid)) {
+            iter = this->sentinels.erase(iter);
+            removed++;
+        }
+    }
+
+    return removed;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {
