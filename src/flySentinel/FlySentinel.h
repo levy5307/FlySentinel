@@ -32,6 +32,11 @@ private:
     void deleteScriptJob(pid_t pid);
     void killTimedoutScripts();
     void callClientReconfScript(AbstractFlyDBInstance *master, int role, char *state, SentinelAddr *from, SentinelAddr *to);
+    std::shared_ptr<AbstractFlyDBInstance> getFlyInstanceByAddrAndRunID(
+            const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &instances,
+            char *ip,
+            int port,
+            const std::string &runid);
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <signal.h>
+#include <cassert>
 #include "FlySentinel.h"
 #include "../flyClient/ClientDef.h"
 #include "../flyClient/FlyClient.h"
@@ -88,8 +89,46 @@ void FlySentinel::generateInitMonitorEvents() {
     }
 }
 
+/**
+ * 该函数用于同一个sentinel的连接的不同master之间共享的instancelink
+ **/
 int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> flyInstance) {
+    assert(flyInstance->getFlags() & FSI_SENTINEL);
 
+    /** 该instance的runid为空 */
+    if (flyInstance->getRunid().empty()) {
+        return -1;
+    }
+
+    /** 该instance link已经被共享过 */
+    if (flyInstance->getLink().use_count() > 1) {
+        return -1;
+    }
+
+    /** 遍历所有的masters */
+    for (auto item : this->masters) {
+        std::shared_ptr<AbstractFlyDBInstance> master = item.second;
+
+        /** 如果当前遍历的master是flyInstance的master，直接跳过 */
+        if (flyInstance->getMaster() == master) {
+            continue;
+        }
+
+        /** 从当前master中的所有sentinel中获取是否有与flyInstance代表同一sentinel的结构-->match */
+        std::shared_ptr<AbstractFlyDBInstance> match = getFlyInstanceByAddrAndRunID(
+                master->getSentinels(), NULL, 0, flyInstance->getRunid());
+        /** 没有找到则继续从下一个master的sentinel中查找 */
+        if (NULL == match || flyInstance == match) {
+            continue;
+        }
+
+        /** 找到了，则共享instance link */
+        flyInstance->releaseLink();
+        flyInstance->setLink(match->getLink());
+        return 1;
+    }
+
+    return -1;
 }
 
 /** 可变参数列表需要以NULL结尾 */
@@ -257,6 +296,12 @@ void FlySentinel::callClientReconfScript(AbstractFlyDBInstance *master, int role
                                   to->getIp().c_str(),
                                   toport.c_str(),
                                   NULL);
+
+}
+
+
+std::shared_ptr<AbstractFlyDBInstance> FlySentinel::getFlyInstanceByAddrAndRunID(
+        const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &instances, char *ip, int port, const std::string &runid) {
 
 }
 

@@ -103,6 +103,22 @@ void FlyDBInstance::releaseLink() {
     this->link = NULL;
 }
 
+const std::string &FlyDBInstance::getRunid() const {
+    return runid;
+}
+
+void FlyDBInstance::setRunid(const std::string &runid) {
+    this->runid = runid;
+}
+
+const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &FlyDBInstance::getSentinels() const {
+    return sentinels;
+}
+
+const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &FlyDBInstance::getSlaves() const {
+    return slaves;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {

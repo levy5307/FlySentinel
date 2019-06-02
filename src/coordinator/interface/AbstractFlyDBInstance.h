@@ -29,6 +29,10 @@ public:
     virtual const std::shared_ptr<AbstractInstanceLink> &getLink() const = 0;
     virtual void setLink(const std::shared_ptr<AbstractInstanceLink> &link) = 0;
     virtual void releaseLink() = 0;
+    virtual const std::string &getRunid() const = 0;
+    virtual void setRunid(const std::string &runid) = 0;
+    virtual const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &getSentinels() const = 0;
+    virtual const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &getSlaves() const = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

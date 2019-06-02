@@ -6,6 +6,7 @@
 #define FLYSENTINEL_FLYINSTANCE_H
 
 #include "../coordinator/interface/AbstractFlyDBInstance.h"
+#include "../def.h"
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata);
 
@@ -31,16 +32,23 @@ public:
     const std::shared_ptr<AbstractInstanceLink> &getLink() const;
     void setLink(const std::shared_ptr<AbstractInstanceLink> &link);
     void releaseLink();
+    const std::string &getRunid() const;
+    void setRunid(const std::string &runid);
+    const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &getSentinels() const;
+    const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &getSlaves() const;
 
 private:
     int flags;
     std::string name;
+    std::string runid;
     SentinelAddr *addr = NULL;
     std::shared_ptr<AbstractFlyDBInstance> master = NULL;
     uint32_t quorum;                                /** 对于判定flydb失败，需要的sentinel票数 */
     char *notificationScript = NULL;
     char *clientReconfigScript = NULL;
     std::shared_ptr<AbstractInstanceLink> link;     /** 与instance的连接，sentinel之间共享 */
+    std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> sentinels;    /** Other sentinels monitoring the same master. */
+    std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> slaves;       /** Slaves for this master instance. */
 };
 
 
