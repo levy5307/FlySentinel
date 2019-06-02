@@ -129,6 +129,10 @@ const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &FlyInstance::
     return slaves;
 }
 
+std::shared_ptr<AbstractFlyInstance> FlyInstance::lookupSlave(char *ip, int port) {
+
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {

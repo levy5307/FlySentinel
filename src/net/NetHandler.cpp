@@ -740,3 +740,8 @@ int NetHandler::peerToString(int fd, char *ip, size_t iplen, int *port) {
     return 1;
 }
 
+std::string NetHandler::formatAddr(char *ip, int port) {
+    char buf[NET_PEER_ID_LEN];
+    snprintf(buf, NET_PEER_ID_LEN, "[%s]:%d", ip, port);
+    return buf;
+}

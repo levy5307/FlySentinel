@@ -52,6 +52,7 @@ public:
     ssize_t syncReadLine(int fd, char *ptr, int size, uint64_t timeout);
     ssize_t syncWrite(int fd, std::string str, uint64_t timeout);
     int peerToString(int fd, char *ip, size_t iplen, int *port);
+    std::string formatAddr(char *ip, int port);
 
 private:
     NetHandler();

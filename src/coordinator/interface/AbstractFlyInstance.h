@@ -34,6 +34,7 @@ public:
     virtual void setRunid(const std::string &runid) = 0;
     virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSentinels() const = 0;
     virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSlaves() const = 0;
+    virtual std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
