@@ -399,6 +399,12 @@ public:
         return stringmatchlen(pattern.c_str(), pattern.length(), str.c_str(), str.length(), nocase);
     }
 
+    std::string formatAddr(char *ip, int port) {
+        char buf[100];
+        snprintf(buf, 100, "[%s]:%d", ip, port);
+        return buf;
+    }
+
 private:
     MiscTool() {
     }

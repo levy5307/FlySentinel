@@ -10,9 +10,9 @@
 #include "coordinator/interface/AbstractCoordinator.h"
 #include "coordinator/Coordinator.h"
 
+bool canResize = true;
 AbstractLogFactory *logFactory = new FileLogFactory();
 MiscTool *miscTool = MiscTool::getInstance();
-bool canResize = true;
 AbstractCoordinator *coordinator = NULL;
 
 int main(int argc, char **argv) {

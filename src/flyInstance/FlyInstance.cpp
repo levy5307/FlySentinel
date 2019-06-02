@@ -4,6 +4,7 @@
 
 #include "FlyInstance.h"
 #include "../flySentinel/FlysentinelDef.h"
+#include "../def.h"
 
 FlyInstance::FlyInstance() {
 
@@ -130,7 +131,13 @@ const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &FlyInstance::
 }
 
 std::shared_ptr<AbstractFlyInstance> FlyInstance::lookupSlave(char *ip, int port) {
+    std::string addr = miscTool->formatAddr(ip, port);
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::const_iterator citer = this->slaves.find(addr);
+    if (citer != this->slaves.end()) {
+        return citer->second;
+    }
 
+    return NULL;
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
