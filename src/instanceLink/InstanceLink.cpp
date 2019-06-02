@@ -17,7 +17,7 @@ InstanceLink::~InstanceLink() {
     closeConnection(this->pubsubContext);
 }
 
-void InstanceLink::closeConnection(std::shared_ptr<redisAsyncContext> context) {
+void InstanceLink::closeConnection(const std::shared_ptr<redisAsyncContext> context) {
     if (NULL == context) {
         return;
     }
@@ -46,4 +46,17 @@ const std::shared_ptr<redisAsyncContext> &InstanceLink::getPubsubContext() const
 
 void InstanceLink::decreasePendingCommands() {
     this->pendingCommands--;
+}
+
+void InstanceLink::connectionError(const std::shared_ptr<redisAsyncContext> context) {
+    if (NULL == context) {
+        return;
+    }
+
+    if (this->commandContext == context) {
+        this->commandContext = NULL;
+    } else {
+        this->pubsubContext = NULL;
+    }
+    disconnected = 1;
 }

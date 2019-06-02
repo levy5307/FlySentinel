@@ -17,10 +17,11 @@ class InstanceLink : public AbstractInstanceLink {
 public:
     InstanceLink();
     ~InstanceLink();
-    void closeConnection(std::shared_ptr<redisAsyncContext> context);
+    void closeConnection(const std::shared_ptr<redisAsyncContext> context);
     const std::shared_ptr<redisAsyncContext> &getCommandContext() const;
     const std::shared_ptr<redisAsyncContext> &getPubsubContext() const;
     void decreasePendingCommands();
+    void connectionError(const std::shared_ptr<redisAsyncContext> context);
 
 private:
     bool disconnected = true;                                   // true-需要重连连接
