@@ -93,6 +93,7 @@ void FlySentinel::generateInitMonitorEvents() {
  * 该函数用于同一个sentinel的连接的不同master之间共享的instancelink
  **/
 int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> flyInstance) {
+    /** flyInstance必须是sentinel */
     assert(flyInstance->getFlags() & FSI_SENTINEL);
 
     /** 该instance的runid为空 */
