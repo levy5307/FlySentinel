@@ -9,7 +9,7 @@
 #include "../../flySentinel/SentinelAddr.h"
 #include "AbstractInstanceLink.h"
 
-class AbstractFlyDBInstance {
+class AbstractFlyInstance {
 public:
     virtual int getFlags() const = 0;
     virtual void setFlags(int flags) = 0;
@@ -17,9 +17,9 @@ public:
     virtual void setName(const std::string &name) = 0;
     virtual SentinelAddr *getAddr() const = 0;
     virtual void setAddr(SentinelAddr *addr) = 0;
-    virtual std::shared_ptr<AbstractFlyDBInstance> getMaster() const = 0;
+    virtual std::shared_ptr<AbstractFlyInstance> getMaster() const = 0;
     virtual bool haveMaster() const = 0;
-    virtual void setMaster(std::shared_ptr<AbstractFlyDBInstance> master) = 0;
+    virtual void setMaster(std::shared_ptr<AbstractFlyInstance> master) = 0;
     virtual uint32_t getQuorum() const = 0;
     virtual void setQuorum(uint32_t quorum) = 0;
     virtual char *getNotificationScript() const = 0;
@@ -31,8 +31,8 @@ public:
     virtual void releaseLink() = 0;
     virtual const std::string &getRunid() const = 0;
     virtual void setRunid(const std::string &runid) = 0;
-    virtual const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &getSentinels() const = 0;
-    virtual const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &getSlaves() const = 0;
+    virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSentinels() const = 0;
+    virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSlaves() const = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

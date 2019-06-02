@@ -10,7 +10,7 @@
 #include "../coordinator/interface/AbstractCoordinator.h"
 #include "../config/ConfigCache.h"
 #include "../def.h"
-#include "../coordinator/interface/AbstractFlyDBInstance.h"
+#include "../coordinator/interface/AbstractFlyInstance.h"
 #include "../scriptJob/ScriptJob.h"
 #include "../coordinator/interface/AbstractInstanceLink.h"
 
@@ -20,9 +20,9 @@ class FlySentinel : public AbstractFlyServer {
 public:
     FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache);
     ~FlySentinel();
-    void sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...);
+    void sendEvent(int level, char *type, std::shared_ptr<AbstractFlyInstance> flyInstance, const char *fmt, ...);
     void generateInitMonitorEvents();
-    int tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> flyInstance);
+    int tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyInstance);
 
 private:
     void scheduleScriptExecution(char *path, ...);
@@ -31,16 +31,16 @@ private:
     void collectTerminatedScripts();
     void deleteScriptJob(pid_t pid);
     void killTimedoutScripts();
-    void callClientReconfScript(AbstractFlyDBInstance *master, int role, char *state, SentinelAddr *from, SentinelAddr *to);
-    std::shared_ptr<AbstractFlyDBInstance> getFlyInstanceByAddrAndRunID(
-            const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &instances,
+    void callClientReconfScript(AbstractFlyInstance *master, int role, char *state, SentinelAddr *from, SentinelAddr *to);
+    std::shared_ptr<AbstractFlyInstance> getFlyInstanceByAddrAndRunID(
+            const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
             const char *ip,
             int port,
             const char *runid);
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
-    std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> masters;
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> masters;
     bool tilt = false;                 /** tilt mode */
     uint64_t tiltStartTime = 0;
     uint64_t previousTime = miscTool->mstime();

@@ -30,11 +30,11 @@ FlySentinel::~FlySentinel() {
  *   2.发送pub/sub信息给相应的客户端，type是具体的消息
  *   3.生成通知脚本job到脚本job队列中
  **/
-void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDBInstance> flyInstance, const char *fmt, ...) {
+void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyInstance> flyInstance, const char *fmt, ...) {
     char msg[LOG_MAX_LEN];
     if ('%' == fmt[0] && '@' == fmt[1] && NULL != flyInstance) {
         if (flyInstance->haveMaster()) {
-            std::shared_ptr<AbstractFlyDBInstance> master = flyInstance->getMaster();
+            std::shared_ptr<AbstractFlyInstance> master = flyInstance->getMaster();
             snprintf(msg, sizeof(msg), "%s %s %d @ %s %s %d",
                      flyInstance->getName().c_str(),
                      flyInstance->getAddr()->getIp().c_str(),
@@ -71,7 +71,7 @@ void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyDB
 
     /** 调度脚本到脚本队列中 */
     if (LL_WARNING == level && NULL != flyInstance) {
-        std::shared_ptr<AbstractFlyDBInstance> master = flyInstance->haveMaster() ? flyInstance->getMaster() : flyInstance;
+        std::shared_ptr<AbstractFlyInstance> master = flyInstance->haveMaster() ? flyInstance->getMaster() : flyInstance;
         if (master && NULL != master->getNotificationScript()) {
             this->scheduleScriptExecution(master->getNotificationScript(), type, msg, NULL);
         }
@@ -96,7 +96,7 @@ void FlySentinel::generateInitMonitorEvents() {
  *      2.查看该master的sentinels中是否有一个实例与入参flyInstance代表相同的sentinel
  *      3.如果没有，继续下一个master；如果有，则与该master共享instance link
  **/
-int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> flyInstance) {
+int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyInstance) {
     /** flyInstance必须是sentinel */
     assert(flyInstance->getFlags() & FSI_SENTINEL);
 
@@ -112,7 +112,7 @@ int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> fly
 
     /** 遍历所有的masters */
     for (auto item : this->masters) {
-        std::shared_ptr<AbstractFlyDBInstance> master = item.second;
+        std::shared_ptr<AbstractFlyInstance> master = item.second;
 
         /** 如果当前遍历的master是flyInstance的master，直接跳过 */
         if (flyInstance->getMaster() == master) {
@@ -120,7 +120,7 @@ int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> fly
         }
 
         /** 从当前master中的所有sentinel中获取是否有与flyInstance代表同一sentinel的结构-->match */
-        std::shared_ptr<AbstractFlyDBInstance> match = getFlyInstanceByAddrAndRunID(
+        std::shared_ptr<AbstractFlyInstance> match = getFlyInstanceByAddrAndRunID(
                 master->getSentinels(), NULL, 0, flyInstance->getRunid().c_str());
         /** 没有找到则继续从下一个master的sentinel中查找 */
         if (NULL == match || flyInstance == match) {
@@ -281,7 +281,7 @@ void FlySentinel::killTimedoutScripts() {
  *   <state>始终是"failover"
  *   <role>是"leader"或者"observer"
  * */
-void FlySentinel::callClientReconfScript(AbstractFlyDBInstance *master, int role, char *state,
+void FlySentinel::callClientReconfScript(AbstractFlyInstance *master, int role, char *state,
                                          SentinelAddr *from, SentinelAddr *to) {
     if (master->isClientReconfigScriptNULL()) {
         return;
@@ -305,7 +305,7 @@ void FlySentinel::callClientReconfScript(AbstractFlyDBInstance *master, int role
 }
 
 
-std::shared_ptr<AbstractFlyDBInstance> FlySentinel::getFlyInstanceByAddrAndRunID(const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &instances,
+std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
                                                                                  const char *ip,
                                                                                  int port,
                                                                                  const char *runid) {
@@ -316,7 +316,7 @@ std::shared_ptr<AbstractFlyDBInstance> FlySentinel::getFlyInstanceByAddrAndRunID
 
     /** 遍历所有的instances */
     for (auto item : instances) {
-        std::shared_ptr<AbstractFlyDBInstance> instance = item.second;
+        std::shared_ptr<AbstractFlyInstance> instance = item.second;
         if ((NULL == runid || 0 == instance->getRunid().compare(runid))
             && (NULL == ip || 0 == instance->getAddr()->getIp().compare(ip))
             && port == instance->getAddr()->getPort()) {

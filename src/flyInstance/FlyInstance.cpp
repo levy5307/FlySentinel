@@ -2,14 +2,14 @@
 // Created by levy on 2019/5/5.
 //
 
-#include "FlyDBInstance.h"
+#include "FlyInstance.h"
 #include "../flySentinel/FlysentinelDef.h"
 
-FlyDBInstance::FlyDBInstance() {
+FlyInstance::FlyInstance() {
 
 }
 
-FlyDBInstance::~FlyDBInstance() {
+FlyInstance::~FlyInstance() {
     if (NULL != this->addr) {
         delete this->addr;
     }
@@ -17,75 +17,75 @@ FlyDBInstance::~FlyDBInstance() {
     this->master = NULL;
 }
 
-int FlyDBInstance::getFlags() const {
+int FlyInstance::getFlags() const {
     return flags;
 }
 
-void FlyDBInstance::setFlags(int flags) {
+void FlyInstance::setFlags(int flags) {
     this->flags = flags;
 }
 
-const std::string &FlyDBInstance::getName() const {
+const std::string &FlyInstance::getName() const {
     return name;
 }
 
-void FlyDBInstance::setName(const std::string &name) {
+void FlyInstance::setName(const std::string &name) {
     this->name = name;
 }
 
-SentinelAddr *FlyDBInstance::getAddr() const {
+SentinelAddr *FlyInstance::getAddr() const {
     return addr;
 }
 
-void FlyDBInstance::setAddr(SentinelAddr *addr) {
+void FlyInstance::setAddr(SentinelAddr *addr) {
     this->addr = addr;
 }
 
-std::shared_ptr<AbstractFlyDBInstance> FlyDBInstance::getMaster() const {
+std::shared_ptr<AbstractFlyInstance> FlyInstance::getMaster() const {
     return this->master;
 }
 
-bool FlyDBInstance::haveMaster() const {
+bool FlyInstance::haveMaster() const {
     return 0 != this->flags & FSI_MASTER;
 }
 
-void FlyDBInstance::setMaster(std::shared_ptr<AbstractFlyDBInstance> master) {
+void FlyInstance::setMaster(std::shared_ptr<AbstractFlyInstance> master) {
     this->master = master;
 }
 
-uint32_t FlyDBInstance::getQuorum() const {
+uint32_t FlyInstance::getQuorum() const {
     return quorum;
 }
 
-void FlyDBInstance::setQuorum(uint32_t quorum) {
+void FlyInstance::setQuorum(uint32_t quorum) {
     this->quorum = quorum;
 }
 
-char *FlyDBInstance::getNotificationScript() const {
+char *FlyInstance::getNotificationScript() const {
     return notificationScript;
 }
 
-void FlyDBInstance::setNotificationScript(char *notificationScript) {
+void FlyInstance::setNotificationScript(char *notificationScript) {
     this->notificationScript = notificationScript;
 }
 
-char *FlyDBInstance::getClientReconfigScript() const {
+char *FlyInstance::getClientReconfigScript() const {
     return clientReconfigScript;
 }
 
-bool FlyDBInstance::isClientReconfigScriptNULL() const {
+bool FlyInstance::isClientReconfigScriptNULL() const {
     return NULL == this->clientReconfigScript;
 }
 
-const std::shared_ptr<AbstractInstanceLink> &FlyDBInstance::getLink() const {
+const std::shared_ptr<AbstractInstanceLink> &FlyInstance::getLink() const {
     return link;
 }
 
-void FlyDBInstance::setLink(const std::shared_ptr<AbstractInstanceLink> &link) {
+void FlyInstance::setLink(const std::shared_ptr<AbstractInstanceLink> &link) {
     this->link = link;
 }
 
-void FlyDBInstance::releaseLink() {
+void FlyInstance::releaseLink() {
     if (link.use_count() > 1) {
         if (this->link->getCommandContext()) {
             redisCallbackList *callbacks = &link->getCommandContext()->replies;
@@ -103,19 +103,19 @@ void FlyDBInstance::releaseLink() {
     this->link = NULL;
 }
 
-const std::string &FlyDBInstance::getRunid() const {
+const std::string &FlyInstance::getRunid() const {
     return runid;
 }
 
-void FlyDBInstance::setRunid(const std::string &runid) {
+void FlyInstance::setRunid(const std::string &runid) {
     this->runid = runid;
 }
 
-const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &FlyDBInstance::getSentinels() const {
+const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &FlyInstance::getSentinels() const {
     return sentinels;
 }
 
-const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &FlyDBInstance::getSlaves() const {
+const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &FlyInstance::getSlaves() const {
     return slaves;
 }
 
