@@ -121,7 +121,7 @@ int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> fly
 
         /** 从当前master中的所有sentinel中获取是否有与flyInstance代表同一sentinel的结构-->match */
         std::shared_ptr<AbstractFlyDBInstance> match = getFlyInstanceByAddrAndRunID(
-                master->getSentinels(), NULL, 0, flyInstance->getRunid());
+                master->getSentinels(), NULL, 0, flyInstance->getRunid().c_str());
         /** 没有找到则继续从下一个master的sentinel中查找 */
         if (NULL == match || flyInstance == match) {
             continue;
@@ -305,9 +305,27 @@ void FlySentinel::callClientReconfScript(AbstractFlyDBInstance *master, int role
 }
 
 
-std::shared_ptr<AbstractFlyDBInstance> FlySentinel::getFlyInstanceByAddrAndRunID(
-        const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &instances, char *ip, int port, const std::string &runid) {
+std::shared_ptr<AbstractFlyDBInstance> FlySentinel::getFlyInstanceByAddrAndRunID(const std::map<std::string, std::shared_ptr<AbstractFlyDBInstance>> &instances,
+                                                                                 const char *ip,
+                                                                                 int port,
+                                                                                 const char *runid) {
+    /** 两者都为NULL那还找什么找?! 看函数名字！*/
+    if (NULL == ip && NULL == runid) {
+        return NULL;
+    }
 
+    /** 遍历所有的instances */
+    for (auto item : instances) {
+        std::shared_ptr<AbstractFlyDBInstance> instance = item.second;
+        if ((NULL == runid || 0 == instance->getRunid().compare(runid))
+            && (NULL == ip || 0 == instance->getAddr()->getIp().compare(ip))
+            && port == instance->getAddr()->getPort()) {
+            return instance;
+        }
+    }
+
+    /** 没有找到，返回NULL */
+    return NULL;
 }
 
 void FlySentinel::deleteScriptJob(pid_t pid) {
