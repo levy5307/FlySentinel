@@ -90,7 +90,11 @@ void FlySentinel::generateInitMonitorEvents() {
 }
 
 /**
- * 该函数用于同一个sentinel的连接的不同master之间共享的instancelink
+ * 该函数用于同一个sentinel的连接的不同master之间共享instancelink，参数必须是sentinel：
+ *   具体步骤：
+ *      1.对于所有的masters，轮流查看每一个master
+ *      2.查看该master的sentinels中是否有一个实例与入参flyInstance代表相同的sentinel
+ *      3.如果没有，继续下一个master；如果有，则与该master共享instance link
  **/
 int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyDBInstance> flyInstance) {
     /** flyInstance必须是sentinel */
