@@ -20,6 +20,7 @@ public:
     void setName(const std::string &name);
     SentinelAddr *getAddr() const;
     void setAddr(SentinelAddr *addr);
+    void dupAddr(SentinelAddr *addr);
     std::shared_ptr<AbstractFlyInstance> getMaster() const;
     bool haveMaster() const;
     void setMaster(std::shared_ptr<AbstractFlyInstance> master);

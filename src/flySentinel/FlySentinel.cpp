@@ -306,9 +306,9 @@ void FlySentinel::callClientReconfScript(AbstractFlyInstance *master, int role, 
 
 
 std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
-                                                                                 const char *ip,
-                                                                                 int port,
-                                                                                 const char *runid) {
+                                                                               const char *ip,
+                                                                               int port,
+                                                                               const char *runid) {
     /** 两者都为NULL那还找什么找?! 看函数名字！*/
     if (NULL == ip && NULL == runid) {
         return NULL;
@@ -326,6 +326,49 @@ std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(c
 
     /** 没有找到，返回NULL */
     return NULL;
+}
+
+int FlySentinel::updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+    /** 必须是sentinel */
+    assert(flyInstance->getFlags() & FSI_SENTINEL);
+
+    /** 记录重配置的数量 */
+    int reconfigured = 0;
+
+    /** 遍历所有的master */
+    for (auto item : this->masters) {
+        std::shared_ptr<AbstractFlyInstance> master = item.second;
+
+        /** 从master的sentinels中找到与instance代表同一个sentinel的flyInstance, 如果找不到，则继续处理下一个master */
+        std::shared_ptr<AbstractFlyInstance> match =
+                getFlyInstanceByAddrAndRunID(master->getSentinels(), NULL, 0, flyInstance->getRunid().c_str());
+        if (NULL == match) {
+            continue;
+        }
+
+        /** 因为修改地址，旧的连接不在有效，所以断开旧的连接 */
+        if (NULL != match->getLink()->getCommandContext()) {
+            match->getLink()->closeConnection(match->getLink()->getCommandContext());
+        }
+        if (NULL != match->getLink()->getPubsubContext()) {
+            match->getLink()->closeConnection(match->getLink()->getPubsubContext());
+        }
+
+        /** 如果找到的instance刚好是自己，则无需进行dup address操作 */
+        if (match == flyInstance) {
+            continue;
+        }
+
+        match->dupAddr(flyInstance->getAddr());
+        reconfigured++;
+    }
+
+    /** 如果进行了重配置，则要发送事件 */
+    if (reconfigured > 0) {
+        sendEvent(LL_NOTICE, "+sentinel-address-update", flyInstance, "%@ %d additional matching instances", reconfigured);
+    }
+
+    return reconfigured;
 }
 
 void FlySentinel::deleteScriptJob(pid_t pid) {

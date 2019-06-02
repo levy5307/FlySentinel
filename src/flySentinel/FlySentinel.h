@@ -37,6 +37,7 @@ private:
             const char *ip,
             int port,
             const char *runid);
+    int updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInstance> instance);
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;

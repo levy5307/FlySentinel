@@ -25,3 +25,11 @@ int SentinelAddr::getPort() const {
     return port;
 }
 
+void SentinelAddr::setIp(const std::string &ip) {
+    this->ip = ip;
+}
+
+void SentinelAddr::setPort(int port) {
+    this->port = port;
+}
+

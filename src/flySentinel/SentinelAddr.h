@@ -14,6 +14,8 @@ public:
     bool operator==(const SentinelAddr *sa);
     const std::string& getIp() const;
     int getPort() const;
+    void setIp(const std::string &ip);
+    void setPort(int port);
 
     std::string ip;
     int port = 0;

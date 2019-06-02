@@ -18,6 +18,10 @@ InstanceLink::~InstanceLink() {
 }
 
 void InstanceLink::closeConnection(std::shared_ptr<redisAsyncContext> context) {
+    if (NULL == context) {
+        return;
+    }
+
     if (this->commandContext == context) {
         this->commandContext = NULL;
         this->pendingCommands = 0;

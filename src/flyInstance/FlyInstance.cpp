@@ -41,6 +41,16 @@ void FlyInstance::setAddr(SentinelAddr *addr) {
     this->addr = addr;
 }
 
+void FlyInstance::dupAddr(SentinelAddr *addr) {
+    if (NULL == this->addr) {
+        this->addr = new SentinelAddr(addr->getIp(), addr->getPort());
+        return;
+    }
+
+    this->addr->setIp(addr->getIp());
+    this->addr->setPort(addr->getPort());
+}
+
 std::shared_ptr<AbstractFlyInstance> FlyInstance::getMaster() const {
     return this->master;
 }
