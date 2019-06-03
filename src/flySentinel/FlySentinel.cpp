@@ -380,6 +380,14 @@ std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByName(char *name) {
     return NULL;
 }
 
+void FlySentinel::resetMaster(std::shared_ptr<AbstractFlyInstance> flyInstance, int flags) {
+    assert(flyInstance->getFlags() & FSI_MASTER);
+    flyInstance->reset(flags);
+    if (flags & SENTINEL_GENERATE_EVENT) {
+        this->sendEvent(LL_WARNING, "+reset-master", flyInstance, "%@");
+    }
+}
+
 void FlySentinel::deleteScriptJob(pid_t pid) {
     std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
     for (iter; iter != this->scriptsQueue.end(); iter++) {
