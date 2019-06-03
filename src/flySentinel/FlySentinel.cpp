@@ -435,7 +435,12 @@ void FlySentinel::resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstanc
     }
     slaveAddrs.clear();
 
-    // todo flush sentinel config
+    /** flush config */
+    this->flushConfig();
+}
+
+void FlySentinel::flushConfig() {
+
 }
 
 void FlySentinel::deleteScriptJob(pid_t pid) {

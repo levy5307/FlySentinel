@@ -42,6 +42,7 @@ private:
     void resetMaster(std::shared_ptr<AbstractFlyInstance> master, int flags);
     int resetMasterByPattern(const std::string &pattern, int flags);
     void resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, char *ip, int port);
+    void flushConfig();
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
