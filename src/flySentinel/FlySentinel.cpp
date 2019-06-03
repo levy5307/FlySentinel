@@ -388,6 +388,18 @@ void FlySentinel::resetMaster(std::shared_ptr<AbstractFlyInstance> flyInstance, 
     }
 }
 
+int FlySentinel::resetMasterByPattern(const std::string &pattern, int flags) {
+    int reset = 0;
+    for (auto item : this->masters) {
+        if (miscTool->stringmatch(pattern, item.first, false)) {
+            resetMaster(item.second, flags);
+            reset++;
+        }
+    }
+
+    return reset;
+}
+
 void FlySentinel::deleteScriptJob(pid_t pid) {
     std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
     for (iter; iter != this->scriptsQueue.end(); iter++) {
