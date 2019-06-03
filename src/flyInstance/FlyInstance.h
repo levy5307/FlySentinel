@@ -50,8 +50,8 @@ private:
     char *notificationScript = NULL;
     char *clientReconfigScript = NULL;
     std::shared_ptr<AbstractInstanceLink> link;     /** 与instance的连接，sentinel之间共享 */
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> sentinels;    /** Other sentinels monitoring the same master. */
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves;       /** Slaves for this master instance. */
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> sentinels;    /** key-ip:port. Other sentinels monitoring the same master. */
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves;       /** key-ip:port. Slaves for this master instance. */
 };
 
 

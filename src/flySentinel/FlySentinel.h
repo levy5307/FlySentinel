@@ -38,10 +38,11 @@ private:
             int port,
             const char *runid);
     int updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInstance> instance);
+    std::shared_ptr<AbstractFlyInstance> getMasterByName(char *name);
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> masters;
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> masters;            // key-name
     bool tilt = false;                 /** tilt mode */
     uint64_t tiltStartTime = 0;
     uint64_t previousTime = miscTool->mstime();

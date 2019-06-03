@@ -371,6 +371,15 @@ int FlySentinel::updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInsta
     return reconfigured;
 }
 
+std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByName(char *name) {
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::iterator iter = this->masters.find(name);
+    if (iter != this->masters.end()) {
+        return iter->second;
+    }
+
+    return NULL;
+}
+
 void FlySentinel::deleteScriptJob(pid_t pid) {
     std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
     for (iter; iter != this->scriptsQueue.end(); iter++) {
