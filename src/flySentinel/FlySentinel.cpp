@@ -10,7 +10,7 @@
 #include "../flyClient/FlyClient.h"
 #include "../def.h"
 #include "../dataStructure/dict/Dict.cpp"
-#include "FlysentinelDef.h"
+#include "FlySentinelDef.h"
 #include "../scriptJob/ScriptJobDef.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)

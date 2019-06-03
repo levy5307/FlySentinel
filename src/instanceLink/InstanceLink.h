@@ -17,6 +17,7 @@ class InstanceLink : public AbstractInstanceLink {
 public:
     InstanceLink();
     ~InstanceLink();
+    void reset();
     void closeConnection(const std::shared_ptr<redisAsyncContext> context);
     const std::shared_ptr<redisAsyncContext> &getCommandContext() const;
     const std::shared_ptr<redisAsyncContext> &getPubsubContext() const;

@@ -39,6 +39,7 @@ public:
     const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSlaves() const;
     std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port);
     int removeMatchingSentinel(char *runid);
+    void reset(int flags);
 
 private:
     int flags;

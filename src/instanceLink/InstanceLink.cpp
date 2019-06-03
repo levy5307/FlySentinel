@@ -17,6 +17,23 @@ InstanceLink::~InstanceLink() {
     closeConnection(this->pubsubContext);
 }
 
+void InstanceLink::reset() {
+    uint64_t nowt = miscTool->mstime();
+    this->disconnected = true;
+    this->pendingCommands = 0;
+    this->commandContext = NULL;
+    this->pubsubContext = NULL;
+    this->ccConnTime = 0;
+    this->pcConntime = 0;
+    this->pcLastActivity = 0;
+    this->lastAvailTime = nowt;
+    this->actPingTime = nowt;
+    this->lastPingTime = 0;
+    this->lastPongTime = nowt;
+    this->lastReconnTime = 0;
+
+}
+
 void InstanceLink::closeConnection(const std::shared_ptr<redisAsyncContext> context) {
     if (NULL == context) {
         return;

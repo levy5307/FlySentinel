@@ -3,8 +3,9 @@
 //
 
 #include "FlyInstance.h"
-#include "../flySentinel/FlysentinelDef.h"
+#include "../flySentinel/FlySentinelDef.h"
 #include "../def.h"
+#include "FlyInstanceDef.h"
 
 FlyInstance::FlyInstance() {
 
@@ -16,6 +17,9 @@ FlyInstance::~FlyInstance() {
     }
 
     this->master = NULL;
+    this->sentinels.clear();
+    this->sentinels.clear();
+    this->link = NULL;
 }
 
 int FlyInstance::getFlags() const {
@@ -154,6 +158,17 @@ int FlyInstance::removeMatchingSentinel(char *runid) {
     }
 
     return removed;
+}
+
+void FlyInstance::reset(int flags) {
+    this->slaves.clear();
+    if (flags & SENTINEL_RESET_SENTINELS) {
+        this->sentinels.clear();
+    }
+    this->flags &= FSI_MASTER | FSI_SLAVE | FSI_SENTINEL;
+    this->runid.clear();
+    this->master = NULL;
+    this->link.reset();
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
