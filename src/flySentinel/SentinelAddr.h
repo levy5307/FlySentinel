@@ -10,8 +10,9 @@
 class SentinelAddr {
 public:
     SentinelAddr(const std::string &ip, int port);
-    SentinelAddr* operator=(const SentinelAddr *sa);
-    bool operator==(const SentinelAddr *sa);
+    SentinelAddr* operator=(const SentinelAddr &sa);
+    bool operator==(const SentinelAddr &sa);
+    bool operator!=(const SentinelAddr &sa);
     const std::string& getIp() const;
     int getPort() const;
     void setIp(const std::string &ip);

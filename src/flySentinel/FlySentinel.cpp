@@ -12,6 +12,8 @@
 #include "../dataStructure/dict/Dict.cpp"
 #include "FlySentinelDef.h"
 #include "../scriptJob/ScriptJobDef.h"
+#include "../flyInstance/FlyInstanceDef.h"
+#include "../flyInstance/FlyInstance.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
         : AbstractFlyServer(coordinator, configCache) {
@@ -380,11 +382,11 @@ std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByName(char *name) {
     return NULL;
 }
 
-void FlySentinel::resetMaster(std::shared_ptr<AbstractFlyInstance> flyInstance, int flags) {
-    assert(flyInstance->getFlags() & FSI_MASTER);
-    flyInstance->reset(flags);
+void FlySentinel::resetMaster(std::shared_ptr<AbstractFlyInstance> master, int flags) {
+    assert(master->getFlags() & FSI_MASTER);
+    master->reset(flags);
     if (flags & SENTINEL_GENERATE_EVENT) {
-        this->sendEvent(LL_WARNING, "+reset-master", flyInstance, "%@");
+        this->sendEvent(LL_WARNING, "+reset-master", master, "%@");
     }
 }
 
@@ -398,6 +400,42 @@ int FlySentinel::resetMasterByPattern(const std::string &pattern, int flags) {
     }
 
     return reset;
+}
+
+/** reset master and change it`s address */
+void FlySentinel::resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, char *ip, int port) {
+    SentinelAddr *newaddr = new SentinelAddr(ip, port);
+    SentinelAddr *oldaddr = master->getAddr();
+
+    /** 收集所有slave的地址（被切换成master的地址除外）*/
+    const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves = master->getSlaves();
+    std::vector<SentinelAddr*> slaveAddrs;
+    for (auto item : slaves) {
+        if (*(item.second->getAddr()) == *newaddr) {
+            continue;
+        }
+
+        slaveAddrs.push_back(item.second->getAddr());
+    }
+
+    /** 如果master的切换后地址和原旧地址不同，也将旧地址加入slaveAddrs中 */
+    if (*newaddr != *oldaddr) {
+        slaveAddrs.push_back(oldaddr);
+    }
+
+    /** reset master */
+    this->resetMaster(master, SENTINEL_RESET_SENTINELS);
+    master->setAddr(newaddr);
+
+    /** add slaves back */
+    for (auto item : slaveAddrs) {
+        std::shared_ptr<AbstractFlyInstance> slave = std::shared_ptr<AbstractFlyInstance>(
+                new FlyInstance(NULL, FSI_SLAVE, item->getIp(), item->getPort(), master->getQuorum(), master));
+        this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
+    }
+    slaveAddrs.clear();
+
+    // todo flush sentinel config
 }
 
 void FlySentinel::deleteScriptJob(pid_t pid) {

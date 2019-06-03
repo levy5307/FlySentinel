@@ -9,12 +9,16 @@ SentinelAddr::SentinelAddr(const std::string &ip, int port) {
     this->port = port;
 }
 
-SentinelAddr* SentinelAddr::operator=(const SentinelAddr *sa) {
-    return new SentinelAddr(sa->ip, sa->port);
+SentinelAddr* SentinelAddr::operator=(const SentinelAddr &sa) {
+    return new SentinelAddr(sa.ip, sa.port);
 }
 
-bool SentinelAddr::operator==(const SentinelAddr *sa) {
-    return sa->port == this->port && sa->ip == this->ip;
+bool SentinelAddr::operator==(const SentinelAddr &sa) {
+    return sa.port == this->port && sa.ip == this->ip;
+}
+
+bool SentinelAddr::operator!=(const SentinelAddr &sa) {
+    return !this->operator==(sa);
 }
 
 const std::string& SentinelAddr::getIp() const {

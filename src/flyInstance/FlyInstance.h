@@ -13,6 +13,8 @@ void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void 
 class FlyInstance : public AbstractFlyInstance {
 public:
     FlyInstance();
+    FlyInstance(const std::string &name, int flags, const std::string &hostname,
+                int port, int quorum, std::shared_ptr<AbstractFlyInstance> master);
     ~FlyInstance();
     int getFlags() const;
     void setFlags(int flags);
@@ -53,6 +55,8 @@ private:
     std::shared_ptr<AbstractInstanceLink> link;     /** 与instance的连接，sentinel之间共享 */
     std::map<std::string, std::shared_ptr<AbstractFlyInstance>> sentinels;    /** key-ip:port. Other sentinels monitoring the same master. */
     std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves;       /** key-ip:port. Slaves for this master instance. */
+    uint64_t sDownSinceTime;                        /** Subjectively down since time. */
+    uint64_t oDownSinceTime;                        /** Objectively down since time. */
 };
 
 

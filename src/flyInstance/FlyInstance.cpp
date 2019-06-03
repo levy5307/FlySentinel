@@ -11,6 +11,15 @@ FlyInstance::FlyInstance() {
 
 }
 
+FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname, 
+                         int port, int quorum, std::shared_ptr<AbstractFlyInstance> master) {
+    this->name = name;
+    this->flags = flags;
+    this->addr = new SentinelAddr(hostname, port);
+    this->quorum = quorum;
+    this->master = master;
+}
+
 FlyInstance::~FlyInstance() {
     if (NULL != this->addr) {
         delete this->addr;
@@ -43,6 +52,9 @@ SentinelAddr *FlyInstance::getAddr() const {
 }
 
 void FlyInstance::setAddr(SentinelAddr *addr) {
+    if (NULL != this->addr) {
+        delete this->addr;
+    }
     this->addr = addr;
 }
 
@@ -169,6 +181,8 @@ void FlyInstance::reset(int flags) {
     this->runid.clear();
     this->master = NULL;
     this->link.reset();
+    this->oDownSinceTime = 0;
+    this->sDownSinceTime = 0;
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
