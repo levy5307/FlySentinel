@@ -456,6 +456,14 @@ void FlySentinel::propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> 
     }
 }
 
+void FlySentinel::setClientName(redisAsyncContext *context, std::shared_ptr<AbstractFlyInstance> flyInstance, char *type) {
+    char name[64];
+    snprintf(name, sizeof(name), "sentinel-%.8s-%s", this->myid, type);
+    if (redisAsyncCommand(context, sentinelDiscardReplyCallback, flyInstance.get(), "%s SETNAME %s", "CLIENT", name)) {
+        flyInstance->getLink()->increasePendingCommands();
+    }
+}
+
 void FlySentinel::deleteScriptJob(pid_t pid) {
     std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
     for (iter; iter != this->scriptsQueue.end(); iter++) {

@@ -22,6 +22,7 @@ public:
     const std::shared_ptr<redisAsyncContext> &getCommandContext() const;
     const std::shared_ptr<redisAsyncContext> &getPubsubContext() const;
     void decreasePendingCommands();
+    void increasePendingCommands();
     void connectionError(const std::shared_ptr<redisAsyncContext> context);
 
 private:

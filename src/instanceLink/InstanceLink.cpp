@@ -64,6 +64,10 @@ void InstanceLink::decreasePendingCommands() {
     this->pendingCommands--;
 }
 
+void InstanceLink::increasePendingCommands() {
+    this->pendingCommands++;
+}
+
 void InstanceLink::connectionError(const std::shared_ptr<redisAsyncContext> context) {
     if (NULL == context) {
         return;
