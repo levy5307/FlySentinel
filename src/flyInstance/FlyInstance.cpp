@@ -183,6 +183,8 @@ void FlyInstance::reset(int flags) {
     this->link.reset();
     this->oDownSinceTime = 0;
     this->sDownSinceTime = 0;
+    this->promotedSlave = NULL;
+    this->failoverState = SENTINEL_FAILOVER_STATE_NONE;
 }
 
 bool FlyInstance::noDownFor(uint64_t ms) {

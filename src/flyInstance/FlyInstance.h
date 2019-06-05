@@ -7,6 +7,7 @@
 
 #include "../coordinator/interface/AbstractFlyInstance.h"
 #include "../def.h"
+#include "FlyInstanceDef.h"
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata);
 
@@ -56,8 +57,10 @@ private:
     std::shared_ptr<AbstractInstanceLink> link;     /** 与instance的连接，sentinel之间共享 */
     std::map<std::string, std::shared_ptr<AbstractFlyInstance>> sentinels;    /** key-ip:port. Other sentinels monitoring the same master. */
     std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves;       /** key-ip:port. Slaves for this master instance. */
-    uint64_t sDownSinceTime;                        /** Subjectively down since time. */
-    uint64_t oDownSinceTime;                        /** Objectively down since time. */
+    uint64_t sDownSinceTime = 0;                        /** Subjectively down since time. */
+    uint64_t oDownSinceTime = 0;                        /** Objectively down since time. */
+    std::shared_ptr<AbstractFlyInstance> promotedSlave = NULL;
+    FailoverState failoverState = SENTINEL_FAILOVER_STATE_NONE;
 };
 
 

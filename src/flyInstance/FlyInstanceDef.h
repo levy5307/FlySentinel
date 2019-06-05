@@ -7,4 +7,13 @@
 
 const int SENTINEL_RESET_SENTINELS = 1 << 0;
 
+enum FailoverState {
+    SENTINEL_FAILOVER_STATE_NONE = 0,                  /** No failover in progress. */
+    SENTINEL_FAILOVER_STATE_WAIT_START = 1,            /** Wait for failover_start_time*/
+    SENTINEL_FAILOVER_STATE_SELECT_SLAVE = 2,          /** Select slave to promote */
+    SENTINEL_FAILOVER_STATE_SEND_SLAVEOF_NOONE = 3,    /** Slave -> Master */
+    SENTINEL_FAILOVER_STATE_WAIT_PROMOTION = 4,        /** Wait slave to change role */
+    SENTINEL_FAILOVER_STATE_RECONF_SLAVES = 5,         /** SLAVEOF newmaster */
+    SENTINEL_FAILOVER_STATE_UPDATE_CONFIG = 6          /** Monitor promoted slave. */
+};
 #endif //FLYSENTINEL_FLYINSTANCEDEF_H
