@@ -11,7 +11,7 @@ FlyInstance::FlyInstance() {
 
 }
 
-FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname, 
+FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname,
                          int port, int quorum, std::shared_ptr<AbstractFlyInstance> master) {
     this->name = name;
     this->flags = flags;
@@ -183,6 +183,12 @@ void FlyInstance::reset(int flags) {
     this->link.reset();
     this->oDownSinceTime = 0;
     this->sDownSinceTime = 0;
+}
+
+bool FlyInstance::noDownFor(uint64_t ms) {
+    /** 取sdown和odown两者中最大 */
+    uint64_t mostRecent = this->oDownSinceTime > this->sDownSinceTime ? this->oDownSinceTime : this->sDownSinceTime;
+    return 0 == mostRecent || miscTool->mstime() - ms > mostRecent;
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {

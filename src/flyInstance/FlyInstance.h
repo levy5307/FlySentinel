@@ -42,6 +42,7 @@ public:
     std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port);
     int removeMatchingSentinel(char *runid);
     void reset(int flags);
+    bool noDownFor(uint64_t ms);
 
 private:
     int flags;

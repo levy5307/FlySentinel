@@ -37,6 +37,7 @@ public:
     virtual std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port) = 0;
     virtual int removeMatchingSentinel(char *runid) = 0;
     virtual void reset(int flags) = 0;
+    virtual bool noDownFor(uint64_t ms) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
