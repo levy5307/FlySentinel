@@ -24,6 +24,8 @@ public:
     void generateInitMonitorEvents();
     int tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyInstance);
     void flushConfig();
+    /** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
+    void propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master);
 
 private:
     void scheduleScriptExecution(char *path, ...);

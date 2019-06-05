@@ -6,6 +6,7 @@
 #define FLYSENTINEL_FLYINSTANCEDEF_H
 
 const int SENTINEL_RESET_SENTINELS = 1 << 0;
+const int SENTINEL_DEFAULT_DOWN_AFTER = 30 * 1000;
 
 enum FailoverState {
     SENTINEL_FAILOVER_STATE_NONE = 0,                  /** No failover in progress. */

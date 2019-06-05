@@ -443,6 +443,19 @@ void FlySentinel::flushConfig() {
 
 }
 
+/** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
+void FlySentinel::propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master) {
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves = master->getSlaves();
+    for (auto item : slaves) {
+        item.second->setDownAfterPeriod(master->getDownAfterPeriod());
+    }
+
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> sentinels = master->getSentinels();
+    for (auto item : sentinels) {
+        item.second->setDownAfterPeriod(master->getDownAfterPeriod());
+    }
+}
+
 void FlySentinel::deleteScriptJob(pid_t pid) {
     std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
     for (iter; iter != this->scriptsQueue.end(); iter++) {

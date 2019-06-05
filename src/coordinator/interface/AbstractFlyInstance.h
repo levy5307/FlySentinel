@@ -38,6 +38,8 @@ public:
     virtual int removeMatchingSentinel(char *runid) = 0;
     virtual void reset(int flags) = 0;
     virtual bool noDownFor(uint64_t ms) = 0;
+    virtual uint64_t getDownAfterPeriod() const = 0;
+    virtual void setDownAfterPeriod(uint64_t downAfterPeriod) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

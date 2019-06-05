@@ -13,7 +13,6 @@ void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void 
 
 class FlyInstance : public AbstractFlyInstance {
 public:
-    FlyInstance();
     FlyInstance(const std::string &name, int flags, const std::string &hostname,
                 int port, int quorum, std::shared_ptr<AbstractFlyInstance> master);
     ~FlyInstance();
@@ -44,8 +43,11 @@ public:
     int removeMatchingSentinel(char *runid);
     void reset(int flags);
     bool noDownFor(uint64_t ms);
+    uint64_t getDownAfterPeriod() const;
+    void setDownAfterPeriod(uint64_t downAfterPeriod);
 
 private:
+    FlyInstance(){};
     int flags;
     std::string name;
     std::string runid;
@@ -59,6 +61,7 @@ private:
     std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves;       /** key-ip:port. Slaves for this master instance. */
     uint64_t sDownSinceTime = 0;                        /** Subjectively down since time. */
     uint64_t oDownSinceTime = 0;                        /** Objectively down since time. */
+    uint64_t downAfterPeriod = 0;                       /** down after this period */
     std::shared_ptr<AbstractFlyInstance> promotedSlave = NULL;
     FailoverState failoverState = SENTINEL_FAILOVER_STATE_NONE;
 };

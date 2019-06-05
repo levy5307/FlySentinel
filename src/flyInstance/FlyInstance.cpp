@@ -7,10 +7,6 @@
 #include "../def.h"
 #include "FlyInstanceDef.h"
 
-FlyInstance::FlyInstance() {
-
-}
-
 FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname,
                          int port, int quorum, std::shared_ptr<AbstractFlyInstance> master) {
     this->name = name;
@@ -18,6 +14,7 @@ FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &
     this->addr = new SentinelAddr(hostname, port);
     this->quorum = quorum;
     this->master = master;
+    this->downAfterPeriod = this->master ? this->master->getDownAfterPeriod() : SENTINEL_DEFAULT_DOWN_AFTER;
 }
 
 FlyInstance::~FlyInstance() {
@@ -191,6 +188,14 @@ bool FlyInstance::noDownFor(uint64_t ms) {
     /** 取sdown和odown两者中最大 */
     uint64_t mostRecent = this->oDownSinceTime > this->sDownSinceTime ? this->oDownSinceTime : this->sDownSinceTime;
     return 0 == mostRecent || miscTool->mstime() - ms > mostRecent;
+}
+
+uint64_t FlyInstance::getDownAfterPeriod() const {
+    return downAfterPeriod;
+}
+
+void FlyInstance::setDownAfterPeriod(uint64_t downAfterPeriod) {
+    this->downAfterPeriod = downAfterPeriod;
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
