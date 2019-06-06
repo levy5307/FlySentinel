@@ -45,6 +45,12 @@ public:
     bool noDownFor(uint64_t ms);
     uint64_t getDownAfterPeriod() const;
     void setDownAfterPeriod(uint64_t downAfterPeriod);
+    int getRoleReported() const;
+    void setRoleReported(int roleReported);
+    uint64_t getRoleReportedTime() const;
+    void setRoleReportedTime(uint64_t roleReportedTime);
+    uint64_t getInfoRefresh() const;
+    void setInfoRefresh(uint64_t infoRefresh);
 
 private:
     FlyInstance(){};
@@ -64,6 +70,9 @@ private:
     uint64_t downAfterPeriod = 0;                       /** down after this period */
     std::shared_ptr<AbstractFlyInstance> promotedSlave = NULL;
     FailoverState failoverState = SENTINEL_FAILOVER_STATE_NONE;
+    int roleReported;
+    uint64_t roleReportedTime = 0;
+    uint64_t infoRefresh = 0;
 };
 
 

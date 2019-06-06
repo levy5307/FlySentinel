@@ -464,6 +464,20 @@ void FlySentinel::setClientName(redisAsyncContext *context, std::shared_ptr<Abst
     }
 }
 
+/**
+ * 鉴定master是否是正常的，如果master正常，需要满足以下条件：
+ *    1.master在配置中是master
+ *    2.master在自己的报告中也是master
+ *    3.没有处于SDOWN和ODOWN
+ *    4.master在[nowt-2*SENTINEL_INFO_PERIOD, nowt]时间内接收过info信息
+ **/
+bool FlySentinel::masterLookSane(std::shared_ptr<AbstractFlyInstance> master) {
+    return (master->getFlags() & FSI_MASTER)
+           && (master->getRoleReported() & FSI_MASTER)
+           && (0 == master->getFlags() & (FSI_O_DOWN | FSI_S_DOWN))
+           && (master->getInfoRefresh() > miscTool->mstime() - 2 * SENTINEL_INFO_PERIOD);
+}
+
 void FlySentinel::deleteScriptJob(pid_t pid) {
     std::list<std::shared_ptr<ScriptJob>>::iterator iter = this->scriptsQueue.begin();
     for (iter; iter != this->scriptsQueue.end(); iter++) {

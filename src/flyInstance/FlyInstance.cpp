@@ -9,12 +9,15 @@
 
 FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname,
                          int port, int quorum, std::shared_ptr<AbstractFlyInstance> master) {
+    uint64_t nowt = miscTool->mstime();
     this->name = name;
     this->flags = flags;
     this->addr = new SentinelAddr(hostname, port);
     this->quorum = quorum;
     this->master = master;
     this->downAfterPeriod = this->master ? this->master->getDownAfterPeriod() : SENTINEL_DEFAULT_DOWN_AFTER;
+    this->roleReported = this->flags & (FSI_MASTER | FSI_SLAVE);
+    this->roleReportedTime = nowt;
 }
 
 FlyInstance::~FlyInstance() {
@@ -170,6 +173,7 @@ int FlyInstance::removeMatchingSentinel(char *runid) {
 }
 
 void FlyInstance::reset(int flags) {
+    uint64_t nowt = miscTool->mstime();
     this->slaves.clear();
     if (flags & SENTINEL_RESET_SENTINELS) {
         this->sentinels.clear();
@@ -182,6 +186,8 @@ void FlyInstance::reset(int flags) {
     this->sDownSinceTime = 0;
     this->promotedSlave = NULL;
     this->failoverState = SENTINEL_FAILOVER_STATE_NONE;
+    this->roleReported = this->flags & (FSI_MASTER | FSI_SLAVE);
+    this->roleReportedTime = nowt;
 }
 
 bool FlyInstance::noDownFor(uint64_t ms) {
@@ -196,6 +202,30 @@ uint64_t FlyInstance::getDownAfterPeriod() const {
 
 void FlyInstance::setDownAfterPeriod(uint64_t downAfterPeriod) {
     this->downAfterPeriod = downAfterPeriod;
+}
+
+int FlyInstance::getRoleReported() const {
+    return roleReported;
+}
+
+void FlyInstance::setRoleReported(int roleReported) {
+    this->roleReported = roleReported;
+}
+
+uint64_t FlyInstance::getRoleReportedTime() const {
+    return roleReportedTime;
+}
+
+void FlyInstance::setRoleReportedTime(uint64_t roleReportedTime) {
+    this->roleReportedTime = roleReportedTime;
+}
+
+uint64_t FlyInstance::getInfoRefresh() const {
+    return infoRefresh;
+}
+
+void FlyInstance::setInfoRefresh(uint64_t infoRefresh) {
+    this->infoRefresh = infoRefresh;
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {

@@ -40,6 +40,12 @@ public:
     virtual bool noDownFor(uint64_t ms) = 0;
     virtual uint64_t getDownAfterPeriod() const = 0;
     virtual void setDownAfterPeriod(uint64_t downAfterPeriod) = 0;
+    virtual int getRoleReported() const = 0;
+    virtual void setRoleReported(int roleReported) = 0;
+    virtual uint64_t getRoleReportedTime() const = 0;
+    virtual void setRoleReportedTime(uint64_t roleReportedTime) = 0;
+    virtual uint64_t getInfoRefresh() const = 0;
+    virtual void setInfoRefresh(uint64_t infoRefresh) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
