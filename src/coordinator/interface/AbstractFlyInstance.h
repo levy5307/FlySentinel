@@ -46,6 +46,7 @@ public:
     virtual void setRoleReportedTime(uint64_t roleReportedTime) = 0;
     virtual uint64_t getInfoRefresh() const = 0;
     virtual void setInfoRefresh(uint64_t infoRefresh) = 0;
+    virtual bool sendPing() = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

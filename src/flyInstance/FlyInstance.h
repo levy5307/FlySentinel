@@ -51,6 +51,7 @@ public:
     void setRoleReportedTime(uint64_t roleReportedTime);
     uint64_t getInfoRefresh() const;
     void setInfoRefresh(uint64_t infoRefresh);
+    bool sendPing();
 
 private:
     FlyInstance(){};

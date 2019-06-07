@@ -80,3 +80,19 @@ void InstanceLink::connectionError(const std::shared_ptr<redisAsyncContext> cont
     }
     disconnected = 1;
 }
+
+uint64_t InstanceLink::getActPingTime() const {
+    return actPingTime;
+}
+
+void InstanceLink::setActPingTime(uint64_t actPingTime) {
+    this->actPingTime = actPingTime;
+}
+
+uint64_t InstanceLink::getLastPingTime() const {
+    return lastPingTime;
+}
+
+void InstanceLink::setLastPingTime(uint64_t lastPingTime) {
+    this->lastPingTime = lastPingTime;
+}

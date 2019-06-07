@@ -228,6 +228,20 @@ void FlyInstance::setInfoRefresh(uint64_t infoRefresh) {
     this->infoRefresh = infoRefresh;
 }
 
+bool FlyInstance::sendPing() {
+    int retval = redisAsyncCommand(this->link->getCommandContext().get(), NULL, this, "%s", "PING");
+    if (retval > 0) {
+        this->link->increasePendingCommands();
+        this->link->setLastPingTime(miscTool->mstime());
+        if (0 == this->link->getActPingTime()) {
+            this->link->setActPingTime(this->link->getLastPingTime());
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {
