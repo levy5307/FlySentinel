@@ -52,6 +52,12 @@ public:
     uint64_t getInfoRefresh() const;
     void setInfoRefresh(uint64_t infoRefresh);
     bool sendPing();
+    int sendHello();
+    const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const;
+    void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave);
+    bool hasPromotedSlave() const;
+    FailoverState getFailoverState() const;
+    void setFailoverState(FailoverState failoverState);
 
 private:
     FlyInstance(){};

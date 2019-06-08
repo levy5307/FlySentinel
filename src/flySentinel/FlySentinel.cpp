@@ -490,6 +490,16 @@ void FlySentinel::deleteScriptJob(pid_t pid) {
     this->runningScripts--;
 }
 
+SentinelAddr* FlySentinel::getCurrentMasterAddress(std::shared_ptr<AbstractFlyInstance> master) {
+    if ((master->getFlags() & FSI_FAILOVER_IN_PROGRESS)
+        && master->hasPromotedSlave()
+        && master->getFailoverState() > SENTINEL_FAILOVER_STATE_RECONF_SLAVES) {
+        return master->getPromotedSlave()->getAddr();
+    } else {
+        master->getAddr();
+    }
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 

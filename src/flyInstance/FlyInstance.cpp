@@ -242,6 +242,30 @@ bool FlyInstance::sendPing() {
     }
 }
 
+int FlyInstance::sendHello() {
+
+}
+
+const std::shared_ptr<AbstractFlyInstance> &FlyInstance::getPromotedSlave() const {
+    return promotedSlave;
+}
+
+void FlyInstance::setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave) {
+    this->promotedSlave = promotedSlave;
+}
+
+bool FlyInstance::hasPromotedSlave() const {
+    return NULL != this->promotedSlave;
+}
+
+FailoverState FlyInstance::getFailoverState() const {
+    return failoverState;
+}
+
+void FlyInstance::setFailoverState(FailoverState failoverState) {
+    this->failoverState = failoverState;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {

@@ -47,6 +47,7 @@ private:
     void resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, char *ip, int port);
     void setClientName(redisAsyncContext *context, std::shared_ptr<AbstractFlyInstance> flyInstance, char *type);
     bool masterLookSane(std::shared_ptr<AbstractFlyInstance> master);
+    SentinelAddr* getCurrentMasterAddress(std::shared_ptr<AbstractFlyInstance> master);
 
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;

@@ -8,6 +8,7 @@
 #include <string>
 #include "../../flySentinel/SentinelAddr.h"
 #include "AbstractInstanceLink.h"
+#include "../../flyInstance/FlyInstanceDef.h"
 
 class AbstractFlyInstance {
 public:
@@ -47,6 +48,12 @@ public:
     virtual uint64_t getInfoRefresh() const = 0;
     virtual void setInfoRefresh(uint64_t infoRefresh) = 0;
     virtual bool sendPing() = 0;
+    virtual int sendHello() = 0;
+    virtual const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const = 0;
+    virtual void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave) = 0;
+    virtual bool hasPromotedSlave() const = 0;
+    virtual FailoverState getFailoverState() const = 0;
+    virtual void setFailoverState(FailoverState failoverState) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
