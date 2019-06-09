@@ -500,6 +500,9 @@ SentinelAddr* FlySentinel::getCurrentMasterAddress(std::shared_ptr<AbstractFlyIn
     }
 }
 
+void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) {
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 

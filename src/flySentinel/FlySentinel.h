@@ -26,6 +26,7 @@ public:
     void flushConfig();
     /** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
     void propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master);
+    void refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info);
 
 private:
     void scheduleScriptExecution(char *path, ...);

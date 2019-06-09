@@ -272,3 +272,17 @@ void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void 
         instanceLink->decreasePendingCommands();
     }
 }
+
+void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
+    AbstractFlyInstance *flyInstance = (AbstractFlyInstance *)privdata;
+    AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
+    if (NULL == reply || NULL == instanceLink) {
+        return;
+    }
+
+    instanceLink->increasePendingCommands();
+    redisReply *r = (redisReply*)reply;
+    if (REDIS_REPLY_STRING == r->type) {
+        // todo: refresh instance info
+    }
+}
