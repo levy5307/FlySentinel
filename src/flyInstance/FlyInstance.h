@@ -59,6 +59,9 @@ public:
     bool hasPromotedSlave() const;
     FailoverState getFailoverState() const;
     void setFailoverState(FailoverState failoverState);
+    void clearInfo();
+    void setInfo(const std::string &info);
+    const std::string& getInfo() const;
 
 private:
     FlyInstance(){};
@@ -81,6 +84,7 @@ private:
     int roleReported;
     uint64_t roleReportedTime = 0;
     uint64_t infoRefresh = 0;
+    std::string info;                                   /** 缓存的输出info */
 };
 
 

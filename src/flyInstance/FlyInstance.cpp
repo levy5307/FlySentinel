@@ -266,6 +266,18 @@ void FlyInstance::setFailoverState(FailoverState failoverState) {
     this->failoverState = failoverState;
 }
 
+void FlyInstance::clearInfo() {
+    this->info.clear();
+}
+
+void FlyInstance::setInfo(const std::string &info) {
+    this->info = info;
+}
+
+const std::string& FlyInstance::getInfo() const {
+    return this->info;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {

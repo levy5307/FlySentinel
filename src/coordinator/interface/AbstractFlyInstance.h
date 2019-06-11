@@ -54,6 +54,9 @@ public:
     virtual bool hasPromotedSlave() const = 0;
     virtual FailoverState getFailoverState() const = 0;
     virtual void setFailoverState(FailoverState failoverState) = 0;
+    virtual void clearInfo() = 0;
+    virtual void setInfo(const std::string &info) = 0;
+    virtual const std::string& getInfo() const = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
