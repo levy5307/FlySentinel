@@ -16,7 +16,7 @@
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData);
 
-class FlySentinel : public AbstractFlyServer {
+class FlySentinel : public BaseFlyServer {
 public:
     FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache);
     ~FlySentinel();

@@ -16,7 +16,7 @@
 #include "../flyInstance/FlyInstance.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
-        : AbstractFlyServer(coordinator, configCache) {
+        : BaseFlyServer(coordinator, configCache) {
     memset(this->myid, 0, sizeof(this->myid));
     this->port = FLYDB_SENTINEL_PORT;
 }
@@ -504,7 +504,7 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
-    AbstractFlyServer *flyServer = coordinator->getFlyServer();
+    BaseFlyServer *flyServer = coordinator->getFlyServer();
 
     /** 更新缓存时间 */
     flyServer->setNowt(time(NULL));

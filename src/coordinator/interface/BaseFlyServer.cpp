@@ -4,12 +4,12 @@
 
 #include <zconf.h>
 #include <iostream>
-#include "AbstractFlyServer.h"
+#include "BaseFlyServer.h"
 #include "../../def.h"
 #include "../../flyClient/FlyClient.h"
 #include "../../atomic/AtomicHandler.h"
 
-AbstractFlyServer::AbstractFlyServer(const AbstractCoordinator *coordinator, ConfigCache *configCache) {
+BaseFlyServer::BaseFlyServer(const AbstractCoordinator *coordinator, ConfigCache *configCache) {
     this->coordinator = coordinator;
 
     // init command table
@@ -54,7 +54,7 @@ AbstractFlyServer::AbstractFlyServer(const AbstractCoordinator *coordinator, Con
     this->logHandler = logFactory->getLogger();
 }
 
-void AbstractFlyServer::addToClientsPendingToWrite(int fd) {
+void BaseFlyServer::addToClientsPendingToWrite(int fd) {
     std::shared_ptr<AbstractFlyClient> flyClient = this->getFlyClient(fd);
     /** 如果没有找到，返回 */
     if (nullptr == flyClient) {
@@ -71,7 +71,7 @@ void AbstractFlyServer::addToClientsPendingToWrite(int fd) {
     }
 }
 
-int AbstractFlyServer::handleClientsWithPendingWrites() {
+int BaseFlyServer::handleClientsWithPendingWrites() {
     int pendingCount = this->clientsPendingWrite.size();
     if (0 == pendingCount) {
         return 0;
@@ -104,7 +104,7 @@ int AbstractFlyServer::handleClientsWithPendingWrites() {
     return pendingCount;
 }
 
-void AbstractFlyServer::freeClientAsync(int fd) {
+void BaseFlyServer::freeClientAsync(int fd) {
     std::shared_ptr<AbstractFlyClient> flyClient = this->getFlyClient(fd);
     if (nullptr == flyClient) {
         return;
@@ -113,7 +113,7 @@ void AbstractFlyServer::freeClientAsync(int fd) {
     freeClientAsync(flyClient);
 }
 
-std::shared_ptr<AbstractFlyClient> AbstractFlyServer::createClient(int fd) {
+std::shared_ptr<AbstractFlyClient> BaseFlyServer::createClient(int fd) {
     if (fd <= 0) {
         return nullptr;
     }
@@ -150,12 +150,12 @@ std::shared_ptr<AbstractFlyClient> AbstractFlyServer::createClient(int fd) {
     return flyClient;
 }
 
-int AbstractFlyServer::freeClient(std::shared_ptr<AbstractFlyClient> flyClient) {
+int BaseFlyServer::freeClient(std::shared_ptr<AbstractFlyClient> flyClient) {
     /** 将其从global list中删除*/
     this->unlinkClient(flyClient);
 }
 
-void AbstractFlyServer::freeClientAsync(std::shared_ptr<AbstractFlyClient> flyClient) {
+void BaseFlyServer::freeClientAsync(std::shared_ptr<AbstractFlyClient> flyClient) {
     if (flyClient->getFlags() & CLIENT_CLOSE_ASAP) {
         return;
     }
@@ -168,7 +168,7 @@ void AbstractFlyServer::freeClientAsync(std::shared_ptr<AbstractFlyClient> flyCl
  * 将client从一切global list中删除掉
  * (除async delete列表之外, 否则可能导致无法删除)
  **/
-void AbstractFlyServer::unlinkClient(std::shared_ptr<AbstractFlyClient> flyClient) {
+void BaseFlyServer::unlinkClient(std::shared_ptr<AbstractFlyClient> flyClient) {
     /** 在clients列表中删除，并删除该client对应的文件事件 */
     int fd = flyClient->getFd();
     if (-1 != fd) {
@@ -190,7 +190,7 @@ void AbstractFlyServer::unlinkClient(std::shared_ptr<AbstractFlyClient> flyClien
 
 }
 
-void AbstractFlyServer::deleteFromPending(int fd) {
+void BaseFlyServer::deleteFromPending(int fd) {
     std::list<std::shared_ptr<AbstractFlyClient> >::iterator iter = this->clientsPendingWrite.begin();
     for (; iter != this->clientsPendingWrite.end(); iter++) {
         if ((*iter)->getFd() == fd) {
@@ -200,7 +200,7 @@ void AbstractFlyServer::deleteFromPending(int fd) {
     }
 }
 
-void AbstractFlyServer::deleteFromAsyncClose(int fd) {
+void BaseFlyServer::deleteFromAsyncClose(int fd) {
     std::list<std::shared_ptr<AbstractFlyClient> >::iterator iter = this->clientsToClose.begin();
     for (iter; iter != this->clientsToClose.end(); iter++) {
         if ((*iter)->getFd() == fd) {
@@ -210,11 +210,11 @@ void AbstractFlyServer::deleteFromAsyncClose(int fd) {
     }
 }
 
-void AbstractFlyServer::linkClient(std::shared_ptr<AbstractFlyClient> flyClient) {
+void BaseFlyServer::linkClient(std::shared_ptr<AbstractFlyClient> flyClient) {
     this->clients[flyClient->getFd()] = flyClient;
 }
 
-std::shared_ptr<AbstractFlyClient> AbstractFlyServer::getFlyClient(int fd) {
+std::shared_ptr<AbstractFlyClient> BaseFlyServer::getFlyClient(int fd) {
     if (this->clients.find(fd) != this->clients.end()) {
         return this->clients[fd];
     }
@@ -222,7 +222,7 @@ std::shared_ptr<AbstractFlyClient> AbstractFlyServer::getFlyClient(int fd) {
     return nullptr;
 }
 
-void AbstractFlyServer::freeClientsInAsyncFreeList() {
+void BaseFlyServer::freeClientsInAsyncFreeList() {
     for (auto client : this->clientsToClose) {
         if (nullptr == client) {
             continue;
@@ -233,11 +233,11 @@ void AbstractFlyServer::freeClientsInAsyncFreeList() {
     this->clientsToClose.clear();
 }
 
-int AbstractFlyServer::getMaxClients() const {
+int BaseFlyServer::getMaxClients() const {
     return this->maxClients;
 }
 
-int AbstractFlyServer::listenToPort() {
+int BaseFlyServer::listenToPort() {
     int fd;
     // try to bind all to IPV4 and IPV6
     if (0 == this->bindAddrs.size()) {
@@ -298,7 +298,7 @@ int AbstractFlyServer::listenToPort() {
     return 1;
 }
 
-void AbstractFlyServer::loadFromConfig(ConfigCache *configCache) {
+void BaseFlyServer::loadFromConfig(ConfigCache *configCache) {
     this->bindAddrs = configCache->getBindAddrs();
     this->unixsocket = configCache->getUnixsocket();
     this->unixsocketperm = configCache->getUnixsocketperm();
@@ -306,7 +306,7 @@ void AbstractFlyServer::loadFromConfig(ConfigCache *configCache) {
     this->port = configCache->getPort();
 }
 
-bool AbstractFlyServer::dealWithCommand(int fd) {
+bool BaseFlyServer::dealWithCommand(int fd) {
     std::shared_ptr<AbstractFlyClient> flyClient = this->getFlyClient(fd);
     if (nullptr == flyClient) {
         return false;
@@ -315,7 +315,7 @@ bool AbstractFlyServer::dealWithCommand(int fd) {
     return this->commandTable->dealWithCommand(flyClient);
 }
 
-void AbstractFlyServer::setMaxClientLimit() {
+void BaseFlyServer::setMaxClientLimit() {
     this->maxClients = CONFIG_DEFAULT_MAX_CLIENTS;
     int maxFiles = this->maxClients + CONFIG_MIN_RESERVED_FDS;
     rlimit limit;
@@ -354,43 +354,43 @@ void AbstractFlyServer::setMaxClientLimit() {
     }
 }
 
-int AbstractFlyServer::getHz() const {
+int BaseFlyServer::getHz() const {
     return hz;
 }
 
-void AbstractFlyServer::setHz(int hz) {
+void BaseFlyServer::setHz(int hz) {
     this->hz = hz;
 }
 
-time_t AbstractFlyServer::getNowt() const {
+time_t BaseFlyServer::getNowt() const {
     return nowt;
 }
 
-void AbstractFlyServer::setNowt(time_t nowt) {
+void BaseFlyServer::setNowt(time_t nowt) {
     this->nowt = nowt;
 }
 
-size_t AbstractFlyServer::getClientMaxQuerybufLen() const {
+size_t BaseFlyServer::getClientMaxQuerybufLen() const {
     return clientMaxQuerybufLen;
 }
 
-int64_t AbstractFlyServer::getStatNetInputBytes() const {
+int64_t BaseFlyServer::getStatNetInputBytes() const {
     return statNetInputBytes;
 }
 
-void AbstractFlyServer::addToStatNetInputBytes(int64_t size) {
+void BaseFlyServer::addToStatNetInputBytes(int64_t size) {
     this->clientMaxQuerybufLen += size;
 }
 
-void AbstractFlyServer::addCronLoops() {
+void BaseFlyServer::addCronLoops() {
     this->cronloops++;
 }
 
-uint64_t AbstractFlyServer::getCronLoops() const {
+uint64_t BaseFlyServer::getCronLoops() const {
     return this->cronloops;
 }
 
-const std::vector<int> &AbstractFlyServer::getIpfd() const {
+const std::vector<int> &BaseFlyServer::getIpfd() const {
     return ipfd;
 }
 

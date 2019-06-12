@@ -754,7 +754,7 @@ void acceptTcpHandler(const AbstractCoordinator *coordinator,
                       int fd,
                       void *privdata,
                       int mask) {
-    AbstractFlyServer *flyServer = coordinator->getFlyServer();
+    BaseFlyServer *flyServer = coordinator->getFlyServer();
     AbstractNetHandler *netHandler = coordinator->getNetHandler();
 
     int cfd, cport;
@@ -778,7 +778,7 @@ void readQueryFromClient(const AbstractCoordinator *coordinator,
                          int fd,
                          void *privdata,
                          int mask) {
-    AbstractFlyServer *flyServer = coordinator->getFlyServer();
+    BaseFlyServer *flyServer = coordinator->getFlyServer();
     std::shared_ptr<AbstractFlyClient> flyClient = flyServer->getFlyClient(fd);
     AbstractNetHandler *netHandler = coordinator->getNetHandler();
 

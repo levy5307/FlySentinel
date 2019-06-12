@@ -15,9 +15,9 @@
 
 class CommandTable;
 
-class AbstractFlyServer {
+class BaseFlyServer {
 public:
-    AbstractFlyServer(const AbstractCoordinator *coordinato, ConfigCache *configCache);
+    BaseFlyServer(const AbstractCoordinator *coordinato, ConfigCache *configCache);
 
     /** network */
     size_t getClientMaxQuerybufLen() const;
@@ -51,7 +51,7 @@ public:
 
     /** statistic work */
 
-    virtual ~AbstractFlyServer() {};
+    virtual ~BaseFlyServer() {};
 
 private:
     void setMaxClientLimit();

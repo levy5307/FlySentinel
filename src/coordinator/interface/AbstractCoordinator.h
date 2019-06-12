@@ -11,12 +11,12 @@
 #include "AbstractBIOHandler.h"
 #include "AbstractLogHandler.h"
 #include "AbstractFlyObjFactory.h"
-#include "AbstractFlyServer.h"
+#include "BaseFlyServer.h"
 #include "AbstractSharedObjects.h"
 #include "AbstractPubSubHandler.h"
 
 class AbstractFlyClientFactory;
-class AbstractFlyServer;
+class BaseFlyServer;
 
 class AbstractCoordinator {
 public:
@@ -30,7 +30,7 @@ public:
     /** fly object factory **/
     virtual AbstractFlyObjFactory *getFlyObjStringFactory() const = 0;
 
-    virtual AbstractFlyServer* getFlyServer() const = 0;
+    virtual BaseFlyServer* getFlyServer() const = 0;
 
     /** LogHandler */
     virtual AbstractLogHandler *getLogHandler() const = 0;
