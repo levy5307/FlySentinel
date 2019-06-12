@@ -16,7 +16,7 @@
 #include "../flyInstance/FlyInstance.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache)
-        : AbstractFlySentinel(coordinator, configCache) {
+        : AbstractFlyServer(coordinator, configCache) {
     memset(this->myid, 0, sizeof(this->myid));
     this->port = FLYDB_SENTINEL_PORT;
 }

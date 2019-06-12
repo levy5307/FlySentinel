@@ -94,7 +94,7 @@ AbstractFlyClientFactory *Coordinator::getFlyClientFactory() const {
     return this->flyClientFactory;
 }
 
-AbstractFlySentinel* Coordinator::getFlyServer() const {
+AbstractFlyServer* Coordinator::getFlyServer() const {
     return this->flyServer;
 }
 

@@ -13,11 +13,10 @@
 #include "../coordinator/interface/AbstractFlyInstance.h"
 #include "../scriptJob/ScriptJob.h"
 #include "../coordinator/interface/AbstractInstanceLink.h"
-#include "../coordinator/interface/AbstractFlySentinel.h"
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData);
 
-class FlySentinel : public AbstractFlySentinel {
+class FlySentinel : public AbstractFlyServer {
 public:
     FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache);
     ~FlySentinel();

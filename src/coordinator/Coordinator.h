@@ -9,7 +9,6 @@
 #include "../config/ConfigCache.h"
 #include "../config/base/BaseConfigReader.h"
 #include "interface/AbstractPubSubHandler.h"
-#include "interface/AbstractFlySentinel.h"
 
 class Coordinator : public AbstractCoordinator {
 public:
@@ -24,7 +23,7 @@ public:
     AbstractFlyObjFactory *getFlyObjStringFactory() const;
 
     /** fly server */
-    AbstractFlySentinel* getFlyServer() const;
+    AbstractFlyServer* getFlyServer() const;
 
     /** LogHandler */
     AbstractLogHandler *getLogHandler() const;
@@ -64,7 +63,7 @@ private:
     /**
      * fly server
      **/
-    AbstractFlySentinel *flyServer;
+    AbstractFlyServer *flyServer;
 
     /** pub/sub handler */
     AbstractPubSubHandler *pubSubHandler;
