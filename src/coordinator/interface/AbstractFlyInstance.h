@@ -6,7 +6,6 @@
 #define FLYSENTINEL_ABSTRACTFLYINSTANCE_H
 
 #include <string>
-#include <map>
 #include "../../flySentinel/SentinelAddr.h"
 #include "AbstractInstanceLink.h"
 #include "../../flyInstance/FlyInstanceDef.h"

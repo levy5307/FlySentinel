@@ -6,7 +6,6 @@
 #include "../flySentinel/FlySentinelDef.h"
 #include "../def.h"
 #include "FlyInstanceDef.h"
-#include "../coordinator/interface/AbstractCoordinator.h"
 
 FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname,
                          int port, int quorum, std::shared_ptr<AbstractFlyInstance> master) {
@@ -296,7 +295,6 @@ void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *pr
     instanceLink->increasePendingCommands();
     redisReply *r = (redisReply*)reply;
     if (REDIS_REPLY_STRING == r->type) {
-        extern AbstractCoordinator *coordinator;
-        coordinator->getFlyServer()->refreshInstanceInfo(flyInstance, r->str);
+        // todo: refresh instance info
     }
 }

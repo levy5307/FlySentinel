@@ -8,7 +8,6 @@
 #include "ClientDef.h"
 #include "../io/MemFio.h"
 #include "../utils/MiscTool.h"
-#include "../event/EventDef.h"
 
 extern MiscTool *miscTool;
 

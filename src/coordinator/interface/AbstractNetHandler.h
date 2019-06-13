@@ -6,7 +6,6 @@
 #define FLYSENTINEL_ABSTRACTNETHANDLER_H
 
 #include <sys/socket.h>
-#include <string>
 
 class AbstractNetHandler {
 public:
