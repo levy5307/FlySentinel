@@ -5,9 +5,9 @@
 #ifndef FLYSENTINEL_FILEEVENT_H
 #define FLYSENTINEL_FILEEVENT_H
 
-#include "EventDef.h"
 #include "../coordinator/interface/AbstractEventLoop.h"
 #include "../coordinator/interface/AbstractFlyClient.h"
+#include "../coordinator/CoordinatorDef.h"
 
 struct FileEvent {
 public:

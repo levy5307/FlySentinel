@@ -5,7 +5,7 @@
 #ifndef FLYSENTINEL_TIMEEVENT_H
 #define FLYSENTINEL_TIMEEVENT_H
 
-#include "EventDef.h"
+#include "../coordinator/CoordinatorDef.h"
 
 int64_t getCurrentTime();
 

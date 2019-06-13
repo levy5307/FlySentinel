@@ -14,6 +14,7 @@
 #include "../flyObj/FlyObjString/FlyObjStringFactory.h"
 #include "../pubsub/PubSubHandler.h"
 #include "../flyClient/FlyClient.h"
+#include "../event/EventDef.h"
 
 Coordinator::Coordinator() {
     /** 加载config **/

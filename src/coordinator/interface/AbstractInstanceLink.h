@@ -5,6 +5,7 @@
 #ifndef FLYSENTINEL_ABSTRACTINSTANCELINK_H
 #define FLYSENTINEL_ABSTRACTINSTANCELINK_H
 
+#include <memory>
 #include "../../asyncEvent/convert.h"
 
 class AbstractInstanceLink {

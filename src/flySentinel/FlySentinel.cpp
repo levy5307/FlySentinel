@@ -15,6 +15,7 @@
 #include "../flyInstance/FlyInstanceDef.h"
 #include "../flyInstance/FlyInstance.h"
 #include "../atomic/AtomicHandler.h"
+#include "../event/EventDef.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache) {
     memset(this->myid, 0, sizeof(this->myid));

@@ -5,7 +5,7 @@
 #ifndef FLYSENTINEL_ABSTRACTEVENTLOOP_H
 #define FLYSENTINEL_ABSTRACTEVENTLOOP_H
 
-#include "../../event/EventDef.h"
+#include "../CoordinatorDef.h"
 
 class AbstractEventLoop {
 public:

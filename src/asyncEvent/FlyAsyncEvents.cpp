@@ -2,6 +2,7 @@
 // Created by levy on 2019/5/15.
 //
 #include "FlyAsyncEvents.h"
+#include "../event/EventDef.h"
 
 FlyAsyncEvents::FlyAsyncEvents(redisAsyncContext *asyncContext, AbstractEventLoop *eventLoop) {
     this->asyncContext = asyncContext;
