@@ -5,13 +5,13 @@
 #ifndef FLYSENTINEL_ABSTRACTFLYCLIENTFACTORY_H
 #define FLYSENTINEL_ABSTRACTFLYCLIENTFACTORY_H
 
-#include "AbstractCoordinator.h"
+#include <memory>
+#include "AbstractFlyClient.h"
 
 class AbstractFlyClientFactory {
 public:
     virtual std::shared_ptr<AbstractFlyClient> getFlyClient(
             int fd,
-            const AbstractCoordinator *coordinator,
             time_t nowt) = 0;
 };
 

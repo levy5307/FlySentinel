@@ -5,8 +5,11 @@
 #include "FlyClientFactory.h"
 #include "FlyClient.h"
 
+FlyClientFactory::FlyClientFactory(const AbstractCoordinator *coordinator) {
+    this->coordinator = coordinator;
+}
+
 std::shared_ptr<AbstractFlyClient> FlyClientFactory::getFlyClient(int fd,
-                                                                  const AbstractCoordinator *coordinator,
                                                                   time_t nowt) {
-    return std::shared_ptr<AbstractFlyClient>(new FlyClient(fd, coordinator, nowt));
+    return std::shared_ptr<AbstractFlyClient>(new FlyClient(fd, this->coordinator, nowt));
 }

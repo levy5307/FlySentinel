@@ -6,13 +6,17 @@
 #define FLYSENTINEL_FLYCLIENTFACTORY_H
 
 #include "../coordinator/interface/AbstractFlyClientFactory.h"
+#include "../coordinator/interface/AbstractCoordinator.h"
 
 class FlyClientFactory : public AbstractFlyClientFactory {
 public:
+    FlyClientFactory(const AbstractCoordinator *coordinator);
     std::shared_ptr<AbstractFlyClient> getFlyClient(
             int fd, 
-            const AbstractCoordinator *coordinator,
             time_t nowt);
+
+private:
+    const AbstractCoordinator *coordinator;
 };
 
 

@@ -6,6 +6,7 @@
 #include <vector>
 #include "CommandEntry.h"
 #include "CommandTableDef.h"
+#include "../flyClient/ClientDef.h"
 
 /**
  * 命令列表：

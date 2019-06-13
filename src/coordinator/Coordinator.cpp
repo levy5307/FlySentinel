@@ -13,6 +13,7 @@
 #include "../shared/SharedObjects.h"
 #include "../flyObj/FlyObjString/FlyObjStringFactory.h"
 #include "../pubsub/PubSubHandler.h"
+#include "../flyClient/FlyClient.h"
 
 Coordinator::Coordinator() {
     /** 加载config **/
@@ -21,7 +22,7 @@ Coordinator::Coordinator() {
     this->configCache = configReader->loadConfig();
 
     /** client factory **/
-    this->flyClientFactory = new FlyClientFactory();
+    this->flyClientFactory = new FlyClientFactory(this);
 
     /** fly obj factory **/
     this->flyObjStringFactory = new FlyObjStringFactory();
@@ -94,7 +95,7 @@ AbstractFlyClientFactory *Coordinator::getFlyClientFactory() const {
     return this->flyClientFactory;
 }
 
-BaseFlyServer* Coordinator::getFlyServer() const {
+AbstractFlyServer* Coordinator::getFlyServer() const {
     return this->flyServer;
 }
 

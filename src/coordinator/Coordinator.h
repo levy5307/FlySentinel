@@ -23,7 +23,7 @@ public:
     AbstractFlyObjFactory *getFlyObjStringFactory() const;
 
     /** fly server */
-    BaseFlyServer* getFlyServer() const;
+    AbstractFlyServer* getFlyServer() const;
 
     /** LogHandler */
     AbstractLogHandler *getLogHandler() const;
@@ -63,7 +63,7 @@ private:
     /**
      * fly server
      **/
-    BaseFlyServer *flyServer;
+    AbstractFlyServer *flyServer;
 
     /** pub/sub handler */
     AbstractPubSubHandler *pubSubHandler;

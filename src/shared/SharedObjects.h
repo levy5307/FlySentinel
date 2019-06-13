@@ -5,10 +5,12 @@
 #ifndef FLYSENTINEL_SHAREDOBJECTS_H
 #define FLYSENTINEL_SHAREDOBJECTS_H
 
-
+#include <memory>
+#include <vector>
 #include "SharedObjectDef.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
 #include "../coordinator/interface/AbstractSharedObjects.h"
+#include "../flyObj/FlyObj.h"
 
 class SharedObjects : public AbstractSharedObjects {
 public:
