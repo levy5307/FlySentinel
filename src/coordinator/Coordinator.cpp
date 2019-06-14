@@ -72,7 +72,7 @@ Coordinator::~Coordinator() {
 }
 
 void Coordinator::createEvent(const std::vector<int> &ipfd) {
-    // 时间循环处理器
+    // 事件循环处理器
     this->eventLoop->createTimeEvent(1, serverCron, NULL, NULL);
     // 创建定时任务，用于创建客户端连接
     for (auto fd : ipfd) {

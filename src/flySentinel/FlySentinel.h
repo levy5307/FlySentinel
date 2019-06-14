@@ -19,9 +19,9 @@ int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *client
 
 class FlySentinel : public AbstractFlyServer {
 public:
-    /**
-     * sentinel special interfaces
-     **/
+    /************************************************************************************************
+     *******************                sentinel special interfaces                 *****************
+     ************************************************************************************************/
     FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache);
     ~FlySentinel();
     void sendEvent(int level, char *type, std::shared_ptr<AbstractFlyInstance> flyInstance, const char *fmt, ...);
@@ -31,11 +31,15 @@ public:
     /** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
     void propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master);
     void refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info);
+    const std::string &getAnnounceIP() const;
+    void setAnnounceIP(const std::string &announceIP);
+    int getAnnouncePort() const;
+    void setAnnouncePort(int announcePort);
 
 
-    /**
-     * general server interfaces
-     **/
+    /************************************************************************************************
+     *******************                general server interfaces                   *****************
+     ************************************************************************************************/
     /** network */
     size_t getClientMaxQuerybufLen() const;
     int64_t getStatNetInputBytes() const;
@@ -67,9 +71,9 @@ public:
     uint64_t getCronLoops() const;
 
 private:
-    /**
-     * sentinel server private functions
-     **/
+    /************************************************************************************************
+     *******************             sentinel server private functions              *****************
+     ************************************************************************************************/
     void scheduleScriptExecution(char *path, ...);
     std::shared_ptr<ScriptJob> getScriptListNodeByPid(pid_t pid);
     void runPendingScripts();
@@ -91,9 +95,9 @@ private:
     bool masterLookSane(std::shared_ptr<AbstractFlyInstance> master);
     SentinelAddr* getCurrentMasterAddress(std::shared_ptr<AbstractFlyInstance> master);
 
-    /**
-     * general server private functions
-     **/
+    /************************************************************************************************
+     *******************             general server private functions               *****************
+     ************************************************************************************************/
     void initGeneralServer(const AbstractCoordinator *coordinator, ConfigCache *configCache);
     void setMaxClientLimit();
     int listenToPort();
@@ -101,27 +105,27 @@ private:
     void deleteFromPending(int fd);
     void deleteFromAsyncClose(int fd);
 
-    /**
-     * Sentinel parameters
-     **/
+    /************************************************************************************************
+     *******************                    Sentinel parameters                     *****************
+     ************************************************************************************************/
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
     std::map<std::string, std::shared_ptr<AbstractFlyInstance>> masters;            // key-name
     bool tilt = false;                 /** tilt mode */
     uint64_t tiltStartTime = 0;
     uint64_t previousTime = miscTool->mstime();
-    char *announceIP = NULL;
+    std::string announceIP;                         /** 用于同其他sentinel进行gossip协议传输的地址和端口 */
     int announcePort = 0;
     int runningScripts = 0;
     std::list<std::shared_ptr<ScriptJob>> scriptsQueue;
 
-    /**
-     * Common server parameters
-     **/
+    /************************************************************************************************
+     *******************                General server parameters                  *****************
+     ************************************************************************************************/
     /** 网络相关 */
-    int port;                                 // tcp listening port
+    int port;                                 // tcp监听端口
     std::vector<int> ipfd;                    // TCP socket fd
-    std::vector<std::string> bindAddrs;        // 绑定地址
+    std::vector<std::string> bindAddrs;       // 绑定地址，监听地址
     int tcpBacklog;                           // TCP listen() backlog
     char *neterr;                             // 网络error buffer
     const char *unixsocket;                   // UNIX socket path

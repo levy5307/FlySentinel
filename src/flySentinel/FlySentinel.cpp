@@ -888,6 +888,22 @@ const std::vector<int> &FlySentinel::getIpfd() const {
     return ipfd;
 }
 
+const std::string &FlySentinel::getAnnounceIP() const {
+    return announceIP;
+}
+
+void FlySentinel::setAnnounceIP(const std::string &announceIP) {
+    this->announceIP = announceIP;
+}
+
+int FlySentinel::getAnnouncePort() const {
+    return announcePort;
+}
+
+void FlySentinel::setAnnouncePort(int announcePort) {
+    this->announcePort = announcePort;
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 

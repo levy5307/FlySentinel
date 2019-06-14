@@ -96,3 +96,11 @@ uint64_t InstanceLink::getLastPingTime() const {
 void InstanceLink::setLastPingTime(uint64_t lastPingTime) {
     this->lastPingTime = lastPingTime;
 }
+
+bool InstanceLink::isDisconnected() const {
+    return disconnected;
+}
+
+void InstanceLink::setDisconnected(bool disconnected) {
+    this->disconnected = disconnected;
+}

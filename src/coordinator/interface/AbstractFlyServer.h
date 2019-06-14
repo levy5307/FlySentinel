@@ -24,6 +24,10 @@ public:
     /** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
     virtual void propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master) = 0;
     virtual void refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) = 0;
+    virtual const std::string &getAnnounceIP() const = 0;
+    virtual void setAnnounceIP(const std::string &announceIP) = 0;
+    virtual int getAnnouncePort() const = 0;
+    virtual void setAnnouncePort(int announcePort) = 0;
 
     /**
      * general server interface

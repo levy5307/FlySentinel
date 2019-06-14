@@ -7,6 +7,7 @@
 #include "../def.h"
 #include "FlyInstanceDef.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
+extern AbstractCoordinator *coordinator;
 
 FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname,
                          int port, int quorum, std::shared_ptr<AbstractFlyInstance> master) {
@@ -244,6 +245,19 @@ bool FlyInstance::sendPing() {
 }
 
 int FlyInstance::sendHello() {
+    // 这里的master不能用智能指针，因为this再放入一个智能指针里，有可能会被释放两次
+    AbstractFlyInstance *master = (this->flags & FSI_MASTER) ? this : this->getMaster().get();
+    SentinelAddr *masterAddr = master->getAddr();
+    AbstractFlyServer *flyServer = coordinator->getFlyServer();
+
+    /** 如果连接已经断开了，直接返回 */
+    if (this->getLink()->isDisconnected()) {
+        return -1;
+    }
+
+    std::string announceIP = flyServer->getAnnounceIP();
+    if (announceIP.empty()) {
+    }
 
 }
 
@@ -296,7 +310,6 @@ void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *pr
     instanceLink->increasePendingCommands();
     redisReply *r = (redisReply*)reply;
     if (REDIS_REPLY_STRING == r->type) {
-        extern AbstractCoordinator *coordinator;
         coordinator->getFlyServer()->refreshInstanceInfo(flyInstance, r->str);
     }
 }

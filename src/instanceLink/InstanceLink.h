@@ -28,6 +28,8 @@ public:
     void setActPingTime(uint64_t actPingTime);
     uint64_t getLastPingTime() const;
     void setLastPingTime(uint64_t lastPingTime);
+    bool isDisconnected() const;
+    void setDisconnected(bool disconnected);
 
 private:
     bool disconnected = true;                                   // true-需要重连连接
