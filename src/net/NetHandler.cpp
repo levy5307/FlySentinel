@@ -745,3 +745,41 @@ std::string NetHandler::formatAddr(char *ip, int port) {
     snprintf(buf, NET_PEER_ID_LEN, "[%s]:%d", ip, port);
     return buf;
 }
+
+int NetHandler::sockName(int fd, char *ip, size_t iplen, int *port) {
+    struct sockaddr_storage sa;
+    socklen_t salen = sizeof(sa);
+
+    /** 通过fd获取该socket的地址信息 */
+    if (-1 == getsockname(fd, (struct sockaddr*)&sa, &salen)) {
+        if (NULL != ip) {
+            ip[0] = '?';
+            ip[1] = '\0';
+        }
+        if (NULL != port) {
+            *port = 0;
+        }
+
+        return -1;
+    }
+
+    if (AF_INET == sa.ss_family) { /** ipv4 */
+        struct sockaddr_in *s = (struct sockaddr_in *)&sa;
+        if (NULL != ip) {
+            inet_ntop(AF_INET, (void*)&(s->sin_addr), ip, iplen);
+        }
+        if (NULL != port) {
+            *port = ntohs(s->sin_port);
+        }
+    } else { /** ipv6 */
+        struct sockaddr_in6 *s = (struct sockaddr_in6 *)&sa;
+        if (NULL != ip) {
+            inet_ntop(AF_INET, (void*)&(s->sin6_addr), ip, iplen);
+        }
+        if (NULL != port) {
+            *port = ntohs(s->sin6_port);
+        }
+    }
+
+    return 1;
+}

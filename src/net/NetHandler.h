@@ -53,6 +53,7 @@ public:
     ssize_t syncWrite(int fd, std::string str, uint64_t timeout);
     int peerToString(int fd, char *ip, size_t iplen, int *port);
     std::string formatAddr(char *ip, int port);
+    int sockName(int fd, char *ip, size_t iplen, int *port);
 
 private:
     NetHandler();

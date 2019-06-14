@@ -64,6 +64,8 @@ public:
     virtual int peerToString(int fd, char *ip, size_t iplen, int *port) = 0;
 
     virtual std::string formatAddr(char *ip, int port) = 0;
+
+    virtual int sockName(int fd, char *ip, size_t iplen, int *port) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTNETHANDLER_H
