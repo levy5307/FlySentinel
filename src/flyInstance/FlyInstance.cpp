@@ -277,8 +277,8 @@ int FlyInstance::sendHello() {
              master->getName().c_str(), masterAddr->ip.c_str(), masterAddr->port, (unsigned long long) master->getConfigEpoch());
 
     /** 发送该hello message */
-    if(-1 == redisAsyncCommand(this->link->getCommandContext().get(),
-                               NULL, this, "%s %s %s", "PUBLISH", SENTINEL_HELLO_CHANNEL.c_str(), payload)) {
+    if(-1 == redisAsyncCommand(this->link->getCommandContext().get(), sentinelPublishReplyCallback,
+                               this, "%s %s %s", "PUBLISH", SENTINEL_HELLO_CHANNEL.c_str(), payload)) {
         return -1;
     }
 
@@ -346,4 +346,8 @@ void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *pr
     if (REDIS_REPLY_STRING == r->type) {
         coordinator->getFlyServer()->refreshInstanceInfo(flyInstance, r->str);
     }
+}
+
+void sentinelPublishReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
+
 }

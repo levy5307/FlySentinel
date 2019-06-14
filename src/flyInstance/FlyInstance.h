@@ -11,6 +11,7 @@
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata);
 void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *privdata);
+void sentinelPublishReplyCallback(redisAsyncContext *context, void *reply, void *privdata);
 
 class FlyInstance : public AbstractFlyInstance {
 public:
