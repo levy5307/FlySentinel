@@ -28,6 +28,8 @@ public:
     virtual void setAnnounceIP(const std::string &announceIP) = 0;
     virtual int getAnnouncePort() const = 0;
     virtual void setAnnouncePort(int announcePort) = 0;
+    virtual const char *getMyid() const = 0;
+    virtual uint64_t getCurrentEpoch() const = 0;
 
     /**
      * general server interface
@@ -37,6 +39,8 @@ public:
     virtual int64_t getStatNetInputBytes() const = 0;
     virtual void addToStatNetInputBytes(int64_t size) = 0;
     virtual const std::vector<int> &getIpfd() const = 0;
+    virtual int getPort() const = 0;
+    virtual void setPort(int port) = 0;
 
     /** clients */
     virtual void addToClientsPendingToWrite(int fd) = 0;

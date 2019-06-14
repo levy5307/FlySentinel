@@ -62,12 +62,15 @@ public:
     void clearInfo();
     void setInfo(const std::string &info);
     const std::string& getInfo() const;
+    uint64_t getConfigEpoch() const;
+    void setConfigEpoch(uint64_t configEpoch);
 
 private:
     FlyInstance(){};
     int flags;
     std::string name;
     std::string runid;
+    uint64_t configEpoch;           /** 配置epoch */
     SentinelAddr *addr = NULL;
     std::shared_ptr<AbstractFlyInstance> master = NULL;
     uint32_t quorum;                                /** 对于判定flydb失败，需要的sentinel票数 */

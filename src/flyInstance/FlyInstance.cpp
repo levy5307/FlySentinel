@@ -7,6 +7,8 @@
 #include "../def.h"
 #include "FlyInstanceDef.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
+#include "../net/NetDef.h"
+
 extern AbstractCoordinator *coordinator;
 
 FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname,
@@ -245,7 +247,7 @@ bool FlyInstance::sendPing() {
 }
 
 int FlyInstance::sendHello() {
-    // 这里的master不能用智能指针，因为this再放入一个智能指针里，有可能会被释放两次
+    /** 这里的master不能用智能指针，因为this再放入一个智能指针里，有可能会被释放两次 */
     AbstractFlyInstance *master = (this->flags & FSI_MASTER) ? this : this->getMaster().get();
     SentinelAddr *masterAddr = master->getAddr();
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
@@ -255,10 +257,34 @@ int FlyInstance::sendHello() {
         return -1;
     }
 
+    /** 获取announce ip和port, 如果没有设置用于gossip协议的addr，则使用命令连接的addr */
     std::string announceIP = flyServer->getAnnounceIP();
     if (announceIP.empty()) {
+        int fd = this->getLink()->getCommandContext()->c.fd;
+        if (-1 == coordinator->getNetHandler()->sockName(fd, (char*)announceIP.c_str(), NET_IP_STR_LEN, NULL)) {
+            return -1;
+        }
+    }
+    /** 如果用于gossip的port无效，则使用监听port */
+    int announcePort = (0 == flyServer->getAnnouncePort()) ?  flyServer->getPort() : flyServer->getAnnouncePort();
+
+    /** 按照格式获取hello message的数据 */
+    char payload[NET_IP_STR_LEN+1024];
+    snprintf(payload,sizeof(payload),
+             "%s,%d,%s,%llu," /** Info about this sentinel. */
+             "%s,%s,%d,%llu", /** Info about current master. */
+             announceIP.c_str(), announcePort, flyServer->getMyid(), (unsigned long long) flyServer->getCurrentEpoch(),
+             master->getName().c_str(), masterAddr->ip.c_str(), masterAddr->port, (unsigned long long) master->getConfigEpoch());
+
+    /** 发送该hello message */
+    if(-1 == redisAsyncCommand(this->link->getCommandContext().get(),
+                               NULL, this, "%s %s %s", "PUBLISH", SENTINEL_HELLO_CHANNEL.c_str(), payload)) {
+        return -1;
     }
 
+    /** 增加pending command数量 */
+    this->link->increasePendingCommands();
+    return 1;
 }
 
 const std::shared_ptr<AbstractFlyInstance> &FlyInstance::getPromotedSlave() const {
@@ -291,6 +317,14 @@ void FlyInstance::setInfo(const std::string &info) {
 
 const std::string& FlyInstance::getInfo() const {
     return this->info;
+}
+
+uint64_t FlyInstance::getConfigEpoch() const {
+    return configEpoch;
+}
+
+void FlyInstance::setConfigEpoch(uint64_t configEpoch) {
+    this->configEpoch = configEpoch;
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {

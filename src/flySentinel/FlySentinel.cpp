@@ -904,6 +904,22 @@ void FlySentinel::setAnnouncePort(int announcePort) {
     this->announcePort = announcePort;
 }
 
+int FlySentinel::getPort() const {
+    return port;
+}
+
+void FlySentinel::setPort(int port) {
+    this->port = port;
+}
+
+const char *FlySentinel::getMyid() const {
+    return myid;
+}
+
+uint64_t FlySentinel::getCurrentEpoch() const {
+    return currentEpoch;
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 

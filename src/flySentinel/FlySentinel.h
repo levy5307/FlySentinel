@@ -35,7 +35,8 @@ public:
     void setAnnounceIP(const std::string &announceIP);
     int getAnnouncePort() const;
     void setAnnouncePort(int announcePort);
-
+    const char *getMyid() const;
+    uint64_t getCurrentEpoch() const;
 
     /************************************************************************************************
      *******************                general server interfaces                   *****************
@@ -45,6 +46,8 @@ public:
     int64_t getStatNetInputBytes() const;
     void addToStatNetInputBytes(int64_t size);
     const std::vector<int> &getIpfd() const;
+    int getPort() const;
+    void setPort(int port);
 
     /** clients */
     void addToClientsPendingToWrite(int fd);

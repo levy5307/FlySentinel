@@ -7,6 +7,7 @@
 
 const int SENTINEL_RESET_SENTINELS = 1 << 0;
 const int SENTINEL_DEFAULT_DOWN_AFTER = 30 * 1000;
+const std::string SENTINEL_HELLO_CHANNEL = "__sentinel__:hello";
 
 enum FailoverState {
     SENTINEL_FAILOVER_STATE_NONE = 0,                  /** No failover in progress. */
