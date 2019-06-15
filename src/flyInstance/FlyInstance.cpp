@@ -327,6 +327,22 @@ void FlyInstance::setConfigEpoch(uint64_t configEpoch) {
     this->configEpoch = configEpoch;
 }
 
+uint64_t FlyInstance::getLastPubTime() const {
+    return this->lastPubTime;
+}
+
+void FlyInstance::setLastPubTime(uint64_t lastPubTime) {
+    this->lastPubTime = lastPubTime;
+}
+
+uint64_t FlyInstance::getLastHelloTime() const {
+    return lastHelloTime;
+}
+
+void FlyInstance::setLastHelloTime(uint64_t lastHelloTime) {
+    this->lastHelloTime = lastHelloTime;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {
@@ -349,5 +365,15 @@ void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *pr
 }
 
 void sentinelPublishReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
+    AbstractFlyInstance *flyInstance = (AbstractFlyInstance *)privdata;
+    AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
+    if (NULL == reply || NULL == instanceLink) {
+        return;
+    }
 
+    instanceLink->increasePendingCommands();
+    redisReply *r = (redisReply*)reply;
+    if (REDIS_REPLY_ERROR == r->type) {
+        flyInstance->setLastPubTime(miscTool->mstime());
+    }
 }

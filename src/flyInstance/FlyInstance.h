@@ -65,6 +65,10 @@ public:
     const std::string& getInfo() const;
     uint64_t getConfigEpoch() const;
     void setConfigEpoch(uint64_t configEpoch);
+    uint64_t getLastPubTime() const;
+    void setLastPubTime(uint64_t lastPubTime);
+    uint64_t getLastHelloTime() const;
+    void setLastHelloTime(uint64_t lastHelloTime);
 
 private:
     FlyInstance(){};
@@ -72,6 +76,8 @@ private:
     std::string name;
     std::string runid;
     uint64_t configEpoch;           /** 配置epoch */
+    uint64_t lastPubTime;         /** 最后一次向Pub/Sub发送hello的时间 */
+    uint64_t lastHelloTime;       /** 只有当FSI_SENTINEL被设置时才会使用，表示最近一次从Pub/Sub接收到hello消息的时间 */
     SentinelAddr *addr = NULL;
     std::shared_ptr<AbstractFlyInstance> master = NULL;
     uint32_t quorum;                                /** 对于判定flydb失败，需要的sentinel票数 */

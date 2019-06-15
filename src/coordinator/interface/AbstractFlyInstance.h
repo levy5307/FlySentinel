@@ -59,6 +59,10 @@ public:
     virtual const std::string& getInfo() const = 0;
     virtual uint64_t getConfigEpoch() const = 0;
     virtual void setConfigEpoch(uint64_t configEpoch) = 0;
+    virtual uint64_t getLastPubTime() const = 0;
+    virtual void setLastPubTime(uint64_t lastPubTime) = 0;
+    virtual uint64_t getLastHelloTime() const = 0;
+    virtual void setLastHelloTime(uint64_t lastHelloTime) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
