@@ -270,7 +270,7 @@ int FlyInstance::sendHello() {
 
     /** 按照格式获取hello message的数据 */
     char payload[NET_IP_STR_LEN+1024];
-    snprintf(payload,sizeof(payload),
+    snprintf(payload, sizeof(payload),
              "%s,%d,%s,%llu," /** Info about this sentinel. */
              "%s,%s,%d,%llu", /** Info about current master. */
              announceIP.c_str(), announcePort, flyServer->getMyid(), (unsigned long long) flyServer->getCurrentEpoch(),
@@ -371,9 +371,15 @@ void sentinelPublishReplyCallback(redisAsyncContext *context, void *reply, void 
         return;
     }
 
+    /** 减少instance link的pending command数量 */
     instanceLink->increasePendingCommands();
+
+    /**
+     * 如果发送失败了，则不更新最后一次发送时间，以便于下一次loop时重新发送;
+     * 否则，发送成功了则需要更新最后一次的发送时间
+     **/
     redisReply *r = (redisReply*)reply;
-    if (REDIS_REPLY_ERROR == r->type) {
+    if (REDIS_REPLY_ERROR != r->type) {
         flyInstance->setLastPubTime(miscTool->mstime());
     }
 }
