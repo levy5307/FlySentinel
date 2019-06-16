@@ -287,6 +287,10 @@ int FlyInstance::sendHello() {
     return 1;
 }
 
+void FlyInstance::sendPeriodicCommands() {
+    
+}
+
 const std::shared_ptr<AbstractFlyInstance> &FlyInstance::getPromotedSlave() const {
     return promotedSlave;
 }

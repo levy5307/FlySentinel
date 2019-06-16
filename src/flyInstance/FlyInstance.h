@@ -55,6 +55,7 @@ public:
     void setInfoRefresh(uint64_t infoRefresh);
     bool sendPing();
     int sendHello();
+    void sendPeriodicCommands();
     const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const;
     void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave);
     bool hasPromotedSlave() const;

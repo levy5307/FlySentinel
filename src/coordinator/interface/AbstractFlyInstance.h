@@ -49,6 +49,7 @@ public:
     virtual void setInfoRefresh(uint64_t infoRefresh) = 0;
     virtual bool sendPing() = 0;
     virtual int sendHello() = 0;
+    virtual void sendPeriodicCommands() = 0;
     virtual const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const = 0;
     virtual void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave) = 0;
     virtual bool hasPromotedSlave() const = 0;
