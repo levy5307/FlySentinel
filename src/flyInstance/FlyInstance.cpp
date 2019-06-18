@@ -389,6 +389,10 @@ void FlyInstance::setLastHelloTime(uint64_t lastHelloTime) {
     this->lastHelloTime = lastHelloTime;
 }
 
+void FlyInstance::addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> *flyClient) {
+
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {
