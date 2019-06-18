@@ -90,6 +90,7 @@ private:
     uint64_t sDownSinceTime = 0;                        /** Subjectively down since time. */
     uint64_t oDownSinceTime = 0;                        /** Objectively down since time. */
     uint64_t downAfterPeriod = 0;                       /** down after this period */
+    uint64_t masterLinkDownTime;                        /** Slave replication link down time. */
     std::shared_ptr<AbstractFlyInstance> promotedSlave = NULL;
     FailoverState failoverState = SENTINEL_FAILOVER_STATE_NONE;
     int roleReported;

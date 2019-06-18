@@ -104,3 +104,15 @@ bool InstanceLink::isDisconnected() const {
 void InstanceLink::setDisconnected(bool disconnected) {
     this->disconnected = disconnected;
 }
+
+int InstanceLink::getPendingCommands() const {
+    return pendingCommands;
+}
+
+uint64_t InstanceLink::getLastPongTime() const {
+    return lastPongTime;
+}
+
+void InstanceLink::setLastPongTime(uint64_t lastPongTime) {
+    this->lastPongTime = lastPongTime;
+}

@@ -288,7 +288,49 @@ int FlyInstance::sendHello() {
 }
 
 void FlyInstance::sendPeriodicCommands() {
-    
+    /** 如果连接已经断开了，直接返回 */
+    if (this->getLink()->isDisconnected()) {
+        return;
+    }
+
+    /** 如果pending commands过多 */
+    if (this->getLink()->getPendingCommands() > SENTINEL_MAX_PENDING_COMMANDS * this->getLink().use_count()) {
+        return;
+    }
+
+    uint64_t nowt = miscTool->mstime();
+    /**
+     * 1.如果当前flyinstance是一个master的slave，并且该master处于odown条件下，则改为每秒发送一次,
+     * 以便于密切的关注slaves，防止某一个slave被变成master
+     * 2.如果当前slave与master断开连接，则同样需要经常监视info信息。
+     **/
+    int infoPeriod = 0;
+    if (((this->flags & FSI_SLAVE) && (this->master->getFlags() & (FSI_O_DOWN|FSI_FAILOVER_IN_PROGRESS)))
+        || this->masterLinkDownTime != 0) {
+        infoPeriod = 1000;
+    } else {
+        infoPeriod = SENTINEL_INFO_PERIOD;
+    }
+    if ((0 == this->flags & FSI_SENTINEL)
+        && (0 == this->infoRefresh || nowt - this->infoRefresh > infoPeriod)) {
+        int retval = redisAsyncCommand(this->link->getCommandContext().get(),
+                sentinelInfoReplyCallback, this, "%s", "INFO");
+        if (retval >= 0) {
+            this->link->increasePendingCommands();
+        }
+    }
+
+    /** 周期性发送ping */
+    int pingPeriod = this->downAfterPeriod > SENTINEL_PING_PERIOD ? SENTINEL_PING_PERIOD : this->downAfterPeriod;
+    if (nowt - this->getLink()->getLastPongTime() > pingPeriod
+        && nowt - this->getLink()->getLastPingTime() > pingPeriod / 2) {
+        this->sendPing();
+    }
+
+    /** 周期性发送hello */
+    if (nowt - this->lastPubTime > SENTINEL_PUBLISH_PERIOD) {
+        this->sendHello();
+    }
 }
 
 const std::shared_ptr<AbstractFlyInstance> &FlyInstance::getPromotedSlave() const {

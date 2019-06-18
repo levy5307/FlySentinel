@@ -23,11 +23,14 @@ public:
     const std::shared_ptr<redisAsyncContext> &getPubsubContext() const;
     void decreasePendingCommands();
     void increasePendingCommands();
+    int getPendingCommands() const;
     void connectionError(const std::shared_ptr<redisAsyncContext> context);
     uint64_t getActPingTime() const;
     void setActPingTime(uint64_t actPingTime);
     uint64_t getLastPingTime() const;
     void setLastPingTime(uint64_t lastPingTime);
+    uint64_t getLastPongTime() const;
+    void setLastPongTime(uint64_t lastPongTime);
     bool isDisconnected() const;
     void setDisconnected(bool disconnected);
 
