@@ -320,7 +320,12 @@ void FlyInstance::sendPeriodicCommands() {
         }
     }
 
-    /** 周期性发送ping */
+    /**
+     * 周期性发送ping: 上次接收到pong到现在的时间超过pingPeriod，并且上次发送ping的时间距现在pingPeriod/2
+     * 时间线：更新lastPongTime------->更新lastPingTime-------->更新lastPingTime-------->更新lastPongTime
+     *                                               发送失败       （2）      发送成功（并接收到pong）
+     * 以在(2)处为例，需要两次发送的时间间隔超过1/2 * pingPeriod，并且发送时间距离上次接收时间超过2 * 1/2 * period，才需要重新发送
+     **/
     int pingPeriod = this->downAfterPeriod > SENTINEL_PING_PERIOD ? SENTINEL_PING_PERIOD : this->downAfterPeriod;
     if (nowt - this->getLink()->getLastPongTime() > pingPeriod
         && nowt - this->getLink()->getLastPingTime() > pingPeriod / 2) {
