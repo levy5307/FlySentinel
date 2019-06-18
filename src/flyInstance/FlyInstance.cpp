@@ -325,6 +325,9 @@ void FlyInstance::sendPeriodicCommands() {
      * 时间线：更新lastPongTime------->更新lastPingTime-------->更新lastPingTime-------->更新lastPongTime
      *                                               发送失败       （2）      发送成功（并接收到pong）
      * 以在(2)处为例，需要两次发送的时间间隔超过1/2 * pingPeriod，并且发送时间距离上次接收时间超过2 * 1/2 * period，才需要重新发送
+     * 即(1)一个ping周期内没有接收到pong，并且(2)距离上次发送时间超过了1/2个ping周期，则重新发送ping。
+     * 第(1)个条件用于判断网络是否不可达
+     * 第(2)条件主要用于约束一直没有收到pong，所导致的频繁发送ping的情况
      **/
     int pingPeriod = this->downAfterPeriod > SENTINEL_PING_PERIOD ? SENTINEL_PING_PERIOD : this->downAfterPeriod;
     if (nowt - this->getLink()->getLastPongTime() > pingPeriod
