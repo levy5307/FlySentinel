@@ -397,8 +397,25 @@ void FlyInstance::setLastHelloTime(uint64_t lastHelloTime) {
     this->lastHelloTime = lastHelloTime;
 }
 
-void FlyInstance::addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> *flyClient) {
+void FlyInstance::addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> flyClient) {
+    /** name pair */
+    flyClient->addReplyBulkString("name");
+    flyClient->addReplyBulkString(this->name);
 
+    /** ip pair */
+    flyClient->addReplyBulkString("ip");
+    flyClient->addReplyBulkString(this->addr->getIp());
+
+    /** port pair */
+    flyClient->addReplyBulkString("port");
+    flyClient->addReplyLongLong(this->addr->getPort());
+
+    /** runid pair */
+    flyClient->addReplyBulkString("runid");
+    flyClient->addReplyBulkString(this->runid);
+
+    /** flags */
+    flyClient->addReplyBulkString("flags");
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {

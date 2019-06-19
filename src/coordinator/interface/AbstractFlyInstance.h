@@ -64,7 +64,7 @@ public:
     virtual void setLastPubTime(uint64_t lastPubTime) = 0;
     virtual uint64_t getLastHelloTime() const = 0;
     virtual void setLastHelloTime(uint64_t lastHelloTime) = 0;
-    virtual void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> *flyClient) = 0;
+    virtual void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> flyClient) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

@@ -596,23 +596,10 @@ void FlyClient::addReplyError(const char *err) {
     this->addReply(fio->getStr().c_str());
 }
 
-void FlyClient::addReplyBulkCount(int count) {
-    /**
-    AbstractSharedObjects *sharedObjects = coordinator->getSharedObjects();
-    if (count < sharedObjects->getSharedMbulkHeadersSize()) {
-        std::string *str = reinterpret_cast<std::string *>(sharedObjects->getMbulkHeader(count)->getPtr());
-        this->addReply(str->c_str());
-    } else {
-        std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
-        fio->writeBulkCount('*', count);
-        this->addReply(fio->getStr().c_str());
-    }
-     */
+void FlyClient::addReplyBulkLongLong(int count) {
     std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
     fio->writeBulkCount('*', count);
     this->addReply(fio->getStr().c_str());
-
-    return;
 }
 
 void FlyClient::addReplyBulkString(std::string str) {

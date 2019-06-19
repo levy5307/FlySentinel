@@ -70,7 +70,7 @@ public:
     void setLastPubTime(uint64_t lastPubTime);
     uint64_t getLastHelloTime() const;
     void setLastHelloTime(uint64_t lastHelloTime);
-    void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> *flyClient);
+    void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> flyClient);
 
 private:
     FlyInstance(){};

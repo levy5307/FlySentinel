@@ -95,7 +95,7 @@ public:
     void addReplyFlyStringObj(std::shared_ptr<FlyObj> flyObj);
     void addReplyErrorFormat(const char *fmt, ...);
     void addReplyError(const char *err);
-    void addReplyBulkCount(int count);
+    void addReplyBulkLongLong(int count);
     void addReplyBulkString(std::string str);
     void addReplyLongLong(int64_t length);
     const char *getBuf() const;
