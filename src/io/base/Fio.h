@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
-#include "../../flyObj/FlyObj.h"
+#include "../../flyobj/FlyObj.h"
 
 class Fio {
 public:

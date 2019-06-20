@@ -10,7 +10,7 @@
 #include "SharedObjectDef.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
 #include "../coordinator/interface/AbstractSharedObjects.h"
-#include "../flyObj/FlyObj.h"
+#include "../flyobj/FlyObj.h"
 
 class SharedObjects : public AbstractSharedObjects {
 public:

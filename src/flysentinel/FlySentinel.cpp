@@ -6,14 +6,14 @@
 #include <signal.h>
 #include <cassert>
 #include "FlySentinel.h"
-#include "../flyClient/ClientDef.h"
-#include "../flyClient/FlyClient.h"
+#include "../flyclient/ClientDef.h"
+#include "../flyclient/FlyClient.h"
 #include "../def.h"
-#include "../dataStructure/dict/Dict.cpp"
+#include "../datastructure/dict/Dict.cpp"
 #include "FlySentinelDef.h"
-#include "../scriptJob/ScriptJobDef.h"
-#include "../flyInstance/FlyInstanceDef.h"
-#include "../flyInstance/FlyInstance.h"
+#include "../scriptjob/ScriptJobDef.h"
+#include "../flyinstance/FlyInstanceDef.h"
+#include "../flyinstance/FlyInstance.h"
 #include "../atomic/AtomicHandler.h"
 
 FlySentinel::FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache) {

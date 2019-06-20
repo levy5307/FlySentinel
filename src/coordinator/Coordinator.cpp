@@ -5,15 +5,15 @@
 #include "Coordinator.h"
 #include "../net/NetHandler.h"
 #include "../config/TextConfigReader.h"
-#include "../flyClient/FlyClientFactory.h"
+#include "../flyclient/FlyClientFactory.h"
 #include "../bio/BIOHandler.h"
 #include "../def.h"
 #include "../event/EventLoop.h"
-#include "../flySentinel/FlySentinel.h"
+#include "../flysentinel/FlySentinel.h"
 #include "../shared/SharedObjects.h"
-#include "../flyObj/FlyObjString/FlyObjStringFactory.h"
+#include "../flyobj/string/FlyObjStringFactory.h"
 #include "../pubsub/PubSubHandler.h"
-#include "../flyClient/FlyClient.h"
+#include "../flyclient/FlyClient.h"
 
 Coordinator::Coordinator() {
     /** 加载config **/

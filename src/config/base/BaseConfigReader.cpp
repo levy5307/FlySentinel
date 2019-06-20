@@ -5,7 +5,7 @@
 #include <iostream>
 #include <syslog.h>
 #include "BaseConfigReader.h"
-#include "../../dataStructure/dict/Dict.cpp"
+#include "../../datastructure/dict/Dict.cpp"
 #include "../../log/LogDef.h"
 #include "../../def.h"
 

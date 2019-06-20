@@ -6,10 +6,10 @@
 #define FLYSENTINEL_COMMANDTABLE_H
 
 #include <string>
-#include "../flyClient/FlyClient.h"
+#include "../flyclient/FlyClient.h"
 #include "../log/FileLogHandler.h"
-#include "../dataStructure/dict/DictEntry.h"
-#include "../commandTable/CommandEntry.h"
+#include "../datastructure/dict/DictEntry.h"
+#include "../commandtable/CommandEntry.h"
 
 template<class KEY, class VAL>
 class Dict;

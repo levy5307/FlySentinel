@@ -7,7 +7,7 @@
 #include "CommandEntry.h"
 #include "../utils/MiscTool.h"
 #include "../log/FileLogFactory.h"
-#include "../dataStructure/dict/Dict.cpp"
+#include "../datastructure/dict/Dict.cpp"
 #include "CommandTableDef.h"
 
 CommandTable::CommandTable(const AbstractCoordinator* coordinator) {

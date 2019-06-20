@@ -5,7 +5,7 @@
 #ifndef FLYSENTINEL_ABSTRACTINSTANCELINK_H
 #define FLYSENTINEL_ABSTRACTINSTANCELINK_H
 
-#include "../../asyncEvent/convert.h"
+#include "../../asyncevent/convert.h"
 
 class AbstractInstanceLink {
 public:

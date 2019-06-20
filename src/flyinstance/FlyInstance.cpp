@@ -3,7 +3,7 @@
 //
 
 #include "FlyInstance.h"
-#include "../flySentinel/FlySentinelDef.h"
+#include "../flysentinel/FlySentinelDef.h"
 #include "../def.h"
 #include "FlyInstanceDef.h"
 #include "../coordinator/interface/AbstractCoordinator.h"

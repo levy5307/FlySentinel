@@ -11,9 +11,9 @@
 #include "../config/ConfigCache.h"
 #include "../def.h"
 #include "../coordinator/interface/AbstractFlyInstance.h"
-#include "../scriptJob/ScriptJob.h"
+#include "../scriptjob/ScriptJob.h"
 #include "../coordinator/interface/AbstractInstanceLink.h"
-#include "../commandTable/CommandTable.h"
+#include "../commandtable/CommandTable.h"
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData);
 

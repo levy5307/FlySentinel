@@ -7,8 +7,8 @@
 
 #include <string>
 #include <list>
-#include "../flyObj/FlyObj.h"
-#include "../commandTable/CommandEntry.h"
+#include "../flyobj/FlyObj.h"
+#include "../commandtable/CommandEntry.h"
 #include "ClientDef.h"
 #include "../coordinator/interface/AbstractFlyClient.h"
 #include "../coordinator/interface/AbstractLogHandler.h"

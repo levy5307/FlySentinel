@@ -10,7 +10,7 @@
 #include <string>
 #include <list>
 #include <map>
-#include "../../flyObj/FlyObj.h"
+#include "../../flyobj/FlyObj.h"
 
 class AbstractFlyClient {
 public:

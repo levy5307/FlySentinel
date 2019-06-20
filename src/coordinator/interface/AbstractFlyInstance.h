@@ -6,9 +6,9 @@
 #define FLYSENTINEL_ABSTRACTFLYINSTANCE_H
 
 #include <string>
-#include "../../flySentinel/SentinelAddr.h"
+#include "../../flysentinel/SentinelAddr.h"
 #include "AbstractInstanceLink.h"
-#include "../../flyInstance/FlyInstanceDef.h"
+#include "../../flyinstance/FlyInstanceDef.h"
 
 class AbstractFlyInstance {
 public:

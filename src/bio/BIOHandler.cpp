@@ -4,7 +4,7 @@
 
 #include <csignal>
 #include "BIOHandler.h"
-#include "../dataStructure/dict/Dict.cpp"
+#include "../datastructure/dict/Dict.cpp"
 #include "../def.h"
 
 AbstractLogHandler *BIOHandler::logHandler;

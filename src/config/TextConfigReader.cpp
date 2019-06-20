@@ -5,7 +5,7 @@
 #include <iostream>
 #include "TextConfigReader.h"
 #include "ConfigCache.h"
-#include "../dataStructure/dict/Dict.cpp"
+#include "../datastructure/dict/Dict.cpp"
 #include "../def.h"
 
 TextConfigReader::TextConfigReader(std::string &configfile) {
