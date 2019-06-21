@@ -21,7 +21,13 @@ enum FlySentinelInstance {
     FSI_S_DOWN = 1 << 3,                    /** subject down */
     FSI_O_DOWN = 1 << 4,                    /** object down */
     FSI_MASTER_DOWN = 1 << 5,               /** 如果设置了该标志位，说明其master已经down */
-    FSI_FAILOVER_IN_PROGRESS = 1 << 6       /** Failover is in progress for */
+    FSI_FAILOVER_IN_PROGRESS = 1 << 6,      /** Failover is in progress for */
+    FSI_PROMOTED = 1 << 7,                  /** Slave selected for promotion. */
+    FSI_RECONF_SENT = 1 << 8,               /** SLAVEOF <newmaster> sent. */
+    FSI_RECONF_INPROG = 1 << 9,             /** Slave synchronization in progress. */
+    FSI_RECONF_DONE = 1 << 10,              /** Slave synchronized with new master. */
+    FSI_FORCE_FAILOVER = 1 << 11,           /** Force failover with master up. */
+    FSI_SCRIPT_KILL_SENT = 1 << 12          /** SCRIPT KILL already sent on -BUSY */
 };
 
 #endif //FLYSENTINEL_FLYSENTINELDEF_H

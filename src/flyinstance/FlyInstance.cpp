@@ -416,6 +416,49 @@ void FlyInstance::addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClien
 
     /** flags */
     flyClient->addReplyBulkString("flags");
+    flyClient->addReplyBulkString(this->getFlagsString());
+}
+
+std::string FlyInstance::getFlagsString() {
+    std::string flags;
+    if (this->flags & FSI_S_DOWN) {
+        flags += "s_down,";
+    }
+    if (this->flags & FSI_O_DOWN) {
+        flags += "o_down,";
+    }
+    if (this->flags & FSI_MASTER) {
+        flags += "master,";
+    }
+    if (this->flags & FSI_SLAVE) {
+        flags += "slave,";
+    }
+    if (this->flags & FSI_SENTINEL) {
+        flags += "sentinel,";
+    }
+    if (this->link->isDisconnected()) {
+        flags += "disconnected,";
+    }
+    if (this->flags & FSI_MASTER_DOWN) {
+        flags += "master_down,";
+    }
+    if (this->flags & FSI_FAILOVER_IN_PROGRESS) {
+        flags += "failover_in_progress,";
+    }
+    if (this->flags & FSI_PROMOTED) {
+        flags += "promoted,";
+    }
+    if (this->flags & FSI_RECONF_SENT) {
+        flags += "reconf_sent,";
+    }
+    if (this->flags & FSI_RECONF_INPROG) {
+        flags += "reconf_inprog,";
+    }
+    if (this->flags & FSI_RECONF_DONE) {
+        flags += "reconf_done,";
+    }
+
+    return flags;
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {

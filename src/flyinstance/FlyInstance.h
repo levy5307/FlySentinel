@@ -74,6 +74,7 @@ public:
 
 private:
     FlyInstance(){};
+    std::string getFlagsString();
     int flags;
     std::string name;
     std::string runid;
