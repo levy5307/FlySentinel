@@ -458,6 +458,11 @@ std::string FlyInstance::getFlagsString() {
         flags += "reconf_done,";
     }
 
+    /** 如果非空，则需要去除掉最后的","*/
+    if (!flags.empty()) {
+        flags = flags.substr(0, flags.size() - 1);
+    }
+
     return flags;
 }
 
