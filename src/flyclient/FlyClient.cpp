@@ -602,7 +602,10 @@ void FlyClient::addReplyBulkLongLong(uint64_t num) {
 }
 
 void FlyClient::addReplyBulkBuffer(const std::string &buf) {
-
+    std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
+    fio->writeBulkCount('$', buf.length());
+    fio->write(buf.c_str(), buf.length());
+    this->addReply(fio->getStr().c_str());
 }
 
 void FlyClient::addReplyBulkString(std::string str) {
@@ -614,6 +617,7 @@ void FlyClient::addReplyBulkString(std::string str) {
 void FlyClient::addReplyLongLong(int64_t length) {
     std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
     fio->writeBulkCount(':', length);
+    this->addReply(fio->getStr().c_str());
 }
 
 int FlyClient::addReplyToBuffer(const char *s, size_t len) {
