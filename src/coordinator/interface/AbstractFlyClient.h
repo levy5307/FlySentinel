@@ -115,7 +115,9 @@ public:
 
     virtual void addReplyError(const char *err) = 0;
 
-    virtual void addReplyBulkLongLong(int count) = 0;
+    virtual void addReplyBulkBuffer(const std::string &buf) = 0;
+
+    virtual void addReplyBulkLongLong(uint64_t num) = 0;
 
     virtual void addReplyBulkString(std::string str) = 0;
 
