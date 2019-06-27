@@ -73,6 +73,10 @@ public:
     void addCronLoops();
     uint64_t getCronLoops() const;
 
+    /** 将一组instance当前状态组成reply, 发送给flyClient */
+    void addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
+                                std::map<std::string, std::shared_ptr<AbstractFlyInstance>> instanceMap);
+
 private:
     /************************************************************************************************
      *******************             sentinel server private functions              *****************

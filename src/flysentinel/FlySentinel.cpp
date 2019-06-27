@@ -920,6 +920,15 @@ uint64_t FlySentinel::getCurrentEpoch() const {
     return currentEpoch;
 }
 
+void FlySentinel::addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
+                                         std::map<std::string, std::shared_ptr<AbstractFlyInstance>> instanceMap) {
+    for (auto iter : instanceMap) {
+        iter.second->addReplySentinelRedisInstance(flyClient);
+    }
+
+    return;
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 

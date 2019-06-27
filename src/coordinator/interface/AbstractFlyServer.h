@@ -65,6 +65,9 @@ public:
     virtual void setNowt(time_t nowt) = 0;
     virtual void addCronLoops() = 0;
     virtual uint64_t getCronLoops() const = 0;
+
+    virtual void addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
+                                        std::map<std::string, std::shared_ptr<AbstractFlyInstance>> instanceMap) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYSERVER_H
