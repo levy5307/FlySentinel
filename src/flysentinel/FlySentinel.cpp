@@ -929,6 +929,17 @@ void FlySentinel::addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyC
     return;
 }
 
+std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByNameOrReplyError(
+        std::shared_ptr<AbstractFlyClient> flyClient, std::string &str) {
+    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::iterator iter = this->masters.find(str);
+    if (iter != this->masters.end()) {
+        return iter->second;
+    } else {
+        flyClient->addReplyError("No such master with that name!");
+        return NULL;
+    }
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 

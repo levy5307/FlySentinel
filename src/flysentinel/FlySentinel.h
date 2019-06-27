@@ -95,6 +95,8 @@ private:
             const char *runid);
     int updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInstance> instance);
     std::shared_ptr<AbstractFlyInstance> getMasterByName(char *name);
+    std::shared_ptr<AbstractFlyInstance> getMasterByNameOrReplyError(
+            std::shared_ptr<AbstractFlyClient> flyClient, std::string &str);
     void resetMaster(std::shared_ptr<AbstractFlyInstance> master, int flags);
     int resetMasterByPattern(const std::string &pattern, int flags);
     void resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, char *ip, int port);
