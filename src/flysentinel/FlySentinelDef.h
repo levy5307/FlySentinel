@@ -30,4 +30,10 @@ enum FlySentinelInstance {
     FSI_SCRIPT_KILL_SENT = 1 << 12          /** SCRIPT KILL already sent on -BUSY */
 };
 
+enum FlySentinelQuorumState {
+    FSQS_OK = 0,
+    FSQS_NOQUORUM = 1,
+    FSQS_NOVOTER = 2
+};
+
 #endif //FLYSENTINEL_FLYSENTINELDEF_H

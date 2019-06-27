@@ -9,6 +9,7 @@
 #include "../../flysentinel/SentinelAddr.h"
 #include "AbstractInstanceLink.h"
 #include "../../flyinstance/FlyInstanceDef.h"
+#include "../../flysentinel/FlySentinelDef.h"
 
 class AbstractFlyInstance {
 public:
@@ -65,6 +66,7 @@ public:
     virtual uint64_t getLastHelloTime() const = 0;
     virtual void setLastHelloTime(uint64_t lastHelloTime) = 0;
     virtual void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> flyClient) = 0;
+    virtual int sentinelIsQuorumReachable(int *usablePtr) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

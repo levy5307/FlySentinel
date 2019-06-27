@@ -71,6 +71,7 @@ public:
     uint64_t getLastHelloTime() const;
     void setLastHelloTime(uint64_t lastHelloTime);
     void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> flyClient);
+    int sentinelIsQuorumReachable(int *usablePtr);
 
 private:
     FlyInstance(){};

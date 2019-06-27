@@ -2,6 +2,7 @@
 // Created by levy on 2019/5/5.
 //
 
+#include <cassert>
 #include "FlyInstance.h"
 #include "../flysentinel/FlySentinelDef.h"
 #include "../def.h"
@@ -425,6 +426,37 @@ void FlyInstance::addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClien
     /** link reference count */
     flyClient->addReplyBulkString("link-refcount");
     flyClient->addReplyBulkLongLong(this->getLink().use_count());
+}
+
+int FlyInstance::sentinelIsQuorumReachable(int *usablePtr) {
+    assert(this->flags & FSI_MASTER);
+
+    int usable = 1;
+    int totalVoters = this->sentinels.size() + 1;   /** 总票数 = sentinel数量 + 1 */
+    for (auto iter : this->sentinels) {
+        if (iter.second->getFlags() & (FSI_O_DOWN | FSI_S_DOWN)) {
+            continue;
+        }
+
+        usable++;
+    }
+
+    int res = FSQS_OK;
+    /** 如果可用票数 < 配置最少票数，返回 */
+    if (usable < this->quorum) {
+        res |= FSQS_NOQUORUM;
+    }
+
+    /** 如果可用票数 < 总票数 / 2 + 1，返回 */
+    if (usable < totalVoters / 2 + 1) {
+        res |= FSQS_NOVOTER;
+    }
+
+    if (NULL != usablePtr) {
+        *usablePtr = usable;
+    }
+
+    return res;
 }
 
 std::string FlyInstance::getFlagsString() {
