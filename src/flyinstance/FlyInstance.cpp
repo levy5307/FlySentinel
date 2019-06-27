@@ -417,6 +417,14 @@ void FlyInstance::addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClien
     /** flags */
     flyClient->addReplyBulkString("flags");
     flyClient->addReplyBulkString(this->getFlagsString());
+
+    /** pending commands */
+    flyClient->addReplyBulkString("link-pending-commands");
+    flyClient->addReplyBulkLongLong(this->getLink()->getPendingCommands());
+
+    /** link reference count */
+    flyClient->addReplyBulkString("link-refcount");
+    flyClient->addReplyBulkLongLong(this->getLink().use_count());
 }
 
 std::string FlyInstance::getFlagsString() {
