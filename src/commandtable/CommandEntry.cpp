@@ -215,10 +215,4 @@ void publishCommand(const AbstractCoordinator* coordinator,
                     std::shared_ptr<AbstractFlyClient> flyClient) {
     std::string *argv1 = reinterpret_cast<std::string*>(flyClient->getArgv()[1]->getPtr());
     std::string *argv2 = reinterpret_cast<std::string*>(flyClient->getArgv()[2]->getPtr());
-    int receivers = coordinator->getPubSubHandler()->publishMessage(*argv1, *argv2);
-
-    // todo: 同步操作
-
-    /** 将通知到的receivers数量发送给client */
-    flyClient->addReplyLongLong(receivers);
 }
