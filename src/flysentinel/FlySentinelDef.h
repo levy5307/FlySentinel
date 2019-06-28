@@ -36,4 +36,6 @@ enum FlySentinelQuorumState {
     FSQS_NOVOTER = 2
 };
 
+const uint8_t HELLO_SIZE = 8;
+
 #endif //FLYSENTINEL_FLYSENTINELDEF_H

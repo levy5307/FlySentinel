@@ -37,7 +37,7 @@ public:
     virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSentinels() const = 0;
     virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSlaves() const = 0;
     virtual std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port) = 0;
-    virtual int removeMatchingSentinel(char *runid) = 0;
+    virtual int removeMatchingSentinel(const std::string &runid) = 0;
     virtual void reset(int flags) = 0;
     virtual bool noDownFor(uint64_t ms) = 0;
     virtual uint64_t getDownAfterPeriod() const = 0;

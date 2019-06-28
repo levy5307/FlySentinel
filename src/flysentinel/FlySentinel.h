@@ -37,6 +37,8 @@ public:
     void setAnnouncePort(int announcePort);
     const char *getMyid() const;
     uint64_t getCurrentEpoch() const;
+    /** 处理从master/slave/sentinel发送来的hello message */
+    void processHelloMessage(std::string &hello);
 
     /************************************************************************************************
      *******************                general server interfaces                   *****************
@@ -94,7 +96,7 @@ private:
             int port,
             const char *runid);
     int updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInstance> instance);
-    std::shared_ptr<AbstractFlyInstance> getMasterByName(char *name);
+    std::shared_ptr<AbstractFlyInstance> getMasterByName(const std::string &name);
     std::shared_ptr<AbstractFlyInstance> getMasterByNameOrReplyError(
             std::shared_ptr<AbstractFlyClient> flyClient, std::string &str);
     void resetMaster(std::shared_ptr<AbstractFlyInstance> master, int flags);

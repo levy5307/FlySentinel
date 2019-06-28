@@ -42,7 +42,7 @@ public:
     const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSentinels() const;
     const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSlaves() const;
     std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port);
-    int removeMatchingSentinel(char *runid);
+    int removeMatchingSentinel(const std::string &runid);
     void reset(int flags);
     bool noDownFor(uint64_t ms);
     uint64_t getDownAfterPeriod() const;

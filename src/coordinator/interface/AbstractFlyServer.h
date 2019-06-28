@@ -30,6 +30,7 @@ public:
     virtual void setAnnouncePort(int announcePort) = 0;
     virtual const char *getMyid() const = 0;
     virtual uint64_t getCurrentEpoch() const = 0;
+    virtual void processHelloMessage(std::string &hello) = 0;
 
     /**
      * general server interface

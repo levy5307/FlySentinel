@@ -161,7 +161,7 @@ std::shared_ptr<AbstractFlyInstance> FlyInstance::lookupSlave(char *ip, int port
     return NULL;
 }
 
-int FlyInstance::removeMatchingSentinel(char *runid) {
+int FlyInstance::removeMatchingSentinel(const std::string &runid) {
     /** 移除数量 */
     int removed = 0;
 

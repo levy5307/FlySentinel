@@ -352,10 +352,11 @@ void FlySentinel::callClientReconfScript(AbstractFlyInstance *master, int role, 
 }
 
 
-std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
-                                                                               const char *ip,
-                                                                               int port,
-                                                                               const char *runid) {
+std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(
+        const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
+        const char *ip,
+        int port,
+        const char *runid) {
     /** 两者都为NULL那还找什么找?! 看函数名字！*/
     if (NULL == ip && NULL == runid) {
         return NULL;
@@ -418,7 +419,7 @@ int FlySentinel::updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInsta
     return reconfigured;
 }
 
-std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByName(char *name) {
+std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByName(const std::string &name) {
     std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::iterator iter = this->masters.find(name);
     if (iter != this->masters.end()) {
         return iter->second;
@@ -918,6 +919,43 @@ const char *FlySentinel::getMyid() const {
 
 uint64_t FlySentinel::getCurrentEpoch() const {
     return currentEpoch;
+}
+
+/**
+ * hello message format:
+ *   "{0-ip},{1-port},{2-runid},{3-current epoch},{4-master name},{5-master ip},{6-master port},{7-master epoch}"
+ * */
+void FlySentinel::processHelloMessage(std::string &hello) {
+    std::vector<std::string> spiltStrs;
+    miscTool->spiltString(hello, ",", spiltStrs);
+    if (HELLO_SIZE != spiltStrs.size()) {
+        return;
+    }
+
+    std::shared_ptr<AbstractFlyInstance> master = this->getMasterByName(spiltStrs[4]);
+    if (NULL == master) {
+        return;
+    }
+
+    std::string ip = spiltStrs[0];
+    int port = atoi(spiltStrs[1].c_str());
+    std::string runid = spiltStrs[2];
+    uint64_t currentEpoch = strtoull(spiltStrs[3].c_str(), NULL, 10);
+    int masterPort = atoi(spiltStrs[6].c_str());
+    uint64_t masterEpoch = strtoull(spiltStrs[7].c_str(), NULL, 10);
+    std::shared_ptr<AbstractFlyInstance> instance = getFlyInstanceByAddrAndRunID(
+            master->getSentinels(), spiltStrs[0].c_str(), port, spiltStrs[2].c_str());
+
+    /** 如果instance不为null */
+    if (NULL != instance) {
+        int removed = master->removeMatchingSentinel(runid);
+        if (removed > 0) {
+            this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master,
+                            "%@ ip %s port %d for %s", ip.c_str(), port, runid.c_str());
+        } else {
+            // todo
+        }
+    }
 }
 
 void FlySentinel::addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
