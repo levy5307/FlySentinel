@@ -949,7 +949,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
     int port = atoi(spiltStrs[1].c_str());
     std::string runid = spiltStrs[2];
     uint64_t currentEpoch = strtoull(spiltStrs[3].c_str(), NULL, 10);
-    std::string masterIP = spiltStrs[6];
+    std::string masterIP = spiltStrs[5];
     int masterPort = atoi(spiltStrs[6].c_str());
     uint64_t masterEpoch = strtoull(spiltStrs[7].c_str(), NULL, 10);
 
@@ -957,17 +957,21 @@ void FlySentinel::processHelloMessage(std::string &hello) {
     std::shared_ptr<AbstractFlyInstance> sentinel = getFlyInstanceByAddrAndRunID(
             master->getSentinels(), ip.c_str(), port, runid.c_str());
 
-    /** 如果instance为null */
+    /**
+     * 如果sentinel为null, 即根据地址和runid没有找到该sentinel, 则:
+     *    1.删除占有runid的sentinel
+     *    2.如果地址被占用，则设置占有该地址的sentinel的地址为无效
+     *    3.创建一个sentinel
+     **/
     if (NULL == sentinel) {
-        /** 根据sentinel runid删除掉对应的sentinel */
+        /** 删除拥有相同runid的sentinel */
         int removed = master->removeMatchingSentinel(runid);
         if (removed > 0) {
             this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master,
                             "%@ ip %s port %d for %s", ip.c_str(), port, runid.c_str());
         } else {
             /**
-             * 在master中没有找到，需要判断新的地址是否已经有其他sentinel占用该地址,
-             * 如果有，则置该sentinel的地址为无效
+             * 判断地址（ip/port）是否被占用，如果被占用了，则将占有的sentinel地址设置为无效
              **/
              std::shared_ptr<AbstractFlyInstance> another =
                      getFlyInstanceByAddrAndRunID(master->getSentinels(), ip.c_str(), port, NULL);
@@ -993,7 +997,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         }
     }
 
-    /** 接收到比当前配置更新的配置，更新配置信息 */
+    /** 接收到比当前配置更新的配置，更新sentinel的配置信息 */
     if (currentEpoch > this->currentEpoch) {
         this->currentEpoch = currentEpoch;
         this->flushConfig();
