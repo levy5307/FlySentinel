@@ -39,6 +39,7 @@ public:
     uint64_t getCurrentEpoch() const;
     /** 处理从master/slave/sentinel发送来的hello message */
     void processHelloMessage(std::string &hello);
+    void receiveHelloMessage(redisAsyncContext *context, void *reply, void *privdata);
 
     /************************************************************************************************
      *******************                general server interfaces                   *****************

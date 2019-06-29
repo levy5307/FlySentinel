@@ -1020,9 +1020,37 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         }
     }
 
+    /** 更新hello处理时间 */
     if (NULL != sentinel) {
         sentinel->setLastHelloTime(miscTool->mstime());
     }
+}
+
+void FlySentinel::receiveHelloMessage(redisAsyncContext *context, void *reply, void *privdata) {
+    AbstractFlyInstance *instance = (AbstractFlyInstance *)privdata;
+    if (NULL == reply || NULL == instance) {
+        return;
+    }
+    redisReply *rr = (redisReply *)reply;
+
+    /** 更新pub/sub constext最近活动时间 */
+    instance->getLink()->setPcLastActivity(miscTool->mstime());
+
+    if (rr->type != REDIS_REPLY_ARRAY ||
+        rr->elements != 3 ||
+        rr->element[0]->type != REDIS_REPLY_STRING ||
+        rr->element[1]->type != REDIS_REPLY_STRING ||
+        rr->element[2]->type != REDIS_REPLY_STRING ||
+        strcmp(rr->element[0]->str,"message") != 0) return;
+
+    /** 如果是本机，则不做处理 */
+    if (NULL != strstr(rr->element[2]->str, this->myid)) {
+        return;
+    }
+
+    /** 处理hello消息 */
+    std::string hello = std::string(rr->element[2]->str);
+    this->processHelloMessage(hello);
 }
 
 void FlySentinel::addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,

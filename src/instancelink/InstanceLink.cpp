@@ -116,3 +116,11 @@ uint64_t InstanceLink::getLastPongTime() const {
 void InstanceLink::setLastPongTime(uint64_t lastPongTime) {
     this->lastPongTime = lastPongTime;
 }
+
+uint64_t InstanceLink::getPcLastActivity() const {
+    return pcLastActivity;
+}
+
+void InstanceLink::setPcLastActivity(uint64_t pcLastActivity) {
+    this->pcLastActivity = pcLastActivity;
+}

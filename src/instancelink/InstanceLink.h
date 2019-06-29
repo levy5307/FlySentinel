@@ -33,6 +33,8 @@ public:
     void setLastPongTime(uint64_t lastPongTime);
     bool isDisconnected() const;
     void setDisconnected(bool disconnected);
+    uint64_t getPcLastActivity() const;
+    void setPcLastActivity(uint64_t pcLastActivity);
 
 private:
     bool disconnected = true;                                   // true-需要重连连接
