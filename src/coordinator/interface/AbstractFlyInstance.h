@@ -20,6 +20,7 @@ public:
     virtual SentinelAddr *getAddr() const = 0;
     virtual void setAddr(SentinelAddr *addr) = 0;
     virtual void dupAddr(SentinelAddr *addr) = 0;
+    virtual void setPort(int port) = 0;
     virtual std::shared_ptr<AbstractFlyInstance> getMaster() const = 0;
     virtual bool haveMaster() const = 0;
     virtual void setMaster(std::shared_ptr<AbstractFlyInstance> master) = 0;

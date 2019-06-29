@@ -923,7 +923,8 @@ uint64_t FlySentinel::getCurrentEpoch() const {
 
 /**
  * hello message format:
- *   "{0-ip},{1-port},{2-runid},{3-current epoch},{4-master name},{5-master ip},{6-master port},{7-master epoch}"
+ *   "{0-sentinel ip},{1-sentinel port},{2-runid},{3-current epoch},
+ *   {4-master name},{5-master ip},{6-master port},{7-master epoch}"
  * */
 void FlySentinel::processHelloMessage(std::string &hello) {
     std::vector<std::string> spiltStrs;
@@ -943,17 +944,44 @@ void FlySentinel::processHelloMessage(std::string &hello) {
     uint64_t currentEpoch = strtoull(spiltStrs[3].c_str(), NULL, 10);
     int masterPort = atoi(spiltStrs[6].c_str());
     uint64_t masterEpoch = strtoull(spiltStrs[7].c_str(), NULL, 10);
-    std::shared_ptr<AbstractFlyInstance> instance = getFlyInstanceByAddrAndRunID(
-            master->getSentinels(), spiltStrs[0].c_str(), port, spiltStrs[2].c_str());
 
-    /** 如果instance不为null */
-    if (NULL != instance) {
+    /** 根据地址和runid去尝试找该sentinel */
+    std::shared_ptr<AbstractFlyInstance> instance = getFlyInstanceByAddrAndRunID(
+            master->getSentinels(), ip.c_str(), port, runid.c_str());
+
+    /** 如果instance为null */
+    if (NULL == instance) {
+        /** 根据sentinel runid删除掉对应的sentinel */
         int removed = master->removeMatchingSentinel(runid);
         if (removed > 0) {
             this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master,
                             "%@ ip %s port %d for %s", ip.c_str(), port, runid.c_str());
         } else {
-            // todo
+            /**
+             * 在master中没有找到，需要判断新的地址是否已经有其他sentinel占用该地址,
+             * 如果有，则置该sentinel的地址为无效
+             **/
+             std::shared_ptr<AbstractFlyInstance> another =
+                     getFlyInstanceByAddrAndRunID(master->getSentinels(), ip.c_str(), port, NULL);
+             if (NULL != another) {
+                 this->sendEvent(LL_NOTICE, "+sentinel-invalid-addr", another, "%@");
+                 another->setPort(0);
+                 /** 向所有master的表示同一个sentinel的instance结构进行更新 */
+                 updateSentinelAddrInAllMasters(another);
+             }
+        }
+
+        /** create new sentinel */
+        std::shared_ptr<AbstractFlyInstance> instance = new FlyInstance(
+                runid, FSI_SENTINEL, ip, port, master->getQuorum(), master);
+        if (NULL != instance) {
+            if (removed > 0) {
+                this->sendEvent(LL_NOTICE, "+sentinel", instance, "%@");
+                this->updateSentinelAddrInAllMasters(instance);
+            }
+            instance->setRunid(runid);
+            this->tryConnectionSharing(instance);
+            this->flushConfig();
         }
     }
 }

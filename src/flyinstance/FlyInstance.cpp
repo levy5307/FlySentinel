@@ -73,6 +73,10 @@ void FlyInstance::dupAddr(SentinelAddr *addr) {
     this->addr->setPort(addr->getPort());
 }
 
+void FlyInstance::setPort(int port) {
+    this->addr->setPort(port);
+}
+
 std::shared_ptr<AbstractFlyInstance> FlyInstance::getMaster() const {
     return this->master;
 }
