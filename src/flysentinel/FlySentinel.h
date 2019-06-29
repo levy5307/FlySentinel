@@ -89,7 +89,8 @@ private:
     void collectTerminatedScripts();
     void deleteScriptJob(pid_t pid);
     void killTimedoutScripts();
-    void callClientReconfScript(AbstractFlyInstance *master, int role, char *state, SentinelAddr *from, SentinelAddr *to);
+    void callClientReconfScript(std::shared_ptr<AbstractFlyInstance> master, int role,
+                                char *state, SentinelAddr *from, SentinelAddr *to);
     std::shared_ptr<AbstractFlyInstance> getFlyInstanceByAddrAndRunID(
             const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
             const char *ip,
@@ -101,7 +102,7 @@ private:
             std::shared_ptr<AbstractFlyClient> flyClient, std::string &str);
     void resetMaster(std::shared_ptr<AbstractFlyInstance> master, int flags);
     int resetMasterByPattern(const std::string &pattern, int flags);
-    void resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, char *ip, int port);
+    void resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, const char *ip, int port);
     void setClientName(redisAsyncContext *context, std::shared_ptr<AbstractFlyInstance> flyInstance, char *type);
     bool masterLookSane(std::shared_ptr<AbstractFlyInstance> master);
     SentinelAddr* getCurrentMasterAddress(std::shared_ptr<AbstractFlyInstance> master);
