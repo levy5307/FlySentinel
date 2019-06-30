@@ -112,7 +112,8 @@ private:
     bool masterLookSane(AbstractFlyInstance* master);
     SentinelAddr* getCurrentMasterAddress(AbstractFlyInstance* master);
     void parseRunid(const std::string &line, AbstractFlyInstance* flyInstance);
-    void parseIPAndPort(const std::string &line, AbstractFlyInstance* flyInstance);
+    void parseSlaveIPAndPort(const std::string &line, AbstractFlyInstance *flyInstance);
+    void parseSlaveRoleParams(const std::string &line, AbstractFlyInstance *flyInstance);
 
     /************************************************************************************************
      *******************             general server private functions               *****************

@@ -566,7 +566,7 @@ void FlySentinel::parseRunid(const std::string &line, AbstractFlyInstance* flyIn
     return;
 }
 
-void FlySentinel::parseIPAndPort(const std::string &line, AbstractFlyInstance* flyInstance) {
+void FlySentinel::parseSlaveIPAndPort(const std::string &line, AbstractFlyInstance *flyInstance) {
     /** ip */
     char *ip = strstr((char*)line.c_str(), "ip=");
     if (NULL == ip) {
@@ -600,6 +600,49 @@ void FlySentinel::parseIPAndPort(const std::string &line, AbstractFlyInstance* f
     }
 }
 
+void FlySentinel::parseSlaveRoleParams(const std::string &line, AbstractFlyInstance *flyInstance) {
+    /** ip */
+    if (line.length() >= 12 && 0 == line.compare("master_host:")) {
+        std::string host = line.substr(12, -1);
+        if (flyInstance->getSlaveMasterHost().empty()
+            || 0 == flyInstance->getSlaveMasterHost().compare(host)) {
+            flyInstance->setSlaveMasterHost(host);
+        }
+        return;
+    }
+
+    /** port */
+    if (line.length() >= 12 && 0 == line.compare("master_port:")) {
+        int port = atoi(line.substr(12, -1).c_str());
+        if (0 == flyInstance->getSlaveMasterPort() != port) {
+            flyInstance->setSlaveMasterPort(port);
+        }
+        return;
+    }
+
+    /** master link status */
+    if (line.length() >= 19 && 0 == line.compare("master_link_status")) {
+        if (0 == strcmp(line.c_str() + 19, "up")) {
+            flyInstance->setSlaveMasterLinkStatus(SENTINEL_MASTER_LINK_STATUS_UP);
+        } else {
+            flyInstance->setSlaveMasterLinkStatus(SENTINEL_MASTER_LINK_STATUS_DOWN);
+        }
+        return;
+    }
+
+    /** slave priority */
+    if (line.length() >= 15 && 0 == line.compare("slave_priority:")) {
+        flyInstance->setSlavePriority(atoi(line.c_str() + 15));
+    }
+
+    /** slave replication offset */
+    if (line.length() >= 18 && 0 == line.compare("slave_repl_offset:")) {
+        flyInstance->setSlaveReplOffset(atoi(line.c_str() + 18));
+    }
+
+    return;
+}
+
 void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) {
     if (NULL == flyInstance) {
         return;
@@ -610,6 +653,7 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
 
     /** 以行划分 */
     std::vector<std::string> lines;
+    int role = 0;
     miscTool->spiltString(info, "\r\n", lines);
     for (auto line : lines) {
         /** the format is: runid:<40bit hexchars> **/
@@ -623,7 +667,7 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
             && line.length() >= 7
             && 0 == line.compare("slave")
             && isdigit(line[5])) {
-            this->parseIPAndPort(line, flyInstance);
+            this->parseSlaveIPAndPort(line, flyInstance);
             continue;
         }
 
@@ -631,8 +675,22 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
         if (line.length() >= 32 && 0 == line.compare("master_link_down_since_seconds")) {
             uint64_t seconds = atoi(line.c_str() + 31);
             flyInstance->setMasterLinkDownTime(seconds);
+            continue;
         }
-        // todo:
+
+        /** role type */
+        if (0 == line.compare("role:master")) {
+            role |= FSI_MASTER;
+            continue;
+        } else if (0 == line.compare("role:slave")) {
+            role |= FSI_SLAVE;
+            continue;
+        }
+
+        /** slave role parameters */
+        if (FSI_SLAVE == role) {
+            this->parseSlaveRoleParams(line, flyInstance);
+        }
     }
 }
 

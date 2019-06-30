@@ -67,6 +67,16 @@ public:
     virtual int sentinelIsQuorumReachable(int *usablePtr) = 0;
     virtual uint64_t getMasterLinkDownTime() const = 0;
     virtual void setMasterLinkDownTime(uint64_t masterLinkDownTime) = 0;
+    virtual const std::string &getSlaveMasterHost() const = 0;
+    virtual void setSlaveMasterHost(const std::string &slaveMasterHost) = 0;
+    virtual int getSlaveMasterPort() const = 0;
+    virtual void setSlaveMasterPort(int slaveMasterPort) = 0;
+    virtual int getSlaveMasterLinkStatus() const = 0;
+    virtual void setSlaveMasterLinkStatus(int slaveMasterLinkStatus) = 0;
+    virtual int getSlavePriority() const = 0;
+    virtual void setSlavePriority(int slavePriority) = 0;
+    virtual uint64_t getSlaveReplOffset() const = 0;
+    virtual void setSlaveReplOffset(uint64_t slaveReplOffset) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

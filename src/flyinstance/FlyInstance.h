@@ -73,6 +73,16 @@ public:
     int sentinelIsQuorumReachable(int *usablePtr);
     uint64_t getMasterLinkDownTime() const;
     void setMasterLinkDownTime(uint64_t masterLinkDownTime);
+    const std::string &getSlaveMasterHost() const;
+    void setSlaveMasterHost(const std::string &slaveMasterHost);
+    int getSlaveMasterPort() const;
+    void setSlaveMasterPort(int slaveMasterPort);
+    int getSlaveMasterLinkStatus() const;
+    void setSlaveMasterLinkStatus(int slaveMasterLinkStatus);
+    int getSlavePriority() const;
+    void setSlavePriority(int slavePriority);
+    uint64_t getSlaveReplOffset() const;
+    void setSlaveReplOffset(uint64_t slaveReplOffset);
 
 private:
     FlyInstance(){};
@@ -85,12 +95,17 @@ private:
     uint64_t lastHelloTime;       /** 只有当FSI_SENTINEL被设置时才会使用，表示最近一次从Pub/Sub接收到hello消息的时间 */
     SentinelAddr *addr = NULL;
     AbstractFlyInstance* master = NULL;
-    uint32_t quorum;                                /** 对于判定flydb失败，需要的sentinel票数 */
     char *notificationScript = NULL;
     char *clientReconfigScript = NULL;
     std::shared_ptr<AbstractInstanceLink> link;     /** 与instance的连接，sentinel之间共享 */
+
+    /**
+     * master参数
+     **/
     std::map<std::string, AbstractFlyInstance*> sentinels;    /** key-ip:port. Other sentinels monitoring the same master. */
     std::map<std::string, AbstractFlyInstance*> slaves;       /** key-ip:port. Slaves for this master instance. */
+    uint32_t quorum;                                          /** 对于判定flydb失败，需要的sentinel票数 */
+
     uint64_t sDownSinceTime = 0;                        /** Subjectively down since time. */
     uint64_t oDownSinceTime = 0;                        /** Objectively down since time. */
     uint64_t downAfterPeriod = 0;                       /** down after this period */
@@ -101,6 +116,16 @@ private:
     uint64_t roleReportedTime = 0;
     uint64_t infoRefresh = 0;
     std::string info;                                   /** 缓存的输出info */
+
+    /**
+     * slave参数
+     **/
+    std::string slaveMasterHost;                      /** 通过info信息获取到的master host */
+    int slaveMasterPort;                              /** 通过info信息获取到的master port */
+    int slavePriority;                                /** 通过info信息获取到的slave的优先级 */
+    uint64_t slaveReplOffset;                         /** 通过info信息获取到的slave的主从复制偏移量 */
+    uint64_t slaveConfChangeTime = 0;
+    int slaveMasterLinkStatus = 0;
 };
 
 

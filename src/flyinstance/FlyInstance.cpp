@@ -410,6 +410,48 @@ void FlyInstance::setMasterLinkDownTime(uint64_t masterLinkDownTime) {
     this->masterLinkDownTime = masterLinkDownTime;
 }
 
+const std::string &FlyInstance::getSlaveMasterHost() const {
+    return this->slaveMasterHost;
+}
+
+void FlyInstance::setSlaveMasterHost(const std::string &slaveMasterHost) {
+    this->slaveMasterHost = slaveMasterHost;
+    this->slaveConfChangeTime = miscTool->mstime();
+}
+
+int FlyInstance::getSlaveMasterPort() const {
+    return this->slaveMasterPort;
+}
+
+void FlyInstance::setSlaveMasterPort(int slaveMasterPort) {
+    this->slaveMasterPort = slaveMasterPort;
+    this->slaveConfChangeTime = miscTool->mstime();
+}
+
+int FlyInstance::getSlaveMasterLinkStatus() const {
+    return slaveMasterLinkStatus;
+}
+
+void FlyInstance::setSlaveMasterLinkStatus(int slaveMasterLinkStatus) {
+    this->slaveMasterLinkStatus = slaveMasterLinkStatus;
+}
+
+int FlyInstance::getSlavePriority() const {
+    return slavePriority;
+}
+
+void FlyInstance::setSlavePriority(int slavePriority) {
+    this->slavePriority = slavePriority;
+}
+
+uint64_t FlyInstance::getSlaveReplOffset() const {
+    return slaveReplOffset;
+}
+
+void FlyInstance::setSlaveReplOffset(uint64_t slaveReplOffset) {
+    this->slaveReplOffset = slaveReplOffset;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {
