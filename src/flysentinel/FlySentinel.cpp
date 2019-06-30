@@ -564,6 +564,16 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
     /** 以行划分 */
     std::vector<std::string> lines;
     miscTool->spiltString(info, "\r\n", lines);
+    for (auto line : lines) {
+        /** the format is: runid:<40bit hexchars> **/
+        if (line.length() >= 47 && NULL != strstr(line.c_str(), "runid:")) {
+            std::string newRunid = line.substr(7, 40);
+            if (0 == flyInstance->getRunid().compare(newRunid)) {
+                //this->sendEvent(LL_NOTICE, "+reboot", flyInstance, "%@");
+                flyInstance->setRunid(newRunid);
+            }
+        }
+    }
 }
 
 void FlySentinel::addToClientsPendingToWrite(int fd) {
