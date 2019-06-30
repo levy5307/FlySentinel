@@ -83,6 +83,8 @@ public:
     void setSlavePriority(int slavePriority);
     uint64_t getSlaveReplOffset() const;
     void setSlaveReplOffset(uint64_t slaveReplOffset);
+    uint64_t getSlaveConfChangeTime() const;
+    void setSlaveConfChangeTime(uint64_t slaveConfChangeTime);
 
 private:
     FlyInstance(){};

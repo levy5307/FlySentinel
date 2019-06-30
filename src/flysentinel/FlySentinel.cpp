@@ -77,7 +77,7 @@ FlySentinel::~FlySentinel() {
  *   2.发送pub/sub信息给相应的客户端，type是具体的消息
  *   3.生成通知脚本job到脚本job队列中
  **/
-void FlySentinel::sendEvent(int level, char *type, AbstractFlyInstance* flyInstance, const char *fmt, ...) {
+void FlySentinel::sendEvent(int level, const char *type, AbstractFlyInstance* flyInstance, const char *fmt, ...) {
     if (NULL == flyInstance) {
         return;
     }
@@ -691,6 +691,26 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
         if (FSI_SLAVE == role) {
             this->parseSlaveRoleParams(line, flyInstance);
         }
+    }
+
+    /** 更新info refresh的记录时间 */
+    flyInstance->setInfoRefresh(miscTool->mstime());
+
+    /** 角色发生了变换 */
+    if (role != flyInstance->getRoleReported()) {
+        uint64_t nowt = miscTool->mstime();
+        flyInstance->setRoleReportedTime(nowt);
+        flyInstance->setRoleReported(role);
+        if (FSI_SLAVE == role) {
+            flyInstance->setSlaveConfChangeTime(nowt);
+        }
+        this->sendEvent(
+                LL_VERBOSE,
+                flyInstance->getFlags() & (FSI_SLAVE | FSI_MASTER) ? "+role-changed" : "-role-changed",
+                flyInstance,
+                "%@ new reported role is %s",
+                role == FSI_MASTER ? "master" : "slave",
+                flyInstance->getFlags() & FSI_MASTER ? "master" : "slave");
     }
 }
 

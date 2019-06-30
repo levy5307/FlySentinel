@@ -452,6 +452,14 @@ void FlyInstance::setSlaveReplOffset(uint64_t slaveReplOffset) {
     this->slaveReplOffset = slaveReplOffset;
 }
 
+uint64_t FlyInstance::getSlaveConfChangeTime() const {
+    return slaveConfChangeTime;
+}
+
+void FlyInstance::setSlaveConfChangeTime(uint64_t slaveConfChangeTime) {
+    this->slaveConfChangeTime = slaveConfChangeTime;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {

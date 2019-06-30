@@ -17,7 +17,7 @@ public:
     /**
      * sentinel server interface
      **/
-    virtual void sendEvent(int level, char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...) = 0;
+    virtual void sendEvent(int level, const char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...) = 0;
     virtual void generateInitMonitorEvents() = 0;
     virtual int tryConnectionSharing(AbstractFlyInstance* flyInstance) = 0;
     virtual void flushConfig() = 0;

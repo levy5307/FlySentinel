@@ -24,7 +24,7 @@ public:
      ************************************************************************************************/
     FlySentinel(const AbstractCoordinator *coordinator, ConfigCache *configCache);
     ~FlySentinel();
-    void sendEvent(int level, char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...);
+    void sendEvent(int level, const char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...);
     void generateInitMonitorEvents();
     int tryConnectionSharing(AbstractFlyInstance* flyInstance);
     void flushConfig();

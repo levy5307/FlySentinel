@@ -77,6 +77,8 @@ public:
     virtual void setSlavePriority(int slavePriority) = 0;
     virtual uint64_t getSlaveReplOffset() const = 0;
     virtual void setSlaveReplOffset(uint64_t slaveReplOffset) = 0;
+    virtual uint64_t getSlaveConfChangeTime() const = 0;
+    virtual void setSlaveConfChangeTime(uint64_t slaveConfChangeTime) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
