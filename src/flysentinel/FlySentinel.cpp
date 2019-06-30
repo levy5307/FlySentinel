@@ -627,6 +627,11 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
             continue;
         }
 
+        /** master_link_down_since_seconds:{seconds} */
+        if (line.length() >= 32 && 0 == line.compare("master_link_down_since_seconds")) {
+            uint64_t seconds = atoi(line.c_str() + 31);
+            flyInstance->setMasterLinkDownTime(seconds);
+        }
         // todo:
     }
 }
