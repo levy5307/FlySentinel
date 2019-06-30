@@ -111,6 +111,8 @@ private:
     void setClientName(redisAsyncContext *context, AbstractFlyInstance* flyInstance, char *type);
     bool masterLookSane(AbstractFlyInstance* master);
     SentinelAddr* getCurrentMasterAddress(AbstractFlyInstance* master);
+    void parseRunid(const std::string &line, AbstractFlyInstance* flyInstance);
+    void parseIPAndPort(const std::string &line, AbstractFlyInstance* flyInstance);
 
     /************************************************************************************************
      *******************             general server private functions               *****************

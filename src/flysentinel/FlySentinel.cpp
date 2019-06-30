@@ -557,6 +557,49 @@ SentinelAddr* FlySentinel::getCurrentMasterAddress(AbstractFlyInstance* master) 
     }
 }
 
+void FlySentinel::parseRunid(const std::string &line, AbstractFlyInstance* flyInstance) {
+    std::string newRunid = line.substr(7, 40);
+    if (0 == flyInstance->getRunid().compare(newRunid)) {
+        this->sendEvent(LL_NOTICE, "+reboot", flyInstance, "%@");
+        flyInstance->setRunid(newRunid);
+    }
+    return;
+}
+
+void FlySentinel::parseIPAndPort(const std::string &line, AbstractFlyInstance* flyInstance) {
+    /** ip */
+    char *ip = strstr((char*)line.c_str(), "ip=");
+    if (NULL == ip) {
+        return;
+    }
+    char *comma = strstr(ip, ",");
+    if (NULL != comma) {
+        *comma = '\0';
+    }
+
+
+    /** port */
+    char *portstr = strstr(ip, "port=");
+    if (NULL == portstr) {
+        return;
+    }
+    comma = strstr(portstr+5, ",");
+    if (NULL != comma) {
+        *comma = '\0';
+    }
+    int port = atoi(portstr);
+
+    /** 根据ip和port查找slave, 没有找到则创建 */
+    if (flyInstance->lookupSlave(ip, port)) {
+        std::string hostname = std::string(ip);
+        std::string name = "";
+        AbstractFlyInstance *slave = new FlyInstance(
+                name, FSI_SLAVE, hostname, port, flyInstance->getQuorum(), flyInstance);
+        this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
+        this->flushConfig();
+    }
+}
+
 void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) {
     if (NULL == flyInstance) {
         return;
@@ -571,11 +614,7 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
     for (auto line : lines) {
         /** the format is: runid:<40bit hexchars> **/
         if (line.length() >= 47 && NULL != strstr(line.c_str(), "runid:")) {
-            std::string newRunid = line.substr(7, 40);
-            if (0 == flyInstance->getRunid().compare(newRunid)) {
-                this->sendEvent(LL_NOTICE, "+reboot", flyInstance, "%@");
-                flyInstance->setRunid(newRunid);
-            }
+            this->parseRunid(line, flyInstance);
             continue;
         }
 
@@ -584,39 +623,7 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
             && line.length() >= 7
             && 0 == line.compare("slave")
             && isdigit(line[5])) {
-
-            /** ip */
-            char *ip = strstr((char*)line.c_str(), "ip=");
-            if (NULL == ip) {
-                continue;
-            }
-            char *comma = strstr(ip, ",");
-            if (NULL != comma) {
-                *comma = '\0';
-            }
-
-
-            /** port */
-            char *portstr = strstr(ip, "port=");
-            if (NULL == portstr) {
-                continue;
-            }
-            comma = strstr(portstr+5, ",");
-            if (NULL != comma) {
-                *comma = '\0';
-            }
-            int port = atoi(portstr);
-
-            /** 根据ip和port查找slave, 没有找到则创建 */
-            if (flyInstance->lookupSlave(ip, port)) {
-                std::string hostname = std::string(ip);
-                std::string name = "";
-                AbstractFlyInstance *slave = new FlyInstance(
-                        name, FSI_SLAVE, hostname, port, flyInstance->getQuorum(), flyInstance);
-                this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
-                this->flushConfig();
-            }
-
+            this->parseIPAndPort(line, flyInstance);
             continue;
         }
 
