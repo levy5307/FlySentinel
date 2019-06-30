@@ -1128,7 +1128,7 @@ void FlySentinel::sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyI
 
     uint64_t nowt = miscTool->mstime();
     /**
-     * 1.如果当前flyinstance是一个master的slave，并且该master处于odown条件下，则改为每秒发送一次,
+     * 1.如果当前flyinstance是一个slave，并且其master处于odown条件下，则改为每秒发送一次,
      * 以便于密切的关注slaves，防止某一个slave被变成master
      * 2.如果当前slave与master断开连接，则同样需要经常监视info信息。
      **/
@@ -1140,6 +1140,8 @@ void FlySentinel::sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyI
     } else {
         infoPeriod = SENTINEL_INFO_PERIOD;
     }
+
+    /** 如果flyInstance是不是sentinel，向其发送info信息, 即只想master或者slave发送info */
     if ((0 == flyInstance->getFlags() & FSI_SENTINEL)
         && (0 == flyInstance->getInfoRefresh() || nowt - flyInstance->getInfoRefresh() > infoPeriod)) {
         int retval = redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(),
