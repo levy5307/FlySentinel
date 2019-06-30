@@ -1053,6 +1053,123 @@ void FlySentinel::receiveHelloMessage(redisAsyncContext *context, void *reply, v
     this->processHelloMessage(hello);
 }
 
+/**
+ * 通过pub/sub向flyInstance发送hello message，然后改flyInstance可以将该消息广播出去,
+ * 发送hello消息可以达到两个目的：
+ *  1.周知master配置更新
+ *  2.周知该sentinel存货
+ **/
+int FlySentinel::sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+    /** 这里的master不能用智能指针，因为this再放入一个智能指针里，有可能会被释放两次 */
+    std::shared_ptr<AbstractFlyInstance> master = (flyInstance->getFlags() & FSI_MASTER) ? flyInstance : flyInstance->getMaster();
+    SentinelAddr *masterAddr = master->getAddr();
+    AbstractFlyServer *flyServer = coordinator->getFlyServer();
+
+    /** 如果连接已经断开了，直接返回 */
+    if (flyInstance->getLink()->isDisconnected()) {
+        return -1;
+    }
+
+    /** 获取announce ip和port, 如果没有设置用于gossip协议的addr，则使用命令连接的addr */
+    std::string announceIP = flyServer->getAnnounceIP();
+    if (announceIP.empty()) {
+        int fd = flyInstance->getLink()->getCommandContext()->c.fd;
+        if (-1 == coordinator->getNetHandler()->sockName(fd, (char*)announceIP.c_str(), NET_IP_STR_LEN, NULL)) {
+            return -1;
+        }
+    }
+    /** 如果用于gossip的port无效，则使用监听port */
+    int announcePort = (0 == flyServer->getAnnouncePort()) ?  flyServer->getPort() : flyServer->getAnnouncePort();
+
+    /** 按照格式获取hello message的数据 */
+    char payload[NET_IP_STR_LEN+1024];
+    snprintf(payload, sizeof(payload),
+             "%s,%d,%s,%llu," /** Info about this sentinel. */
+             "%s,%s,%d,%llu", /** Info about current master. */
+             announceIP.c_str(), announcePort, flyServer->getMyid(), (unsigned long long) flyServer->getCurrentEpoch(),
+             master->getName().c_str(), masterAddr->ip.c_str(), masterAddr->port, (unsigned long long) master->getConfigEpoch());
+
+    /** 发送该hello message */
+    if(-1 == redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(), sentinelPublishReplyCallback,
+                               this, "%s %s %s", "PUBLISH", SENTINEL_HELLO_CHANNEL.c_str(), payload)) {
+        return -1;
+    }
+
+    /** 增加pending command数量 */
+    flyInstance->getLink()->increasePendingCommands();
+    return 1;
+}
+
+bool FlySentinel::sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+    int retval = redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(), NULL, flyInstance.get(), "%s", "PING");
+    if (retval > 0) {
+        flyInstance->getLink()->increasePendingCommands();
+        flyInstance->getLink()->setLastPingTime(miscTool->mstime());
+        /** 上次的ping已经接收到了pong，则这次发送ping的时候更新actPingTime */
+        if (0 == flyInstance->getLink()->getActPingTime()) {
+            flyInstance->getLink()->setActPingTime(flyInstance->getLink()->getLastPingTime());
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void FlySentinel::sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+    /** 如果连接已经断开了，直接返回 */
+    if (flyInstance->getLink()->isDisconnected()) {
+        return;
+    }
+
+    /** 如果pending commands过多 */
+    if (flyInstance->getLink()->getPendingCommands() > SENTINEL_MAX_PENDING_COMMANDS * flyInstance->getLink().use_count()) {
+        return;
+    }
+
+    uint64_t nowt = miscTool->mstime();
+    /**
+     * 1.如果当前flyinstance是一个master的slave，并且该master处于odown条件下，则改为每秒发送一次,
+     * 以便于密切的关注slaves，防止某一个slave被变成master
+     * 2.如果当前slave与master断开连接，则同样需要经常监视info信息。
+     **/
+    int infoPeriod = 0;
+    if (((flyInstance->getFlags() & FSI_SLAVE)
+         && (flyInstance->getMaster()->getFlags() & (FSI_O_DOWN|FSI_FAILOVER_IN_PROGRESS)))
+        || flyInstance->getMasterLinkDownTime() != 0) {
+        infoPeriod = 1000;
+    } else {
+        infoPeriod = SENTINEL_INFO_PERIOD;
+    }
+    if ((0 == flyInstance->getFlags() & FSI_SENTINEL)
+        && (0 == flyInstance->getInfoRefresh() || nowt - flyInstance->getInfoRefresh() > infoPeriod)) {
+        int retval = redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(),
+                                       sentinelInfoReplyCallback, flyInstance.get(), "%s", "INFO");
+        if (retval >= 0) {
+            flyInstance->getLink()->increasePendingCommands();
+        }
+    }
+
+    /**
+     * 周期性发送ping: 上次接收到pong到现在的时间超过pingPeriod，并且上次发送ping的时间距现在pingPeriod/2
+     * 时间线：更新lastPongTime------->更新lastPingTime-------->更新lastPingTime-------->更新lastPongTime
+     *                                               发送失败       （2）      发送成功（并接收到pong）
+     * 以在(2)处为例，需要两次发送的时间间隔超过1/2 * pingPeriod，并且发送时间距离上次接收时间超过2 * 1/2 * period，才需要重新发送
+     * 即(1)一个ping周期内没有接收到pong，并且(2)距离上次发送时间超过了1/2个ping周期，则重新发送ping。
+     * 第(1)个条件用于判断网络是否不可达
+     * 第(2)条件主要用于约束一直没有收到pong，所导致的频繁发送ping的情况
+     **/
+    int pingPeriod = flyInstance->getDownAfterPeriod() > SENTINEL_PING_PERIOD ? SENTINEL_PING_PERIOD : flyInstance->getDownAfterPeriod();
+    if (nowt - flyInstance->getLink()->getLastPongTime() > pingPeriod
+        && nowt - flyInstance->getLink()->getLastPingTime() > pingPeriod / 2) {
+        this->sendPing(flyInstance);
+    }
+
+    /** 周期性发送hello */
+    if (nowt - flyInstance->getLastPubTime() > SENTINEL_PUBLISH_PERIOD) {
+        this->sendHello(flyInstance);
+    }
+}
+
 void FlySentinel::addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
                                          std::map<std::string, std::shared_ptr<AbstractFlyInstance>> instanceMap) {
     for (auto iter : instanceMap) {

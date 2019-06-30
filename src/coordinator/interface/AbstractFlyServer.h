@@ -32,6 +32,9 @@ public:
     virtual uint64_t getCurrentEpoch() const = 0;
     virtual void processHelloMessage(std::string &hello) = 0;
     virtual void receiveHelloMessage(redisAsyncContext *context, void *reply, void *privdata) = 0;
+    virtual int sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
+    virtual bool sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
+    virtual void sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
 
     /**
      * general server interface

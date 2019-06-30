@@ -49,9 +49,6 @@ public:
     virtual void setRoleReportedTime(uint64_t roleReportedTime) = 0;
     virtual uint64_t getInfoRefresh() const = 0;
     virtual void setInfoRefresh(uint64_t infoRefresh) = 0;
-    virtual bool sendPing() = 0;
-    virtual int sendHello() = 0;
-    virtual void sendPeriodicCommands() = 0;
     virtual const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const = 0;
     virtual void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave) = 0;
     virtual bool hasPromotedSlave() const = 0;
@@ -68,6 +65,8 @@ public:
     virtual void setLastHelloTime(uint64_t lastHelloTime) = 0;
     virtual void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> flyClient) = 0;
     virtual int sentinelIsQuorumReachable(int *usablePtr) = 0;
+    virtual uint64_t getMasterLinkDownTime() const = 0;
+    virtual void setMasterLinkDownTime(uint64_t masterLinkDownTime) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

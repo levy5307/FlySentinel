@@ -54,9 +54,6 @@ public:
     void setRoleReportedTime(uint64_t roleReportedTime);
     uint64_t getInfoRefresh() const;
     void setInfoRefresh(uint64_t infoRefresh);
-    bool sendPing();
-    int sendHello();
-    void sendPeriodicCommands();
     const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const;
     void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave);
     bool hasPromotedSlave() const;
@@ -73,6 +70,8 @@ public:
     void setLastHelloTime(uint64_t lastHelloTime);
     void addReplySentinelRedisInstance(std::shared_ptr<AbstractFlyClient> flyClient);
     int sentinelIsQuorumReachable(int *usablePtr);
+    uint64_t getMasterLinkDownTime() const;
+    void setMasterLinkDownTime(uint64_t masterLinkDownTime);
 
 private:
     FlyInstance(){};

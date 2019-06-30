@@ -40,6 +40,10 @@ public:
     /** 处理从master/slave/sentinel发送来的hello message */
     void processHelloMessage(std::string &hello);
     void receiveHelloMessage(redisAsyncContext *context, void *reply, void *privdata);
+    /** 通过pub/sub向flyInstance发送hello message，然后改flyInstance可以将该消息广播出去 */
+    int sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance);
+    bool sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance);
+    void sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyInstance);
 
     /************************************************************************************************
      *******************                general server interfaces                   *****************
