@@ -17,7 +17,7 @@ public:
     /**
      * sentinel server interface
      **/
-    virtual void sendEvent(int level, char *type, std::shared_ptr<AbstractFlyInstance> flyInstance, const char *fmt, ...) = 0;
+    virtual void sendEvent(int level, char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...) = 0;
     virtual void generateInitMonitorEvents() = 0;
     virtual int tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
     virtual void flushConfig() = 0;

@@ -77,7 +77,11 @@ FlySentinel::~FlySentinel() {
  *   2.发送pub/sub信息给相应的客户端，type是具体的消息
  *   3.生成通知脚本job到脚本job队列中
  **/
-void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyInstance> flyInstance, const char *fmt, ...) {
+void FlySentinel::sendEvent(int level, char *type, AbstractFlyInstance* flyInstance, const char *fmt, ...) {
+    if (NULL == flyInstance) {
+        return;
+    }
+
     char msg[LOG_MAX_LEN];
     if ('%' == fmt[0] && '@' == fmt[1] && NULL != flyInstance) {
         if (flyInstance->haveMaster()) {
@@ -118,7 +122,7 @@ void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyIn
 
     /** 调度脚本到脚本队列中 */
     if (LL_WARNING == level && NULL != flyInstance) {
-        std::shared_ptr<AbstractFlyInstance> master = flyInstance->haveMaster() ? flyInstance->getMaster() : flyInstance;
+        AbstractFlyInstance* master = flyInstance->haveMaster() ? flyInstance->getMaster().get() : flyInstance;
         if (master && NULL != master->getNotificationScript()) {
             this->scheduleScriptExecution(master->getNotificationScript(), type, msg, NULL);
         }
@@ -132,7 +136,7 @@ void FlySentinel::sendEvent(int level, char *type, std::shared_ptr<AbstractFlyIn
  **/
 void FlySentinel::generateInitMonitorEvents() {
     for (auto item : this->masters) {
-        this->sendEvent(LL_WARNING, "+monitor", item.second, "%@ quorum %d", item.second->getQuorum());
+        this->sendEvent(LL_WARNING, "+monitor", item.second.get(), "%@ quorum %d", item.second->getQuorum());
     }
 }
 
@@ -417,7 +421,7 @@ int FlySentinel::updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInsta
 
     /** 如果进行了重配置，则要发送事件 */
     if (reconfigured > 0) {
-        sendEvent(LL_NOTICE, "+sentinel-address-update", flyInstance, "%@ %d additional matching instances", reconfigured);
+        sendEvent(LL_NOTICE, "+sentinel-address-update", flyInstance.get(), "%@ %d additional matching instances", reconfigured);
     }
 
     return reconfigured;
@@ -436,7 +440,7 @@ void FlySentinel::resetMaster(std::shared_ptr<AbstractFlyInstance> master, int f
     assert(master->getFlags() & FSI_MASTER);
     master->reset(flags);
     if (flags & SENTINEL_GENERATE_EVENT) {
-        this->sendEvent(LL_WARNING, "+reset-master", master, "%@");
+        this->sendEvent(LL_WARNING, "+reset-master", master.get(), "%@");
     }
 }
 
@@ -481,7 +485,7 @@ void FlySentinel::resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstanc
     for (auto item : slaveAddrs) {
         std::shared_ptr<AbstractFlyInstance> slave = std::shared_ptr<AbstractFlyInstance>(
                 new FlyInstance(NULL, FSI_SLAVE, item->getIp(), item->getPort(), master->getQuorum(), master));
-        this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
+        this->sendEvent(LL_NOTICE, "+slave", slave.get(), "%@");
     }
     slaveAddrs.clear();
 
@@ -569,7 +573,7 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
         if (line.length() >= 47 && NULL != strstr(line.c_str(), "runid:")) {
             std::string newRunid = line.substr(7, 40);
             if (0 == flyInstance->getRunid().compare(newRunid)) {
-                //this->sendEvent(LL_NOTICE, "+reboot", flyInstance, "%@");
+                this->sendEvent(LL_NOTICE, "+reboot", flyInstance, "%@");
                 flyInstance->setRunid(newRunid);
             }
         }
@@ -987,7 +991,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         /** 删除拥有相同runid的sentinel */
         int removed = master->removeMatchingSentinel(runid);
         if (removed > 0) {
-            this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master,
+            this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master.get(),
                             "%@ ip %s port %d for %s", ip.c_str(), port, runid.c_str());
         } else {
             /**
@@ -996,7 +1000,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
              std::shared_ptr<AbstractFlyInstance> another =
                      getFlyInstanceByAddrAndRunID(master->getSentinels(), ip.c_str(), port, NULL);
              if (NULL != another) {
-                 this->sendEvent(LL_NOTICE, "+sentinel-invalid-addr", another, "%@");
+                 this->sendEvent(LL_NOTICE, "+sentinel-invalid-addr", another.get(), "%@");
                  another->setPort(0);
                  /** 向所有master的表示同一个sentinel的instance结构进行更新 */
                  updateSentinelAddrInAllMasters(another);
@@ -1008,7 +1012,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
                 new FlyInstance(runid, FSI_SENTINEL, ip, port, master->getQuorum(), master));
         if (NULL != sentinel) {
             if (removed > 0) {
-                this->sendEvent(LL_NOTICE, "+sentinel", sentinel, "%@");
+                this->sendEvent(LL_NOTICE, "+sentinel", sentinel.get(), "%@");
                 this->updateSentinelAddrInAllMasters(sentinel);
             }
             sentinel->setRunid(runid);
@@ -1021,7 +1025,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
     if (currentEpoch > this->currentEpoch) {
         this->currentEpoch = currentEpoch;
         this->flushConfig();
-        this->sendEvent(LL_WARNING, "+new-epoch", master, "%llu", this->currentEpoch);
+        this->sendEvent(LL_WARNING, "+new-epoch", master.get(), "%llu", this->currentEpoch);
     }
 
     /** 接收到更新的配置，则更新master info */
@@ -1030,8 +1034,8 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         /** master ip或者port发生了改变 */
         if (masterPort != master->getAddr()->getPort()
             || 0 != master->getAddr()->getIp().compare(masterIP)) {
-            this->sendEvent(LL_WARNING, "+config-update-from", sentinel, "%@");
-            this->sendEvent(LL_WARNING, "+switch-master", master, "%s %s %d %s %d",
+            this->sendEvent(LL_WARNING, "+config-update-from", sentinel.get(), "%@");
+            this->sendEvent(LL_WARNING, "+switch-master", master.get(), "%s %s %d %s %d",
                             master->getName().c_str(), master->getAddr()->getIp().c_str(),
                             master->getAddr()->getPort(), masterIP.c_str(), masterPort);
             SentinelAddr *oldAddr = master->getAddr();
