@@ -554,6 +554,16 @@ SentinelAddr* FlySentinel::getCurrentMasterAddress(std::shared_ptr<AbstractFlyIn
 }
 
 void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) {
+    if (NULL == flyInstance) {
+        return;
+    }
+
+    /** 因为已经连通了，所以设置master link down时间为0 */
+    flyInstance->setMasterLinkDownTime(0);
+
+    /** 以行划分 */
+    std::vector<std::string> lines;
+    miscTool->spiltString(info, "\r\n", lines);
 }
 
 void FlySentinel::addToClientsPendingToWrite(int fd) {
@@ -1101,7 +1111,8 @@ int FlySentinel::sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance) {
 }
 
 bool FlySentinel::sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance) {
-    int retval = redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(), NULL, flyInstance.get(), "%s", "PING");
+    int retval = redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(),
+            sentinelPingReplyCallback, flyInstance.get(), "%s", "PING");
     if (retval > 0) {
         flyInstance->getLink()->increasePendingCommands();
         flyInstance->getLink()->setLastPingTime(miscTool->mstime());

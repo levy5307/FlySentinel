@@ -417,6 +417,10 @@ void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void 
     }
 }
 
+void sentinelPingReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
+
+}
+
 void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractFlyInstance *flyInstance = (AbstractFlyInstance *)privdata;
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
