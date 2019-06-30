@@ -85,7 +85,7 @@ void FlySentinel::sendEvent(int level, char *type, AbstractFlyInstance* flyInsta
     char msg[LOG_MAX_LEN];
     if ('%' == fmt[0] && '@' == fmt[1] && NULL != flyInstance) {
         if (flyInstance->haveMaster()) {
-            std::shared_ptr<AbstractFlyInstance> master = flyInstance->getMaster();
+            AbstractFlyInstance* master = flyInstance->getMaster();
             snprintf(msg, sizeof(msg), "%s %s %d @ %s %s %d",
                      flyInstance->getName().c_str(),
                      flyInstance->getAddr()->getIp().c_str(),
@@ -122,7 +122,7 @@ void FlySentinel::sendEvent(int level, char *type, AbstractFlyInstance* flyInsta
 
     /** 调度脚本到脚本队列中 */
     if (LL_WARNING == level && NULL != flyInstance) {
-        AbstractFlyInstance* master = flyInstance->haveMaster() ? flyInstance->getMaster().get() : flyInstance;
+        AbstractFlyInstance* master = flyInstance->haveMaster() ? flyInstance->getMaster() : flyInstance;
         if (master && NULL != master->getNotificationScript()) {
             this->scheduleScriptExecution(master->getNotificationScript(), type, msg, NULL);
         }
@@ -136,7 +136,7 @@ void FlySentinel::sendEvent(int level, char *type, AbstractFlyInstance* flyInsta
  **/
 void FlySentinel::generateInitMonitorEvents() {
     for (auto item : this->masters) {
-        this->sendEvent(LL_WARNING, "+monitor", item.second.get(), "%@ quorum %d", item.second->getQuorum());
+        this->sendEvent(LL_WARNING, "+monitor", item.second, "%@ quorum %d", item.second->getQuorum());
     }
 }
 
@@ -147,7 +147,7 @@ void FlySentinel::generateInitMonitorEvents() {
  *      2.查看该master的sentinels中是否有一个实例与入参flyInstance代表相同的sentinel
  *      3.如果没有，继续下一个master；如果有，则与该master共享instance link
  **/
-int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+int FlySentinel::tryConnectionSharing(AbstractFlyInstance* flyInstance) {
     /** flyInstance必须是sentinel */
     assert(flyInstance->getFlags() & FSI_SENTINEL);
 
@@ -163,7 +163,7 @@ int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyIn
 
     /** 遍历所有的masters */
     for (auto item : this->masters) {
-        std::shared_ptr<AbstractFlyInstance> master = item.second;
+        AbstractFlyInstance* master = item.second;
 
         /** 如果当前遍历的master是flyInstance的master，直接跳过 */
         if (flyInstance->getMaster() == master) {
@@ -171,7 +171,7 @@ int FlySentinel::tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyIn
         }
 
         /** 从当前master中的所有sentinel中获取是否有与flyInstance代表同一sentinel的结构-->match */
-        std::shared_ptr<AbstractFlyInstance> match = getFlyInstanceByAddrAndRunID(
+        AbstractFlyInstance* match = getFlyInstanceByAddrAndRunID(
                 master->getSentinels(), NULL, 0, flyInstance->getRunid().c_str());
         /** 没有找到则继续从下一个master的sentinel中查找 */
         if (NULL == match || flyInstance == match) {
@@ -332,7 +332,7 @@ void FlySentinel::killTimedoutScripts() {
  *   <state>始终是"failover"
  *   <role>是"leader"或者"observer"
  * */
-void FlySentinel::callClientReconfScript(std::shared_ptr<AbstractFlyInstance> master,
+void FlySentinel::callClientReconfScript(AbstractFlyInstance* master,
                                          int role, char *state,
                                          SentinelAddr *from, SentinelAddr *to) {
     if (master->isClientReconfigScriptNULL()) {
@@ -357,8 +357,8 @@ void FlySentinel::callClientReconfScript(std::shared_ptr<AbstractFlyInstance> ma
 }
 
 
-std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(
-        const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
+AbstractFlyInstance* FlySentinel::getFlyInstanceByAddrAndRunID(
+        const std::map<std::string, AbstractFlyInstance*> &instances,
         const char *ip,
         int port,
         const char *runid) {
@@ -369,7 +369,7 @@ std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(
 
     /** 遍历所有的instances */
     for (auto item : instances) {
-        std::shared_ptr<AbstractFlyInstance> instance = item.second;
+        AbstractFlyInstance* instance = item.second;
         if ((NULL == runid || 0 == instance->getRunid().compare(runid))
             && (NULL == ip || 0 == instance->getAddr()->getIp().compare(ip))
             && port == instance->getAddr()->getPort()) {
@@ -381,7 +381,7 @@ std::shared_ptr<AbstractFlyInstance> FlySentinel::getFlyInstanceByAddrAndRunID(
     return NULL;
 }
 
-int FlySentinel::updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+int FlySentinel::updateSentinelAddrInAllMasters(AbstractFlyInstance* flyInstance) {
     /** 必须是sentinel */
     assert(flyInstance->getFlags() & FSI_SENTINEL);
 
@@ -390,13 +390,13 @@ int FlySentinel::updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInsta
 
     /** 遍历所有的master */
     for (auto item : this->masters) {
-        std::shared_ptr<AbstractFlyInstance> master = item.second;
+        AbstractFlyInstance* master = item.second;
 
         /**
          * 根据runid，从master的sentinels中找到与instance代表同一个sentinel的flyInstance,
          * 如果找不到，则继续处理下一个master
          **/
-        std::shared_ptr<AbstractFlyInstance> match =
+        AbstractFlyInstance* match =
                 getFlyInstanceByAddrAndRunID(master->getSentinels(), NULL, 0, flyInstance->getRunid().c_str());
         if (NULL == match) {
             continue;
@@ -421,14 +421,14 @@ int FlySentinel::updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInsta
 
     /** 如果进行了重配置，则要发送事件 */
     if (reconfigured > 0) {
-        sendEvent(LL_NOTICE, "+sentinel-address-update", flyInstance.get(), "%@ %d additional matching instances", reconfigured);
+        sendEvent(LL_NOTICE, "+sentinel-address-update", flyInstance, "%@ %d additional matching instances", reconfigured);
     }
 
     return reconfigured;
 }
 
-std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByName(const std::string &name) {
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::iterator iter = this->masters.find(name);
+AbstractFlyInstance* FlySentinel::getMasterByName(const std::string &name) {
+    std::map<std::string, AbstractFlyInstance*>::iterator iter = this->masters.find(name);
     if (iter != this->masters.end()) {
         return iter->second;
     }
@@ -436,11 +436,11 @@ std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByName(const std::str
     return NULL;
 }
 
-void FlySentinel::resetMaster(std::shared_ptr<AbstractFlyInstance> master, int flags) {
+void FlySentinel::resetMaster(AbstractFlyInstance* master, int flags) {
     assert(master->getFlags() & FSI_MASTER);
     master->reset(flags);
     if (flags & SENTINEL_GENERATE_EVENT) {
-        this->sendEvent(LL_WARNING, "+reset-master", master.get(), "%@");
+        this->sendEvent(LL_WARNING, "+reset-master", master, "%@");
     }
 }
 
@@ -457,12 +457,12 @@ int FlySentinel::resetMasterByPattern(const std::string &pattern, int flags) {
 }
 
 /** reset master and change it`s address */
-void FlySentinel::resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, const char *ip, int port) {
+void FlySentinel::resetMasterAndChangeAddress(AbstractFlyInstance* master, const char *ip, int port) {
     SentinelAddr *newaddr = new SentinelAddr(ip, port);
     SentinelAddr *oldaddr = master->getAddr();
 
     /** 收集所有slave的地址（被切换成master的地址除外）*/
-    const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves = master->getSlaves();
+    const std::map<std::string, AbstractFlyInstance*> slaves = master->getSlaves();
     std::vector<SentinelAddr*> slaveAddrs;
     for (auto item : slaves) {
         if (*(item.second->getAddr()) == *newaddr) {
@@ -483,9 +483,9 @@ void FlySentinel::resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstanc
 
     /** add slaves back */
     for (auto item : slaveAddrs) {
-        std::shared_ptr<AbstractFlyInstance> slave = std::shared_ptr<AbstractFlyInstance>(
-                new FlyInstance(NULL, FSI_SLAVE, item->getIp(), item->getPort(), master->getQuorum(), master));
-        this->sendEvent(LL_NOTICE, "+slave", slave.get(), "%@");
+        AbstractFlyInstance* slave =
+                new FlyInstance(NULL, FSI_SLAVE, item->getIp(), item->getPort(), master->getQuorum(), master);
+        this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
     }
     slaveAddrs.clear();
 
@@ -501,22 +501,22 @@ void FlySentinel::flushConfig() {
 }
 
 /** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
-void FlySentinel::propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master) {
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves = master->getSlaves();
+void FlySentinel::propagateDownAfterPeriod(AbstractFlyInstance* master) {
+    std::map<std::string, AbstractFlyInstance*> slaves = master->getSlaves();
     for (auto item : slaves) {
         item.second->setDownAfterPeriod(master->getDownAfterPeriod());
     }
 
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> sentinels = master->getSentinels();
+    std::map<std::string, AbstractFlyInstance*> sentinels = master->getSentinels();
     for (auto item : sentinels) {
         item.second->setDownAfterPeriod(master->getDownAfterPeriod());
     }
 }
 
-void FlySentinel::setClientName(redisAsyncContext *context, std::shared_ptr<AbstractFlyInstance> flyInstance, char *type) {
+void FlySentinel::setClientName(redisAsyncContext *context, AbstractFlyInstance* flyInstance, char *type) {
     char name[64];
     snprintf(name, sizeof(name), "sentinel-%.8s-%s", this->myid, type);
-    if (redisAsyncCommand(context, sentinelDiscardReplyCallback, flyInstance.get(), "%s SETNAME %s", "CLIENT", name)) {
+    if (redisAsyncCommand(context, sentinelDiscardReplyCallback, flyInstance, "%s SETNAME %s", "CLIENT", name)) {
         flyInstance->getLink()->increasePendingCommands();
     }
 }
@@ -528,7 +528,7 @@ void FlySentinel::setClientName(redisAsyncContext *context, std::shared_ptr<Abst
  *    3.没有处于SDOWN和ODOWN
  *    4.master在[nowt-2*SENTINEL_INFO_PERIOD, nowt]时间内接收过info信息
  **/
-bool FlySentinel::masterLookSane(std::shared_ptr<AbstractFlyInstance> master) {
+bool FlySentinel::masterLookSane(AbstractFlyInstance* master) {
     return (master->getFlags() & FSI_MASTER)
            && (master->getRoleReported() & FSI_MASTER)
            && (0 == master->getFlags() & (FSI_O_DOWN | FSI_S_DOWN))
@@ -547,7 +547,7 @@ void FlySentinel::deleteScriptJob(pid_t pid) {
     this->runningScripts--;
 }
 
-SentinelAddr* FlySentinel::getCurrentMasterAddress(std::shared_ptr<AbstractFlyInstance> master) {
+SentinelAddr* FlySentinel::getCurrentMasterAddress(AbstractFlyInstance* master) {
     if ((master->getFlags() & FSI_FAILOVER_IN_PROGRESS)
         && master->hasPromotedSlave()
         && master->getFailoverState() > SENTINEL_FAILOVER_STATE_RECONF_SLAVES) {
@@ -576,7 +576,51 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
                 this->sendEvent(LL_NOTICE, "+reboot", flyInstance, "%@");
                 flyInstance->setRunid(newRunid);
             }
+            continue;
         }
+
+        /** slave[num]:ip=[ip],port[port] */
+        if ((flyInstance->getFlags() & FSI_MASTER)
+            && line.length() >= 7
+            && 0 == line.compare("slave")
+            && isdigit(line[5])) {
+
+            /** ip */
+            char *ip = strstr((char*)line.c_str(), "ip=");
+            if (NULL == ip) {
+                continue;
+            }
+            char *comma = strstr(ip, ",");
+            if (NULL != comma) {
+                *comma = '\0';
+            }
+
+
+            /** port */
+            char *portstr = strstr(ip, "port=");
+            if (NULL == portstr) {
+                continue;
+            }
+            comma = strstr(portstr+5, ",");
+            if (NULL != comma) {
+                *comma = '\0';
+            }
+            int port = atoi(portstr);
+
+            /** 根据ip和port查找slave, 没有找到则创建 */
+            if (flyInstance->lookupSlave(ip, port)) {
+                std::string hostname = std::string(ip);
+                std::string name = "";
+                AbstractFlyInstance *slave = new FlyInstance(
+                        name, FSI_SLAVE, hostname, port, flyInstance->getQuorum(), flyInstance);
+                this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
+                this->flushConfig();
+            }
+
+            continue;
+        }
+
+        // todo:
     }
 }
 
@@ -964,7 +1008,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         return;
     }
 
-    std::shared_ptr<AbstractFlyInstance> master = this->getMasterByName(spiltStrs[4]);
+    AbstractFlyInstance* master = this->getMasterByName(spiltStrs[4]);
     if (NULL == master) {
         return;
     }
@@ -978,7 +1022,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
     uint64_t masterEpoch = strtoull(spiltStrs[7].c_str(), NULL, 10);
 
     /** 根据地址和runid去尝试找该sentinel */
-    std::shared_ptr<AbstractFlyInstance> sentinel = getFlyInstanceByAddrAndRunID(
+    AbstractFlyInstance* sentinel = getFlyInstanceByAddrAndRunID(
             master->getSentinels(), ip.c_str(), port, runid.c_str());
 
     /**
@@ -991,16 +1035,16 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         /** 删除拥有相同runid的sentinel */
         int removed = master->removeMatchingSentinel(runid);
         if (removed > 0) {
-            this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master.get(),
+            this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master,
                             "%@ ip %s port %d for %s", ip.c_str(), port, runid.c_str());
         } else {
             /**
              * 判断地址（ip/port）是否被占用，如果被占用了，则将占有的sentinel地址设置为无效
              **/
-             std::shared_ptr<AbstractFlyInstance> another =
+             AbstractFlyInstance* another =
                      getFlyInstanceByAddrAndRunID(master->getSentinels(), ip.c_str(), port, NULL);
              if (NULL != another) {
-                 this->sendEvent(LL_NOTICE, "+sentinel-invalid-addr", another.get(), "%@");
+                 this->sendEvent(LL_NOTICE, "+sentinel-invalid-addr", another, "%@");
                  another->setPort(0);
                  /** 向所有master的表示同一个sentinel的instance结构进行更新 */
                  updateSentinelAddrInAllMasters(another);
@@ -1008,11 +1052,11 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         }
 
         /** create new sentinel */
-        std::shared_ptr<AbstractFlyInstance> sentinel = std::shared_ptr<AbstractFlyInstance>(
-                new FlyInstance(runid, FSI_SENTINEL, ip, port, master->getQuorum(), master));
+        AbstractFlyInstance* sentinel =
+                new FlyInstance(runid, FSI_SENTINEL, ip, port, master->getQuorum(), master);
         if (NULL != sentinel) {
             if (removed > 0) {
-                this->sendEvent(LL_NOTICE, "+sentinel", sentinel.get(), "%@");
+                this->sendEvent(LL_NOTICE, "+sentinel", sentinel, "%@");
                 this->updateSentinelAddrInAllMasters(sentinel);
             }
             sentinel->setRunid(runid);
@@ -1025,7 +1069,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
     if (currentEpoch > this->currentEpoch) {
         this->currentEpoch = currentEpoch;
         this->flushConfig();
-        this->sendEvent(LL_WARNING, "+new-epoch", master.get(), "%llu", this->currentEpoch);
+        this->sendEvent(LL_WARNING, "+new-epoch", master, "%llu", this->currentEpoch);
     }
 
     /** 接收到更新的配置，则更新master info */
@@ -1034,8 +1078,8 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         /** master ip或者port发生了改变 */
         if (masterPort != master->getAddr()->getPort()
             || 0 != master->getAddr()->getIp().compare(masterIP)) {
-            this->sendEvent(LL_WARNING, "+config-update-from", sentinel.get(), "%@");
-            this->sendEvent(LL_WARNING, "+switch-master", master.get(), "%s %s %d %s %d",
+            this->sendEvent(LL_WARNING, "+config-update-from", sentinel, "%@");
+            this->sendEvent(LL_WARNING, "+switch-master", master, "%s %s %d %s %d",
                             master->getName().c_str(), master->getAddr()->getIp().c_str(),
                             master->getAddr()->getPort(), masterIP.c_str(), masterPort);
             SentinelAddr *oldAddr = master->getAddr();
@@ -1083,9 +1127,9 @@ void FlySentinel::receiveHelloMessage(redisAsyncContext *context, void *reply, v
  *  1.周知master配置更新
  *  2.周知该sentinel存货
  **/
-int FlySentinel::sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+int FlySentinel::sendHello(AbstractFlyInstance* flyInstance) {
     /** 这里的master不能用智能指针，因为this再放入一个智能指针里，有可能会被释放两次 */
-    std::shared_ptr<AbstractFlyInstance> master = (flyInstance->getFlags() & FSI_MASTER) ? flyInstance : flyInstance->getMaster();
+    AbstractFlyInstance* master = (flyInstance->getFlags() & FSI_MASTER) ? flyInstance : flyInstance->getMaster();
     SentinelAddr *masterAddr = master->getAddr();
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 
@@ -1124,9 +1168,9 @@ int FlySentinel::sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance) {
     return 1;
 }
 
-bool FlySentinel::sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+bool FlySentinel::sendPing(AbstractFlyInstance* flyInstance) {
     int retval = redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(),
-            sentinelPingReplyCallback, flyInstance.get(), "%s", "PING");
+            sentinelPingReplyCallback, flyInstance, "%s", "PING");
     if (retval > 0) {
         flyInstance->getLink()->increasePendingCommands();
         flyInstance->getLink()->setLastPingTime(miscTool->mstime());
@@ -1140,7 +1184,7 @@ bool FlySentinel::sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance) {
     }
 }
 
-void FlySentinel::sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyInstance) {
+void FlySentinel::sendPeriodicCommands(AbstractFlyInstance* flyInstance) {
     /** 如果连接已经断开了，直接返回 */
     if (flyInstance->getLink()->isDisconnected()) {
         return;
@@ -1170,7 +1214,7 @@ void FlySentinel::sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyI
     if ((0 == flyInstance->getFlags() & FSI_SENTINEL)
         && (0 == flyInstance->getInfoRefresh() || nowt - flyInstance->getInfoRefresh() > infoPeriod)) {
         int retval = redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(),
-                                       sentinelInfoReplyCallback, flyInstance.get(), "%s", "INFO");
+                                       sentinelInfoReplyCallback, flyInstance, "%s", "INFO");
         if (retval >= 0) {
             flyInstance->getLink()->increasePendingCommands();
         }
@@ -1198,7 +1242,7 @@ void FlySentinel::sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyI
 }
 
 void FlySentinel::addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
-                                         std::map<std::string, std::shared_ptr<AbstractFlyInstance>> instanceMap) {
+                                         std::map<std::string, AbstractFlyInstance*> instanceMap) {
     for (auto iter : instanceMap) {
         iter.second->addReplySentinelRedisInstance(flyClient);
     }
@@ -1206,9 +1250,9 @@ void FlySentinel::addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyC
     return;
 }
 
-std::shared_ptr<AbstractFlyInstance> FlySentinel::getMasterByNameOrReplyError(
+AbstractFlyInstance* FlySentinel::getMasterByNameOrReplyError(
         std::shared_ptr<AbstractFlyClient> flyClient, std::string &str) {
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::iterator iter = this->masters.find(str);
+    std::map<std::string, AbstractFlyInstance*>::iterator iter = this->masters.find(str);
     if (iter != this->masters.end()) {
         return iter->second;
     } else {

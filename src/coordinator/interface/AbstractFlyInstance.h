@@ -21,9 +21,9 @@ public:
     virtual void setAddr(SentinelAddr *addr) = 0;
     virtual void dupAddr(SentinelAddr *addr) = 0;
     virtual void setPort(int port) = 0;
-    virtual std::shared_ptr<AbstractFlyInstance> getMaster() const = 0;
+    virtual AbstractFlyInstance* getMaster() const = 0;
     virtual bool haveMaster() const = 0;
-    virtual void setMaster(std::shared_ptr<AbstractFlyInstance> master) = 0;
+    virtual void setMaster(AbstractFlyInstance* master) = 0;
     virtual uint32_t getQuorum() const = 0;
     virtual void setQuorum(uint32_t quorum) = 0;
     virtual char *getNotificationScript() const = 0;
@@ -35,9 +35,9 @@ public:
     virtual void releaseLink() = 0;
     virtual const std::string &getRunid() const = 0;
     virtual void setRunid(const std::string &runid) = 0;
-    virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSentinels() const = 0;
-    virtual const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSlaves() const = 0;
-    virtual std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port) = 0;
+    virtual const std::map<std::string, AbstractFlyInstance*> &getSentinels() const = 0;
+    virtual const std::map<std::string, AbstractFlyInstance*> &getSlaves() const = 0;
+    virtual AbstractFlyInstance* lookupSlave(char *ip, int port) = 0;
     virtual int removeMatchingSentinel(const std::string &runid) = 0;
     virtual void reset(int flags) = 0;
     virtual bool noDownFor(uint64_t ms) = 0;
@@ -49,8 +49,8 @@ public:
     virtual void setRoleReportedTime(uint64_t roleReportedTime) = 0;
     virtual uint64_t getInfoRefresh() const = 0;
     virtual void setInfoRefresh(uint64_t infoRefresh) = 0;
-    virtual const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const = 0;
-    virtual void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave) = 0;
+    virtual AbstractFlyInstance* getPromotedSlave() const = 0;
+    virtual void setPromotedSlave(AbstractFlyInstance* promotedSlave) = 0;
     virtual bool hasPromotedSlave() const = 0;
     virtual FailoverState getFailoverState() const = 0;
     virtual void setFailoverState(FailoverState failoverState) = 0;

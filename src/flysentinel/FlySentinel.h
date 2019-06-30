@@ -26,10 +26,10 @@ public:
     ~FlySentinel();
     void sendEvent(int level, char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...);
     void generateInitMonitorEvents();
-    int tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyInstance);
+    int tryConnectionSharing(AbstractFlyInstance* flyInstance);
     void flushConfig();
     /** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
-    void propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master);
+    void propagateDownAfterPeriod(AbstractFlyInstance* master);
     void refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info);
     const std::string &getAnnounceIP() const;
     void setAnnounceIP(const std::string &announceIP);
@@ -41,9 +41,9 @@ public:
     void processHelloMessage(std::string &hello);
     void receiveHelloMessage(redisAsyncContext *context, void *reply, void *privdata);
     /** 通过pub/sub向flyInstance发送hello message，然后改flyInstance可以将该消息广播出去 */
-    int sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance);
-    bool sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance);
-    void sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyInstance);
+    int sendHello(AbstractFlyInstance* flyInstance);
+    bool sendPing(AbstractFlyInstance* flyInstance);
+    void sendPeriodicCommands(AbstractFlyInstance* flyInstance);
 
     /************************************************************************************************
      *******************                general server interfaces                   *****************
@@ -82,7 +82,7 @@ public:
 
     /** 将一组instance当前状态组成reply, 发送给flyClient */
     void addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
-                                std::map<std::string, std::shared_ptr<AbstractFlyInstance>> instanceMap);
+                                std::map<std::string, AbstractFlyInstance*> instanceMap);
 
 private:
     /************************************************************************************************
@@ -94,23 +94,23 @@ private:
     void collectTerminatedScripts();
     void deleteScriptJob(pid_t pid);
     void killTimedoutScripts();
-    void callClientReconfScript(std::shared_ptr<AbstractFlyInstance> master, int role,
+    void callClientReconfScript(AbstractFlyInstance* master, int role,
                                 char *state, SentinelAddr *from, SentinelAddr *to);
-    std::shared_ptr<AbstractFlyInstance> getFlyInstanceByAddrAndRunID(
-            const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &instances,
+    AbstractFlyInstance* getFlyInstanceByAddrAndRunID(
+            const std::map<std::string, AbstractFlyInstance*> &instances,
             const char *ip,
             int port,
             const char *runid);
-    int updateSentinelAddrInAllMasters(std::shared_ptr<AbstractFlyInstance> instance);
-    std::shared_ptr<AbstractFlyInstance> getMasterByName(const std::string &name);
-    std::shared_ptr<AbstractFlyInstance> getMasterByNameOrReplyError(
+    int updateSentinelAddrInAllMasters(AbstractFlyInstance* instance);
+    AbstractFlyInstance* getMasterByName(const std::string &name);
+    AbstractFlyInstance* getMasterByNameOrReplyError(
             std::shared_ptr<AbstractFlyClient> flyClient, std::string &str);
-    void resetMaster(std::shared_ptr<AbstractFlyInstance> master, int flags);
+    void resetMaster(AbstractFlyInstance* master, int flags);
     int resetMasterByPattern(const std::string &pattern, int flags);
-    void resetMasterAndChangeAddress(std::shared_ptr<AbstractFlyInstance> master, const char *ip, int port);
-    void setClientName(redisAsyncContext *context, std::shared_ptr<AbstractFlyInstance> flyInstance, char *type);
-    bool masterLookSane(std::shared_ptr<AbstractFlyInstance> master);
-    SentinelAddr* getCurrentMasterAddress(std::shared_ptr<AbstractFlyInstance> master);
+    void resetMasterAndChangeAddress(AbstractFlyInstance* master, const char *ip, int port);
+    void setClientName(redisAsyncContext *context, AbstractFlyInstance* flyInstance, char *type);
+    bool masterLookSane(AbstractFlyInstance* master);
+    SentinelAddr* getCurrentMasterAddress(AbstractFlyInstance* master);
 
     /************************************************************************************************
      *******************             general server private functions               *****************
@@ -127,7 +127,7 @@ private:
      ************************************************************************************************/
     char myid[CONFIG_RUN_ID_SIZE + 1];
     uint64_t currentEpoch = 0;
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> masters;            // key-name
+    std::map<std::string, AbstractFlyInstance*> masters;            // key-name
     bool tilt = false;                 /** tilt mode */
     uint64_t tiltStartTime = 0;
     uint64_t previousTime = miscTool->mstime();

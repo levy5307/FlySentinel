@@ -13,7 +13,7 @@
 extern AbstractCoordinator *coordinator;
 
 FlyInstance::FlyInstance(const std::string &name, int flags, const std::string &hostname,
-                         int port, int quorum, std::shared_ptr<AbstractFlyInstance> master) {
+                         int port, uint32_t quorum, AbstractFlyInstance* master) {
     uint64_t nowt = miscTool->mstime();
     this->name = name;
     this->flags = flags;
@@ -77,7 +77,7 @@ void FlyInstance::setPort(int port) {
     this->addr->setPort(port);
 }
 
-std::shared_ptr<AbstractFlyInstance> FlyInstance::getMaster() const {
+AbstractFlyInstance* FlyInstance::getMaster() const {
     return this->master;
 }
 
@@ -85,7 +85,7 @@ bool FlyInstance::haveMaster() const {
     return 0 != this->flags & FSI_MASTER;
 }
 
-void FlyInstance::setMaster(std::shared_ptr<AbstractFlyInstance> master) {
+void FlyInstance::setMaster(AbstractFlyInstance* master) {
     this->master = master;
 }
 
@@ -147,17 +147,17 @@ void FlyInstance::setRunid(const std::string &runid) {
     this->runid = runid;
 }
 
-const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &FlyInstance::getSentinels() const {
+const std::map<std::string, AbstractFlyInstance*> &FlyInstance::getSentinels() const {
     return sentinels;
 }
 
-const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &FlyInstance::getSlaves() const {
+const std::map<std::string, AbstractFlyInstance*> &FlyInstance::getSlaves() const {
     return slaves;
 }
 
-std::shared_ptr<AbstractFlyInstance> FlyInstance::lookupSlave(char *ip, int port) {
+AbstractFlyInstance* FlyInstance::lookupSlave(char *ip, int port) {
     std::string addr = miscTool->formatAddr(ip, port);
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::const_iterator citer = this->slaves.find(addr);
+    std::map<std::string, AbstractFlyInstance*>::const_iterator citer = this->slaves.find(addr);
     if (citer != this->slaves.end()) {
         return citer->second;
     }
@@ -170,7 +170,7 @@ int FlyInstance::removeMatchingSentinel(const std::string &runid) {
     int removed = 0;
 
     /** 遍历查找并删除 */
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>>::iterator iter = this->sentinels.begin();
+    std::map<std::string, AbstractFlyInstance*>::iterator iter = this->sentinels.begin();
     for (iter; iter != this->sentinels.end(); iter++) {
         if (0 == iter->second->getRunid().compare(runid)) {
             iter = this->sentinels.erase(iter);
@@ -238,11 +238,11 @@ void FlyInstance::setInfoRefresh(uint64_t infoRefresh) {
 }
 
 
-const std::shared_ptr<AbstractFlyInstance> &FlyInstance::getPromotedSlave() const {
+AbstractFlyInstance* FlyInstance::getPromotedSlave() const {
     return promotedSlave;
 }
 
-void FlyInstance::setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave) {
+void FlyInstance::setPromotedSlave(AbstractFlyInstance* promotedSlave) {
     this->promotedSlave = promotedSlave;
 }
 

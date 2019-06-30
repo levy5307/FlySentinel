@@ -17,7 +17,7 @@ void sentinelPingReplyCallback(redisAsyncContext *context, void *reply, void *pr
 class FlyInstance : public AbstractFlyInstance {
 public:
     FlyInstance(const std::string &name, int flags, const std::string &hostname,
-                int port, int quorum, std::shared_ptr<AbstractFlyInstance> master);
+                int port, uint32_t quorum, AbstractFlyInstance* master);
     ~FlyInstance();
     int getFlags() const;
     void setFlags(int flags);
@@ -27,9 +27,9 @@ public:
     void setAddr(SentinelAddr *addr);
     void dupAddr(SentinelAddr *addr);
     void setPort(int port);
-    std::shared_ptr<AbstractFlyInstance> getMaster() const;
+    AbstractFlyInstance* getMaster() const;
     bool haveMaster() const;
-    void setMaster(std::shared_ptr<AbstractFlyInstance> master);
+    void setMaster(AbstractFlyInstance* master);
     uint32_t getQuorum() const;
     void setQuorum(uint32_t quorum);
     char *getNotificationScript() const;
@@ -41,9 +41,9 @@ public:
     void releaseLink();
     const std::string &getRunid() const;
     void setRunid(const std::string &runid);
-    const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSentinels() const;
-    const std::map<std::string, std::shared_ptr<AbstractFlyInstance>> &getSlaves() const;
-    std::shared_ptr<AbstractFlyInstance> lookupSlave(char *ip, int port);
+    const std::map<std::string, AbstractFlyInstance*> &getSentinels() const;
+    const std::map<std::string, AbstractFlyInstance*> &getSlaves() const;
+    AbstractFlyInstance* lookupSlave(char *ip, int port);
     int removeMatchingSentinel(const std::string &runid);
     void reset(int flags);
     bool noDownFor(uint64_t ms);
@@ -55,8 +55,8 @@ public:
     void setRoleReportedTime(uint64_t roleReportedTime);
     uint64_t getInfoRefresh() const;
     void setInfoRefresh(uint64_t infoRefresh);
-    const std::shared_ptr<AbstractFlyInstance> &getPromotedSlave() const;
-    void setPromotedSlave(const std::shared_ptr<AbstractFlyInstance> &promotedSlave);
+    AbstractFlyInstance* getPromotedSlave() const;
+    void setPromotedSlave(AbstractFlyInstance* promotedSlave);
     bool hasPromotedSlave() const;
     FailoverState getFailoverState() const;
     void setFailoverState(FailoverState failoverState);
@@ -84,18 +84,18 @@ private:
     uint64_t lastPubTime;         /** 最后一次向Pub/Sub发送hello的时间 */
     uint64_t lastHelloTime;       /** 只有当FSI_SENTINEL被设置时才会使用，表示最近一次从Pub/Sub接收到hello消息的时间 */
     SentinelAddr *addr = NULL;
-    std::shared_ptr<AbstractFlyInstance> master = NULL;
+    AbstractFlyInstance* master = NULL;
     uint32_t quorum;                                /** 对于判定flydb失败，需要的sentinel票数 */
     char *notificationScript = NULL;
     char *clientReconfigScript = NULL;
     std::shared_ptr<AbstractInstanceLink> link;     /** 与instance的连接，sentinel之间共享 */
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> sentinels;    /** key-ip:port. Other sentinels monitoring the same master. */
-    std::map<std::string, std::shared_ptr<AbstractFlyInstance>> slaves;       /** key-ip:port. Slaves for this master instance. */
+    std::map<std::string, AbstractFlyInstance*> sentinels;    /** key-ip:port. Other sentinels monitoring the same master. */
+    std::map<std::string, AbstractFlyInstance*> slaves;       /** key-ip:port. Slaves for this master instance. */
     uint64_t sDownSinceTime = 0;                        /** Subjectively down since time. */
     uint64_t oDownSinceTime = 0;                        /** Objectively down since time. */
     uint64_t downAfterPeriod = 0;                       /** down after this period */
     uint64_t masterLinkDownTime;                        /** Slave replication link down time. */
-    std::shared_ptr<AbstractFlyInstance> promotedSlave = NULL;
+    AbstractFlyInstance* promotedSlave = NULL;
     FailoverState failoverState = SENTINEL_FAILOVER_STATE_NONE;
     int roleReported;
     uint64_t roleReportedTime = 0;

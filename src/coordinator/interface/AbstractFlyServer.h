@@ -19,10 +19,10 @@ public:
      **/
     virtual void sendEvent(int level, char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...) = 0;
     virtual void generateInitMonitorEvents() = 0;
-    virtual int tryConnectionSharing(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
+    virtual int tryConnectionSharing(AbstractFlyInstance* flyInstance) = 0;
     virtual void flushConfig() = 0;
     /** 将master的downAfterPeriod设置给与该master相连的所有sentinels和slaves */
-    virtual void propagateDownAfterPeriod(std::shared_ptr<AbstractFlyInstance> master) = 0;
+    virtual void propagateDownAfterPeriod(AbstractFlyInstance* master) = 0;
     virtual void refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) = 0;
     virtual const std::string &getAnnounceIP() const = 0;
     virtual void setAnnounceIP(const std::string &announceIP) = 0;
@@ -32,9 +32,9 @@ public:
     virtual uint64_t getCurrentEpoch() const = 0;
     virtual void processHelloMessage(std::string &hello) = 0;
     virtual void receiveHelloMessage(redisAsyncContext *context, void *reply, void *privdata) = 0;
-    virtual int sendHello(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
-    virtual bool sendPing(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
-    virtual void sendPeriodicCommands(std::shared_ptr<AbstractFlyInstance> flyInstance) = 0;
+    virtual int sendHello(AbstractFlyInstance* flyInstance) = 0;
+    virtual bool sendPing(AbstractFlyInstance* flyInstance) = 0;
+    virtual void sendPeriodicCommands(AbstractFlyInstance* flyInstance) = 0;
 
     /**
      * general server interface
@@ -72,7 +72,7 @@ public:
     virtual uint64_t getCronLoops() const = 0;
 
     virtual void addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,
-                                        std::map<std::string, std::shared_ptr<AbstractFlyInstance>> instanceMap) = 0;
+                                        std::map<std::string, AbstractFlyInstance*> instanceMap) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYSERVER_H
