@@ -643,6 +643,10 @@ void FlySentinel::parseSlaveRoleParams(const std::string &line, AbstractFlyInsta
     return;
 }
 
+void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance, int role) {
+
+}
+
 void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) {
     if (NULL == flyInstance) {
         return;
@@ -711,6 +715,16 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
                 "%@ new reported role is %s",
                 role == FSI_MASTER ? "master" : "slave",
                 flyInstance->getFlags() & FSI_MASTER ? "master" : "slave");
+    }
+
+    /** tilt mode */
+    if (this->tilt) {
+        return;
+    }
+
+    /** 处理角色从SLAVE-->MASTER变换的情况 */
+    if ((flyInstance->getFlags() & FSI_SLAVE) && FSI_MASTER == role) {
+        this->dealWithRoleFromSlaveToMaster(flyInstance, role);
     }
 }
 
