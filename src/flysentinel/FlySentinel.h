@@ -115,6 +115,7 @@ private:
     void parseSlaveIPAndPort(const std::string &line, AbstractFlyInstance *flyInstance);
     void parseSlaveRoleParams(const std::string &line, AbstractFlyInstance *flyInstance);
     void dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance, int role);
+    void dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstance);
 
     /************************************************************************************************
      *******************             general server private functions               *****************

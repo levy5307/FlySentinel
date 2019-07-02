@@ -647,6 +647,10 @@ void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance
 
 }
 
+void FlySentinel::dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstance) {
+
+}
+
 void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) {
     if (NULL == flyInstance) {
         return;
@@ -725,6 +729,14 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
     /** 处理角色从SLAVE-->MASTER变换的情况 */
     if ((flyInstance->getFlags() & FSI_SLAVE) && FSI_MASTER == role) {
         this->dealWithRoleFromSlaveToMaster(flyInstance, role);
+    }
+
+    /** 处理slave向一个完全不同的master地址进行replication的情况 */
+    if ((flyInstance->getFlags() & FSI_SLAVE)
+        && FSI_SLAVE == role
+        && (flyInstance->getSlaveMasterPort() != flyInstance->getMaster()->getAddr()->getPort()
+            || 0 != flyInstance->getSlaveMasterHost().compare(flyInstance->getMaster()->getAddr()->getIp()))) {
+        this->dealWithReplFromDiffMasterAddr(flyInstance);
     }
 }
 
