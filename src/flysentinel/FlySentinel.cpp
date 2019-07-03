@@ -644,7 +644,11 @@ void FlySentinel::parseSlaveRoleParams(const std::string &line, AbstractFlyInsta
 }
 
 void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance, int role) {
+    if ((flyInstance->getFlags() & FSI_PROMOTED) &&
+        (flyInstance->getMaster()->getFlags() & FSI_FAILOVER_IN_PROGRESS)
+        && (flyInstance->getMaster()->getFailoverState() == SENTINEL_FAILOVER_STATE_WAIT_PROMOTION)) {
 
+    }
 }
 
 void FlySentinel::dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstance) {

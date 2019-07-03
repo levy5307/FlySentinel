@@ -85,6 +85,7 @@ public:
     void setSlaveReplOffset(uint64_t slaveReplOffset);
     uint64_t getSlaveConfChangeTime() const;
     void setSlaveConfChangeTime(uint64_t slaveConfChangeTime);
+    bool isPromotedSlave();
 
 private:
     FlyInstance(){};

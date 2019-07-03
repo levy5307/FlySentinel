@@ -79,6 +79,7 @@ public:
     virtual void setSlaveReplOffset(uint64_t slaveReplOffset) = 0;
     virtual uint64_t getSlaveConfChangeTime() const = 0;
     virtual void setSlaveConfChangeTime(uint64_t slaveConfChangeTime) = 0;
+    virtual bool isPromotedSlave() = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

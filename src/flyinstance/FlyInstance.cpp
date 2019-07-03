@@ -460,6 +460,12 @@ void FlyInstance::setSlaveConfChangeTime(uint64_t slaveConfChangeTime) {
     this->slaveConfChangeTime = slaveConfChangeTime;
 }
 
+bool FlyInstance::isPromotedSlave() {
+   return (this->getFlags() & FSI_PROMOTED)
+          && (this->getMaster()->getFlags() & FSI_FAILOVER_IN_PROGRESS)
+          && (this->getMaster()->getFailoverState() == SENTINEL_FAILOVER_STATE_WAIT_PROMOTION);
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {
