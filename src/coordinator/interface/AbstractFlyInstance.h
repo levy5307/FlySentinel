@@ -80,6 +80,9 @@ public:
     virtual uint64_t getSlaveConfChangeTime() const = 0;
     virtual void setSlaveConfChangeTime(uint64_t slaveConfChangeTime) = 0;
     virtual bool isPromotedSlave() = 0;
+    virtual uint64_t getFailoverEpoch() const = 0;
+    virtual void setFailoverEpoch(uint64_t failoverEpoch) = 0;
+    virtual void forceHelloUpdate() = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

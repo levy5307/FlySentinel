@@ -256,6 +256,7 @@ FailoverState FlyInstance::getFailoverState() const {
 
 void FlyInstance::setFailoverState(FailoverState failoverState) {
     this->failoverState = failoverState;
+    this->failoverStateChangeTime = miscTool->mstime();
 }
 
 void FlyInstance::clearInfo() {
@@ -464,6 +465,18 @@ bool FlyInstance::isPromotedSlave() {
    return (this->getFlags() & FSI_PROMOTED)
           && (this->getMaster()->getFlags() & FSI_FAILOVER_IN_PROGRESS)
           && (this->getMaster()->getFailoverState() == SENTINEL_FAILOVER_STATE_WAIT_PROMOTION);
+}
+
+uint64_t FlyInstance::getFailoverEpoch() const {
+    return this->failoverEpoch;
+}
+
+void FlyInstance::setFailoverEpoch(uint64_t failoverEpoch) {
+    this->failoverEpoch = failoverEpoch;
+}
+
+void FlyInstance::forceHelloUpdate() {
+
 }
 
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {

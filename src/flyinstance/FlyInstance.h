@@ -86,6 +86,9 @@ public:
     uint64_t getSlaveConfChangeTime() const;
     void setSlaveConfChangeTime(uint64_t slaveConfChangeTime);
     bool isPromotedSlave();
+    uint64_t getFailoverEpoch() const;
+    void setFailoverEpoch(uint64_t failoverEpoch);
+    void forceHelloUpdate();
 
 private:
     FlyInstance(){};
@@ -114,7 +117,14 @@ private:
     uint64_t downAfterPeriod = 0;                       /** down after this period */
     uint64_t masterLinkDownTime;                        /** Slave replication link down time. */
     AbstractFlyInstance* promotedSlave = NULL;
+
+    /**
+     * failover
+     **/
     FailoverState failoverState = SENTINEL_FAILOVER_STATE_NONE;
+    uint64_t failoverStateChangeTime = 0;
+    uint64_t failoverEpoch;                             /** 当前failover时的epoch */
+
     int roleReported;
     uint64_t roleReportedTime = 0;
     uint64_t infoRefresh = 0;

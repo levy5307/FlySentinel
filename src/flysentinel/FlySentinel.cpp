@@ -644,9 +644,21 @@ void FlySentinel::parseSlaveRoleParams(const std::string &line, AbstractFlyInsta
 }
 
 void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance, int role) {
-    if ((flyInstance->getFlags() & FSI_PROMOTED) &&
-        (flyInstance->getMaster()->getFlags() & FSI_FAILOVER_IN_PROGRESS)
-        && (flyInstance->getMaster()->getFailoverState() == SENTINEL_FAILOVER_STATE_WAIT_PROMOTION)) {
+    if (flyInstance->isPromotedSlave()) {
+        /** 更改master的epoch */
+        flyInstance->getMaster()->setConfigEpoch(flyInstance->getMaster()->getFailoverEpoch());
+        /** 设置master的状态为slaveof new master */
+        flyInstance->getMaster()->setFailoverState(SENTINEL_FAILOVER_STATE_RECONF_SLAVES);
+        /** 刷新配置 */
+        this->flushConfig();
+        /** send events */
+        this->sendEvent(LL_WARNING, "+promoted-slave", flyInstance, "%@");
+        this->sendEvent(LL_WARNING, "+failover-state-reconf-slaves", flyInstance->getMaster(), "%@");
+        /** 客户端重配置脚本 */
+        this->callClientReconfScript(flyInstance->getMaster(), SENTINEL_LEADER, "start",
+                                     flyInstance->getMaster()->getAddr(), flyInstance->getAddr());
+        flyInstance->getMaster()->forceHelloUpdate();
+    } else {
 
     }
 }
