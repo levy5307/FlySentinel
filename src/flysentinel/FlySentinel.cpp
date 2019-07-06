@@ -659,6 +659,13 @@ void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance
                                      flyInstance->getMaster()->getAddr(), flyInstance->getAddr());
         flyInstance->getMaster()->forceHelloUpdate();
     } else {
+        uint64_t waitTime = SENTINEL_PUBLISH_PERIOD * 4;
+        if (!(flyInstance->getFlags() & FSI_PROMOTED)
+            && this->masterLookSane(flyInstance->getMaster())
+            && flyInstance->noDownFor(waitTime)
+            && miscTool->mstime() - flyInstance->getRoleReported() > waitTime) {
+            // todo : send slaveof
+        }
 
     }
 }
