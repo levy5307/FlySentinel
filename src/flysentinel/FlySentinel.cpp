@@ -1165,20 +1165,21 @@ void FlySentinel::processHelloMessage(std::string &hello) {
             master->getSentinels(), ip.c_str(), port, runid.c_str());
 
     /**
-     * 如果sentinel为null, 即根据地址和runid没有找到该sentinel, 则:
-     *    1.删除占有runid的sentinel
-     *    2.如果地址被占用，则设置占有该地址的sentinel的地址为无效
-     *    3.创建一个sentinel
+     * 如果sentinel为null, 即根据地址和runid没有找到该sentinel, 则有两种情况
+     *    1.可能是某个哨兵信息发生了变化
+     *      1> 哨兵重启导致runid发生了变化
+     *      2> 网络拓扑发生变化，ip/port发生了变化
+     *    2.是发现了一个新哨兵
      **/
     if (NULL == sentinel) {
-        /** 删除拥有相同runid的sentinel */
+        /** 网络ip/port发生了变化, 则根据runid去删除sentinel */
         int removed = master->removeMatchingSentinel(runid);
-        if (removed > 0) {
+        if (removed > 0) { /** 如果已经删除了则发送地址变化event */
             this->sendEvent(LL_NOTICE, "+sentinel-address-switch", master,
                             "%@ ip %s port %d for %s", ip.c_str(), port, runid.c_str());
-        } else {
+        } else {    /** 如果根据runid没有能够删除掉 */
             /**
-             * 判断地址（ip/port）是否被占用，如果被占用了，则将占有的sentinel地址设置为无效
+             * runid发生了变化，根据ip/port去查找sentinel，并将原先实例port设置为无效，并且发送地址无效event
              **/
              AbstractFlyInstance* another =
                      getFlyInstanceByAddrAndRunID(master->getSentinels(), ip.c_str(), port, NULL);
@@ -1214,7 +1215,7 @@ void FlySentinel::processHelloMessage(std::string &hello) {
     /** 接收到更新的配置，则更新master info */
     if (NULL != sentinel && master->getConfigEpoch() < masterEpoch) {
         master->setConfigEpoch(masterEpoch);
-        /** master ip或者port发生了改变 */
+        /** master ip或者port发生了改变, 则说明发生了故障转移，某slave变成了master */
         if (masterPort != master->getAddr()->getPort()
             || 0 != master->getAddr()->getIp().compare(masterIP)) {
             this->sendEvent(LL_WARNING, "+config-update-from", sentinel, "%@");
