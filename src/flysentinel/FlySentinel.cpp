@@ -1151,6 +1151,7 @@ uint64_t FlySentinel::getCurrentEpoch() const {
 }
 
 /**
+ * hello信息的用途：sentinel通过pub/sub发送自己及主节点信息(hello message)给flyInstance(主/从/哨兵)，然后该flyInstance可以将该消息广播出去
  * hello message format:
  *   "{0-sentinel ip},{1-sentinel port},{2-runid},{3-current epoch},
  *   {4-master name},{5-master ip},{6-master port},{7-master epoch}"
@@ -1277,10 +1278,10 @@ void FlySentinel::receiveHelloMessage(redisAsyncContext *context, void *reply, v
 }
 
 /**
- * 通过pub/sub向flyInstance发送hello message，然后改flyInstance可以将该消息广播出去,
+ * sentinel通过pub/sub发送自己及主节点信息(hello message)给flyInstance(主/从/哨兵)，然后该flyInstance可以将该消息广播出去
  * 发送hello消息可以达到两个目的：
  *  1.周知master配置更新
- *  2.周知该sentinel存货
+ *  2.周知该sentinel存活
  **/
 int FlySentinel::sendHello(AbstractFlyInstance* flyInstance) {
     /** 这里的master不能用智能指针，因为this再放入一个智能指针里，有可能会被释放两次 */

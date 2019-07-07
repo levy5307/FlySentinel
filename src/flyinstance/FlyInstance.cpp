@@ -183,10 +183,23 @@ int FlyInstance::removeMatchingSentinel(const std::string &runid) {
 
 void FlyInstance::reset(int flags) {
     uint64_t nowt = miscTool->mstime();
+
+    /** clear slaves */
+    std::map<std::string, AbstractFlyInstance*>::iterator iter = this->slaves.begin();
+    for (iter; iter != this->slaves.end(); iter++) {
+        delete iter->second;
+    }
     this->slaves.clear();
+
+    /** clear sentinels */
     if (flags & SENTINEL_RESET_SENTINELS) {
+        std::map<std::string, AbstractFlyInstance*>::iterator iter = this->sentinels.begin();
+        for (iter; iter != this->sentinels.end(); iter++) {
+            delete iter->second;
+        }
         this->sentinels.clear();
     }
+
     this->flags &= FSI_MASTER | FSI_SLAVE | FSI_SENTINEL;
     this->runid.clear();
     this->master = NULL;
