@@ -71,6 +71,21 @@ FlySentinel::~FlySentinel() {
     this->scriptsQueue.clear();
 }
 
+AbstractFlyInstance* FlySentinel::createFlyInstance(const std::string &name, int flags, const std::string &hostname,
+                                                    int port, uint32_t quorum, AbstractFlyInstance* master) {
+    AbstractFlyInstance *flyInstance = new FlyInstance(name, flags, hostname, port, quorum, master);
+
+    if (flags & FSI_MASTER) {
+        this->masters[name] = flyInstance;
+    } else if (flags & FSI_SLAVE) {
+        master->addSlave(name, flyInstance);
+    } else if (flags & FSI_SENTINEL) {
+        master->addSentinel(name, flyInstance);
+    }
+
+    return flyInstance;
+}
+
 /**
  * 发送事件，主要做了三件事：
  *   1.打印log
@@ -483,8 +498,8 @@ void FlySentinel::resetMasterAndChangeAddress(AbstractFlyInstance* master, const
 
     /** add slaves back */
     for (auto item : slaveAddrs) {
-        AbstractFlyInstance* slave =
-                new FlyInstance(NULL, FSI_SLAVE, item->getIp(), item->getPort(), master->getQuorum(), master);
+        AbstractFlyInstance* slave = createFlyInstance(NULL, FSI_SLAVE,
+                item->getIp(), item->getPort(), master->getQuorum(), master);
         this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
     }
     slaveAddrs.clear();
@@ -593,8 +608,8 @@ void FlySentinel::parseSlaveIPAndPort(const std::string &line, AbstractFlyInstan
     if (flyInstance->lookupSlave(ip, port)) {
         std::string hostname = std::string(ip);
         std::string name = "";
-        AbstractFlyInstance *slave = new FlyInstance(
-                name, FSI_SLAVE, hostname, port, flyInstance->getQuorum(), flyInstance);
+        AbstractFlyInstance *slave = createFlyInstance(name, FSI_SLAVE,
+                hostname, port, flyInstance->getQuorum(), flyInstance);
         this->sendEvent(LL_NOTICE, "+slave", slave, "%@");
         this->flushConfig();
     }
@@ -1192,8 +1207,8 @@ void FlySentinel::processHelloMessage(std::string &hello) {
         }
 
         /** create new sentinel */
-        AbstractFlyInstance* sentinel =
-                new FlyInstance(runid, FSI_SENTINEL, ip, port, master->getQuorum(), master);
+        AbstractFlyInstance* sentinel = createFlyInstance(
+                runid, FSI_SENTINEL, ip, port, master->getQuorum(), master);
         if (NULL != sentinel) {
             if (removed > 0) {
                 this->sendEvent(LL_NOTICE, "+sentinel", sentinel, "%@");

@@ -89,6 +89,8 @@ public:
     uint64_t getFailoverEpoch() const;
     void setFailoverEpoch(uint64_t failoverEpoch);
     void forceHelloUpdate();
+    bool addSlave(const std::string &name, AbstractFlyInstance *slave);
+    bool addSentinel(const std::string &name, AbstractFlyInstance *sentinel);
 
 private:
     FlyInstance(){};

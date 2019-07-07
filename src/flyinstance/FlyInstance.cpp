@@ -479,6 +479,24 @@ void FlyInstance::forceHelloUpdate() {
 
 }
 
+bool FlyInstance::addSlave(const std::string &name, AbstractFlyInstance *slave) {
+    if (this->slaves.find(name) != this->slaves.end()) {
+        return false;
+    }
+
+    this->slaves[name] = slave;
+    return true;
+}
+
+bool FlyInstance::addSentinel(const std::string &name, AbstractFlyInstance *sentinel) {
+    if (this->sentinels.find(name) != this->sentinels.end()) {
+        return false;
+    }
+
+    this->sentinels[name] = sentinel;
+    return true;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {

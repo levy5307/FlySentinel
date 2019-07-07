@@ -17,6 +17,9 @@ public:
     /**
      * sentinel server interface
      **/
+    virtual AbstractFlyInstance* createFlyInstance(
+            const std::string &name, int flags, const std::string &hostname,
+            int port, uint32_t quorum, AbstractFlyInstance* master) = 0;
     virtual void sendEvent(int level, const char *type, AbstractFlyInstance *flyInstance, const char *fmt, ...) = 0;
     virtual void generateInitMonitorEvents() = 0;
     virtual int tryConnectionSharing(AbstractFlyInstance* flyInstance) = 0;
