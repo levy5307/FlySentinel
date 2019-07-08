@@ -574,7 +574,8 @@ SentinelAddr* FlySentinel::getCurrentMasterAddress(AbstractFlyInstance* master) 
 
 void FlySentinel::parseRunid(const std::string &line, AbstractFlyInstance* flyInstance) {
     std::string newRunid = line.substr(7, 40);
-    if (0 == flyInstance->getRunid().compare(newRunid)) {
+    /** 如果runid发生了变化，则向"+reboot"频道发布消息 */
+    if (0 != flyInstance->getRunid().compare(newRunid)) {
         this->sendEvent(LL_NOTICE, "+reboot", flyInstance, "%@");
         flyInstance->setRunid(newRunid);
     }
