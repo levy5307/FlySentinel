@@ -694,8 +694,61 @@ void FlySentinel::dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstanc
 
 }
 
-bool FlySentinel::sendSlaveOf(AbstractFlyInstance *flyInstance, const std::string &ip, int port) {
+bool FlySentinel::sendSlaveOf(AbstractFlyInstance *flyInstance, const std::string &host, int port) {
+    std::string portStr;
+    portStr = std::to_string(port);
+    std::string realhost = realhost;
+    if (realhost.empty()) {
+        realhost = "NO";
+        portStr = "ONE";
+    }
 
+    /** 使用事务去执行以下命令：
+     *    1.slaveof host port
+     *    2.rewrite config
+     *    3.与所有client断开连接，等待其重新进行连接
+     **/
+     /** MULTI: enter transaction */
+     const std::shared_ptr<redisAsyncContext> commandContext = flyInstance->getLink()->getCommandContext();
+     int retval = redisAsyncCommand(commandContext.get(), sentinelDiscardReplyCallback, flyInstance, "%s", "MULTI");
+     if (retval < 0) {
+         return retval;
+     }
+     flyInstance->getLink()->increasePendingCommands();
+
+     /** slave of */
+     retval = redisAsyncCommand(commandContext.get(), sentinelDiscardReplyCallback,
+             flyInstance, "SLAVEOF %s %s", host.c_str(), portStr.c_str());
+     if (retval < 0) {
+         return retval;
+     }
+     flyInstance->getLink()->increasePendingCommands();
+
+     /** rewrite config */
+     retval = redisAsyncCommand(commandContext.get(), sentinelDiscardReplyCallback,
+             flyInstance, "CONFIG REWRITE");
+     if (retval < 0) {
+         return retval;
+     }
+     flyInstance->getLink()->increasePendingCommands();
+
+     /** CLIENT KILL TYPE <type> */
+     retval = redisAsyncCommand(commandContext.get(), sentinelDiscardReplyCallback,
+             flyInstance, "CLIENT KILL TYPE normal");
+     if (retval < 0) {
+         return retval;
+     }
+     flyInstance->getLink()->increasePendingCommands();
+
+     /** exit transaction */
+     retval = redisAsyncCommand(commandContext.get(), sentinelDiscardReplyCallback,
+             flyInstance, "EXEC");
+     if (retval < 0) {
+         return retval;
+     }
+     flyInstance->getLink()->increasePendingCommands();
+
+     return 1;
 }
 
 void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const std::string &info) {
