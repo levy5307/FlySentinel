@@ -118,6 +118,7 @@ private:
     void parseSlaveRoleParams(const std::string &line, AbstractFlyInstance *flyInstance);
     void dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance, int role);
     void dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstance);
+    bool sendSlaveOf(AbstractFlyInstance *flyInstance, const std::string &ip, int port);
 
     /************************************************************************************************
      *******************             general server private functions               *****************

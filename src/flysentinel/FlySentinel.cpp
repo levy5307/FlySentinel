@@ -593,7 +593,6 @@ void FlySentinel::parseSlaveIPAndPort(const std::string &line, AbstractFlyInstan
         *comma = '\0';
     }
 
-
     /** port */
     char *portstr = strstr(ip, "port=");
     if (NULL == portstr) {
@@ -680,13 +679,22 @@ void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance
             && this->masterLookSane(flyInstance->getMaster())
             && flyInstance->noDownFor(waitTime)
             && miscTool->mstime() - flyInstance->getRoleReported() > waitTime) {
-            // todo : send slaveof
+            int retval = this->sendSlaveOf(
+                    flyInstance,
+                    flyInstance->getMaster()->getAddr()->getIp(),
+                    flyInstance->getMaster()->getAddr()->getPort());
+            if (retval) {
+                sendEvent(LL_NOTICE, "+convert-to-slave", flyInstance, "%@");
+            }
         }
-
     }
 }
 
 void FlySentinel::dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstance) {
+
+}
+
+bool FlySentinel::sendSlaveOf(AbstractFlyInstance *flyInstance, const std::string &ip, int port) {
 
 }
 
