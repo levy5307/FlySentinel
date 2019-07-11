@@ -510,6 +510,14 @@ bool FlyInstance::addSentinel(const std::string &name, AbstractFlyInstance *sent
     return true;
 }
 
+uint64_t FlyInstance::getFailoverTimeout() const {
+    return failoverTimeout;
+}
+
+void FlyInstance::setFailoverTimeout(uint64_t failoverTimeout) {
+    this->failoverTimeout = failoverTimeout;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {

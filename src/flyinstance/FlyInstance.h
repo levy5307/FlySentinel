@@ -91,6 +91,8 @@ public:
     void forceHelloUpdate();
     bool addSlave(const std::string &name, AbstractFlyInstance *slave);
     bool addSentinel(const std::string &name, AbstractFlyInstance *sentinel);
+    uint64_t getFailoverTimeout() const;
+    void setFailoverTimeout(uint64_t failoverTimeout);
 
 private:
     FlyInstance(){};
@@ -126,6 +128,7 @@ private:
     FailoverState failoverState = SENTINEL_FAILOVER_STATE_NONE;
     uint64_t failoverStateChangeTime = 0;
     uint64_t failoverEpoch;                             /** 当前failover时的epoch */
+    uint64_t failoverTimeout = SENTINEL_DEFAULT_FAILOVER_TIMEOUT;
 
     int roleReported;
     uint64_t roleReportedTime = 0;

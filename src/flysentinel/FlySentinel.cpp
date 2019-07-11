@@ -658,7 +658,7 @@ void FlySentinel::parseSlaveRoleParams(const std::string &line, AbstractFlyInsta
     return;
 }
 
-void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance, int role) {
+void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance) {
     if (flyInstance->isPromotedSlave()) {
         /** 更改master的epoch */
         flyInstance->getMaster()->setConfigEpoch(flyInstance->getMaster()->getFailoverEpoch());
@@ -691,7 +691,18 @@ void FlySentinel::dealWithRoleFromSlaveToMaster(AbstractFlyInstance *flyInstance
 }
 
 void FlySentinel::dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstance) {
+    AbstractFlyInstance *master = flyInstance->getMaster();
+    uint64_t waitTime = master->getFailoverTimeout();
+    if (masterLookSane(master)
+        && flyInstance->noDownFor(waitTime)
+        && miscTool->mstime() - flyInstance->getSlaveConfChangeTime() > waitTime) {
+        int retval = this->sendSlaveOf(flyInstance, master->getAddr()->getIp(), master->getAddr()->getPort());
+        if (retval > 0) {
+            this->sendEvent(LL_NOTICE, "+fix-slave-config", flyInstance, "%@");
+        }
+    }
 
+    return;
 }
 
 bool FlySentinel::sendSlaveOf(AbstractFlyInstance *flyInstance, const std::string &host, int port) {
@@ -828,7 +839,7 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
 
     /** 处理角色从SLAVE-->MASTER变换的情况 */
     if ((flyInstance->getFlags() & FSI_SLAVE) && FSI_MASTER == role) {
-        this->dealWithRoleFromSlaveToMaster(flyInstance, role);
+        this->dealWithRoleFromSlaveToMaster(flyInstance);
     }
 
     /** 处理slave向一个完全不同的master地址进行replication的情况 */

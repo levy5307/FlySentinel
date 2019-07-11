@@ -85,6 +85,8 @@ public:
     virtual void forceHelloUpdate() = 0;
     virtual bool addSlave(const std::string &name, AbstractFlyInstance *slave) = 0;
     virtual bool addSentinel(const std::string &name, AbstractFlyInstance *sentinel) = 0;
+    virtual uint64_t getFailoverTimeout() const = 0;
+    virtual void setFailoverTimeout(uint64_t failoverTimeout) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
