@@ -15,12 +15,16 @@ class AbstractFlyInstance {
 public:
     virtual int getFlags() const = 0;
     virtual void setFlags(int flags) = 0;
+    virtual void addFlags(int flags) = 0;
+    virtual void delFlags(int flags) = 0;
     virtual const std::string &getName() const = 0;
     virtual void setName(const std::string &name) = 0;
     virtual SentinelAddr *getAddr() const = 0;
     virtual void setAddr(SentinelAddr *addr) = 0;
     virtual void dupAddr(SentinelAddr *addr) = 0;
     virtual void setPort(int port) = 0;
+    virtual const std::string &getIP() const = 0;
+    virtual int getPort() const = 0;
     virtual AbstractFlyInstance* getMaster() const = 0;
     virtual bool haveMaster() const = 0;
     virtual void setMaster(AbstractFlyInstance* master) = 0;

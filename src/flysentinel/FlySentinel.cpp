@@ -705,6 +705,25 @@ void FlySentinel::dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstanc
     return;
 }
 
+void FlySentinel::dealWithReconfig(AbstractFlyInstance *flyInstance) {
+    /** FSI_RECONF_SENT --> FSI_RECONF_INPROG */
+    if ((flyInstance->getFlags() & FSI_RECONF_SENT)
+        && 0 == flyInstance->getSlaveMasterHost().compare(flyInstance->getMaster()->getPromotedSlave()->getIP())
+        && flyInstance->getSlaveMasterPort() == flyInstance->getMaster()->getPromotedSlave()->getPort()) {
+        flyInstance->delFlags(FSI_RECONF_SENT);
+        flyInstance->addFlags(FSI_RECONF_INPROG);
+        this->sendEvent(LL_NOTICE, "+slave-reconf-inprog", flyInstance, "%@");
+    }
+
+    /** FSI_RECONF_INPROG --> FSI_RECONF_DONE */
+    if ((flyInstance->getFlags() & FSI_RECONF_INPROG)
+        && flyInstance->getSlaveMasterLinkStatus() == SENTINEL_MASTER_LINK_STATUS_UP) {
+        flyInstance->delFlags(FSI_RECONF_INPROG);
+        flyInstance->addFlags(FSI_RECONF_DONE);
+        this->sendEvent(LL_NOTICE, "+slave-reconf-done", flyInstance, "%@");
+    }
+}
+
 bool FlySentinel::sendSlaveOf(AbstractFlyInstance *flyInstance, const std::string &host, int port) {
     std::string portStr;
     portStr = std::to_string(port);
@@ -849,6 +868,15 @@ void FlySentinel::refreshInstanceInfo(AbstractFlyInstance* flyInstance, const st
             || 0 != flyInstance->getSlaveMasterHost().compare(flyInstance->getMaster()->getAddr()->getIp()))) {
         this->dealWithReplFromDiffMasterAddr(flyInstance);
     }
+
+    /** 处理slave是否在reconfigure的过程中，并修改其状态 */
+    if ((flyInstance->getFlags() & FSI_SLAVE)
+        && role == FSI_SLAVE
+        && (flyInstance->getFlags() & (FSI_RECONF_SENT | FSI_RECONF_INPROG))) {
+        this->dealWithReconfig(flyInstance);
+    }
+
+    return;
 }
 
 void FlySentinel::addToClientsPendingToWrite(int fd) {

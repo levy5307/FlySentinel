@@ -21,12 +21,16 @@ public:
     ~FlyInstance();
     int getFlags() const;
     void setFlags(int flags);
+    void addFlags(int flags);
+    void delFlags(int flags);
     const std::string &getName() const;
     void setName(const std::string &name);
     SentinelAddr *getAddr() const;
     void setAddr(SentinelAddr *addr);
     void dupAddr(SentinelAddr *addr);
     void setPort(int port);
+    const std::string &getIP() const;
+    int getPort() const;
     AbstractFlyInstance* getMaster() const;
     bool haveMaster() const;
     void setMaster(AbstractFlyInstance* master);

@@ -44,6 +44,14 @@ void FlyInstance::setFlags(int flags) {
     this->flags = flags;
 }
 
+void FlyInstance::addFlags(int flags) {
+    this->flags |= flags;
+}
+
+void FlyInstance::delFlags(int flags) {
+    this->flags &= ~flags;
+}
+
 const std::string &FlyInstance::getName() const {
     return name;
 }
@@ -75,6 +83,14 @@ void FlyInstance::dupAddr(SentinelAddr *addr) {
 
 void FlyInstance::setPort(int port) {
     this->addr->setPort(port);
+}
+
+const std::string &FlyInstance::getIP() const {
+    return this->addr->getIp();
+}
+
+int FlyInstance::getPort() const {
+    return this->addr->getPort();
 }
 
 AbstractFlyInstance* FlyInstance::getMaster() const {
