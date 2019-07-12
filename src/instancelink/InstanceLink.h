@@ -35,6 +35,8 @@ public:
     void setDisconnected(bool disconnected);
     uint64_t getPcLastActivity() const;
     void setPcLastActivity(uint64_t pcLastActivity);
+    uint64_t getLastAvailTime() const;
+    void setLastAvailTime(uint64_t lastAvailTime);
 
 private:
     bool disconnected = true;                                   // true-需要重连连接

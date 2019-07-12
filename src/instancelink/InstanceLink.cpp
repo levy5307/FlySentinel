@@ -124,3 +124,11 @@ uint64_t InstanceLink::getPcLastActivity() const {
 void InstanceLink::setPcLastActivity(uint64_t pcLastActivity) {
     this->pcLastActivity = pcLastActivity;
 }
+
+uint64_t InstanceLink::getLastAvailTime() const {
+    return lastAvailTime;
+}
+
+void InstanceLink::setLastAvailTime(uint64_t lastAvailTime) {
+    this->lastAvailTime = lastAvailTime;
+}

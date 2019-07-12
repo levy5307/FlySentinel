@@ -542,7 +542,46 @@ void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void 
 }
 
 void sentinelPingReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
+    AbstractFlyInstance *flyInstance = (AbstractFlyInstance *)privdata;
+    AbstractInstanceLink *link = (AbstractInstanceLink *)context->data;
+    redisReply *r = (redisReply*)reply;
+    if (NULL == reply || NULL == link) {
+        return;
+    }
 
+    /** 减少pending commands */
+    link->decreasePendingCommands();
+
+    uint64_t nowt = miscTool->mstime();
+    if (REDIS_REPLY_STATUS == r->type
+        || REDIS_REPLY_ERROR == r->type) {  /** 收到正确的回复 */
+        if (0 == strncmp(r->str, "PONG", 4)
+            || 0 == strncmp(r->str, "LOADING", 7)
+            || 0 == strncmp(r->str, "MASTERDOWN", 10)) {
+            link->setLastAvailTime(nowt);
+            link->setActPingTime(0);
+        } else {
+            /**
+             * 如果：
+             *   1.收到失败的消息
+             *   2.当前instance被标记为sdown
+             *   3.没有发送过SCRIPT KILL命令
+             * 则发送SCRIPT KILL命令
+             **/
+            if (0 == strncmp(r->str, "BUSY", 4)
+                && (flyInstance->getFlags() & FSI_S_DOWN)
+                && (0 == flyInstance->getFlags() & FSI_SCRIPT_KILL_SENT)) {
+                if (redisAsyncCommand(flyInstance->getLink()->getCommandContext().get(),
+                                      sentinelDiscardReplyCallback, flyInstance, "SCRIPT KILL")) {
+                    flyInstance->getLink()->increasePendingCommands();
+                }
+                flyInstance->addFlags(FSI_SCRIPT_KILL_SENT);
+            }
+        }
+    }
+
+    /** 修改last pong时间为当前时间 */
+    link->setLastPongTime(miscTool->mstime());
 }
 
 void sentinelInfoReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {

@@ -28,6 +28,8 @@ public:
     virtual void setDisconnected(bool disconnected) = 0;
     virtual uint64_t getPcLastActivity() const = 0;
     virtual void setPcLastActivity(uint64_t pcLastActivity) = 0;
+    virtual uint64_t getLastAvailTime() const = 0;
+    virtual void setLastAvailTime(uint64_t lastAvailTime) = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTINSTANCELINK_H
