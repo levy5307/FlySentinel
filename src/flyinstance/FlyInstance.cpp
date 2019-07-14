@@ -504,8 +504,30 @@ void FlyInstance::setFailoverEpoch(uint64_t failoverEpoch) {
     this->failoverEpoch = failoverEpoch;
 }
 
-void FlyInstance::forceHelloUpdate() {
+int FlyInstance::forceHelloUpdate() {
+    if (0 == this->flags & FSI_MASTER) {
+        return -1;
+    }
 
+    if (this->lastPubTime >= SENTINEL_PUBLISH_PERIOD + 1) {
+        this->lastPubTime -= (SENTINEL_PUBLISH_PERIOD + 1);
+    }
+
+    this->forceHelloUpdateFlyInstances(this->sentinels);
+    this->forceHelloUpdateFlyInstances(this->slaves);
+
+    return 1;
+}
+
+void FlyInstance::forceHelloUpdateFlyInstances(std::map<std::string, AbstractFlyInstance*> instances) {
+    for (auto item : instances) {
+        uint64_t lastPubTime = item.second->getLastPubTime();
+        if (lastPubTime >= SENTINEL_PUBLISH_PERIOD + 1) {
+            item.second->setLastPubTime(lastPubTime - SENTINEL_PUBLISH_PERIOD - 1);
+        }
+    }
+
+    return;
 }
 
 bool FlyInstance::addSlave(const std::string &name, AbstractFlyInstance *slave) {

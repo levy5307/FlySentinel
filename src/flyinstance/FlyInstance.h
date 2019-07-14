@@ -92,7 +92,7 @@ public:
     bool isPromotedSlave();
     uint64_t getFailoverEpoch() const;
     void setFailoverEpoch(uint64_t failoverEpoch);
-    void forceHelloUpdate();
+    int forceHelloUpdate();
     bool addSlave(const std::string &name, AbstractFlyInstance *slave);
     bool addSentinel(const std::string &name, AbstractFlyInstance *sentinel);
     uint64_t getFailoverTimeout() const;
@@ -101,6 +101,7 @@ public:
 private:
     FlyInstance(){};
     std::string getFlagsString();
+    void forceHelloUpdateFlyInstances(std::map<std::string, AbstractFlyInstance*> instances);
     int flags;
     std::string name;
     std::string runid;
