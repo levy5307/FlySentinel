@@ -99,6 +99,7 @@ public:
     void addReplyBulkLongLong(uint64_t num);
     void addReplyBulkString(std::string str);
     void addReplyLongLong(int64_t length);
+    void addReplyArrayLen(int length);
     const char *getBuf() const;
     void clearBuf();
     void setBuf(const char* buf, int size);

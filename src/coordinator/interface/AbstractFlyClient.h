@@ -123,6 +123,8 @@ public:
 
     virtual void addReplyLongLong(int64_t length) = 0;
 
+    virtual void addReplyArrayLen(int length) = 0;
+
     virtual void clearBuf() = 0;
 
     virtual void setBuf(const char* buf, int size) = 0;

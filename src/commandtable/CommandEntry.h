@@ -128,6 +128,7 @@ void unsubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyC
 void psubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
 void punsubscribeCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
 void publishCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
+void sentinelRoleCommand(const AbstractCoordinator*, std::shared_ptr<AbstractFlyClient>);
 
 extern std::vector<CommandEntry*> sentinelCommandTable;
 

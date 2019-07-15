@@ -620,6 +620,12 @@ void FlyClient::addReplyLongLong(int64_t length) {
     this->addReply(fio->getStr().c_str());
 }
 
+void FlyClient::addReplyArrayLen(int length) {
+    std::shared_ptr<MemFio> fio = std::shared_ptr<MemFio>(new MemFio());
+    fio->writeBulkCount('*', length);
+    this->addReply(fio->getStr().c_str());
+}
+
 int FlyClient::addReplyToBuffer(const char *s, size_t len) {
     // 无需写入
     if (this->flags & CLIENT_CLOSE_AFTER_REPLY) {

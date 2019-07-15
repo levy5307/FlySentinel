@@ -216,3 +216,7 @@ void publishCommand(const AbstractCoordinator* coordinator,
     std::string *argv1 = reinterpret_cast<std::string*>(flyClient->getArgv()[1]->getPtr());
     std::string *argv2 = reinterpret_cast<std::string*>(flyClient->getArgv()[2]->getPtr());
 }
+
+void sentinelRoleCommand(const AbstractCoordinator* coordinator,
+                         std::shared_ptr<AbstractFlyClient> flyClient) {
+}
