@@ -219,4 +219,11 @@ void publishCommand(const AbstractCoordinator* coordinator,
 
 void sentinelRoleCommand(const AbstractCoordinator* coordinator,
                          std::shared_ptr<AbstractFlyClient> flyClient) {
+    flyClient->addReplyArrayLen(2);
+    flyClient->addReplyBulkBuffer("sentinel");
+
+    const std::map<std::string, AbstractFlyInstance *> &masters = coordinator->getFlyServer()->getMasters();
+    for (auto item : masters) {
+        flyClient->addReplyBulkString(item.first);
+    }
 }

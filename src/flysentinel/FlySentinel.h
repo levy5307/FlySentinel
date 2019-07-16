@@ -39,6 +39,9 @@ public:
     void setAnnouncePort(int announcePort);
     const char *getMyid() const;
     uint64_t getCurrentEpoch() const;
+    const std::map<std::string, AbstractFlyInstance *> &getMasters() const;
+    void setMasters(const std::map<std::string, AbstractFlyInstance *> &masters);
+
     /** 处理从master/slave/sentinel发送来的hello message */
     void processHelloMessage(std::string &hello);
     void receiveHelloMessage(redisAsyncContext *context, void *reply, void *privdata);

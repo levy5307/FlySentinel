@@ -1518,6 +1518,14 @@ AbstractFlyInstance* FlySentinel::getMasterByNameOrReplyError(
     }
 }
 
+const std::map<std::string, AbstractFlyInstance *> &FlySentinel::getMasters() const {
+    return this->masters;
+}
+
+void FlySentinel::setMasters(const std::map<std::string, AbstractFlyInstance *> &masters) {
+    this->masters = masters;
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 
