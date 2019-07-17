@@ -216,6 +216,14 @@ void publishCommand(const AbstractCoordinator* coordinator,
                     std::shared_ptr<AbstractFlyClient> flyClient) {
     std::string *argv1 = reinterpret_cast<std::string*>(flyClient->getArgv()[1]->getPtr());
     std::string *argv2 = reinterpret_cast<std::string*>(flyClient->getArgv()[2]->getPtr());
+
+    if (argv1->compare(SENTINEL_HELLO_CHANNEL)) {
+        flyClient->addReplyError("Only HELLO messages are accepted by Sentinel instances.");
+        return;
+    }
+
+    coordinator->getFlyServer()->processHelloMessage(*argv2);
+    flyClient->addReplyLongLong(1);
 }
 
 void sentinelRoleCommand(const AbstractCoordinator* coordinator,
