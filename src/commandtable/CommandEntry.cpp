@@ -19,7 +19,8 @@ std::vector<CommandEntry* > sentinelCommandTable = {
         new CommandEntry("unsubscribe", unsubscribeCommand, 1, "",    0, NULL, 0, 0, 0, 0, 0),
         new CommandEntry("psubscribe",  psubscribeCommand,  2, "",    0, NULL, 0, 0, 0, 0, 0),
         new CommandEntry("punsubscribe",punsubscribeCommand,1, "",    0, NULL, 0, 0, 0, 0, 0),
-        new CommandEntry("publish",     publishCommand,     3, "",    0, NULL, 0, 0, 0, 0, 0)
+        new CommandEntry("publish",     publishCommand,     3, "",    0, NULL, 0, 0, 0, 0, 0),
+        new CommandEntry("role",        sentinelRoleCommand,1, "",    0, NULL, 0, 0, 0, 0, 0)
 };
 
 CommandEntry::CommandEntry() {
