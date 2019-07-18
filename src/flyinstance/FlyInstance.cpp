@@ -556,6 +556,24 @@ void FlyInstance::setFailoverTimeout(uint64_t failoverTimeout) {
     this->failoverTimeout = failoverTimeout;
 }
 
+void FlyInstance::startFailover() {
+    /** must be master */
+    assert(this->flags & FSI_MASTER);
+
+    AbstractFlyServer *flySentinel = coordinator->getFlyServer();
+
+    this->failoverState = SENTINEL_FAILOVER_STATE_WAIT_START;
+    this->flags |= FSI_FAILOVER_IN_PROGRESS;
+    this->failoverEpoch = flySentinel->getCurrentEpoch() + 1;
+    flySentinel->sendEvent(LL_NOTICE, "+new-epoch", this, "%llu", flySentinel->getCurrentEpoch());
+    flySentinel->sendEvent(LL_WARNING, "+try-failover", this, "%@");
+
+    /** 添加一个随机时间，防止所有sentinel同时启动failover过程  */
+    uint64_t nowt = miscTool->mstime();
+    this->failoverStartTime = nowt + rand() % SENTINEL_MAX_DESYNC;
+    this->failoverStateChangeTime = nowt;
+}
+
 void sentinelDiscardReplyCallback(redisAsyncContext *context, void *reply, void *privdata) {
     AbstractInstanceLink *instanceLink = (AbstractInstanceLink *)context->data;
     if (NULL != instanceLink) {
