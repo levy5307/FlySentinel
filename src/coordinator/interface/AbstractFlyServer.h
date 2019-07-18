@@ -40,6 +40,8 @@ public:
     virtual void sendPeriodicCommands(AbstractFlyInstance* flyInstance) = 0;
     virtual const std::map<std::string, AbstractFlyInstance *> &getMasters() const = 0;
     virtual void setMasters(const std::map<std::string, AbstractFlyInstance *> &masters) = 0;
+    virtual void checkSubjectivelyDown(AbstractFlyInstance* flyInstance) = 0;
+    virtual void checkObjectivelyDown(AbstractFlyInstance* flyInstance) = 0;
 
     /**
      * general server interface

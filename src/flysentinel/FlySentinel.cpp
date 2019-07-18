@@ -1526,6 +1526,14 @@ void FlySentinel::setMasters(const std::map<std::string, AbstractFlyInstance *> 
     this->masters = masters;
 }
 
+void FlySentinel::checkSubjectivelyDown(AbstractFlyInstance* flyInstance) {
+
+}
+
+void FlySentinel::checkObjectivelyDown(AbstractFlyInstance* flyInstance) {
+
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 
