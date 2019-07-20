@@ -556,6 +556,26 @@ void FlyInstance::setFailoverTimeout(uint64_t failoverTimeout) {
     this->failoverTimeout = failoverTimeout;
 }
 
+int FlyInstance::startFailoverIfNeeded() {
+    /** 如果没有处于客观下线状态，不允许执行failover操作 */
+    if (0 == this->flags & FSI_O_DOWN) {
+        return 0;
+    }
+
+    /** 正在执行failover */
+    if (0 == this->flags & FSI_FAILOVER_IN_PROGRESS) {
+        return 0;
+    }
+
+    /** 上次执行failover时间距离现在时间过短，则暂时先不执行failover */
+    if (miscTool->mstime() - this->failoverStartTime < this->failoverTimeout * 2) {
+        return 0;
+    }
+
+    this->startFailover();
+    return 1;
+}
+
 void FlyInstance::startFailover() {
     /** must be master */
     assert(this->flags & FSI_MASTER);

@@ -92,6 +92,7 @@ public:
     virtual uint64_t getFailoverTimeout() const = 0;
     virtual void setFailoverTimeout(uint64_t failoverTimeout) = 0;
     virtual void startFailover() = 0;
+    virtual int startFailoverIfNeeded() = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H

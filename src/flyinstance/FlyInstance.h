@@ -98,6 +98,7 @@ public:
     uint64_t getFailoverTimeout() const;
     void setFailoverTimeout(uint64_t failoverTimeout);
     void startFailover();
+    int startFailoverIfNeeded();
 
 private:
     FlyInstance(){};
