@@ -91,6 +91,7 @@ public:
     virtual bool addSentinel(const std::string &name, AbstractFlyInstance *sentinel) = 0;
     virtual uint64_t getFailoverTimeout() const = 0;
     virtual void setFailoverTimeout(uint64_t failoverTimeout) = 0;
+    virtual void abortFailover() = 0;
     virtual void startFailover() = 0;
     virtual int startFailoverIfNeeded() = 0;
 };

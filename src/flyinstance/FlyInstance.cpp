@@ -576,6 +576,21 @@ int FlyInstance::startFailoverIfNeeded() {
     return 1;
 }
 
+/**
+ * 终止failover
+ * */
+void FlyInstance::abortFailover() {
+    assert(this->flags & FSI_FAILOVER_IN_PROGRESS);
+    assert(this->failoverState < SENTINEL_FAILOVER_STATE_WAIT_PROMOTION);
+    this->flags &= ~(FSI_FAILOVER_IN_PROGRESS | FSI_FORCE_FAILOVER);
+    this->failoverState = SENTINEL_FAILOVER_STATE_NONE;
+    this->failoverStateChangeTime = miscTool->mstime();
+    if (NULL != this->promotedSlave) {
+        this->promotedSlave->delFlags(FSI_PROMOTED);
+        this->promotedSlave = NULL;
+    }
+}
+
 void FlyInstance::startFailover() {
     /** must be master */
     assert(this->flags & FSI_MASTER);
