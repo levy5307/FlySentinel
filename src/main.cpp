@@ -16,6 +16,8 @@ MiscTool *miscTool = MiscTool::getInstance();
 AbstractCoordinator *coordinator = NULL;
 
 int main(int argc, char **argv) {
+    /** 初始化随机种子 */
+    srand((unsigned)time(NULL) ^ getpid());
     coordinator = new Coordinator();
     coordinator->getEventLoop()->eventMain();
 }

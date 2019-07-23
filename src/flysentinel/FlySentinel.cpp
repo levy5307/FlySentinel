@@ -31,7 +31,7 @@ void FlySentinel::initGeneralServer(const AbstractCoordinator *coordinator, Conf
     setMaxClientLimit();
 
     // serverCron运行频率
-    this->hz = CONFIG_CRON_HZ;
+    this->hz = CONFIG_DEFAULT_HZ;
     this->neterr = new char[NET_ERR_LEN];
 
     // 拒绝连接次数设置为0
@@ -1215,6 +1215,17 @@ uint64_t FlySentinel::getCronLoops() const {
     return this->cronloops;
 }
 
+void FlySentinel::timer() {
+    /** 运行脚本任务 */
+    this->runPendingScripts();
+    /** 处理运行结束的脚本 */
+    this->collectTerminatedScripts();
+    /** 处理超时的脚本 */
+    this->killTimedoutScripts();
+    /** 产生一定随机性，使每个sentinel不同步 */
+    this->hz = CONFIG_DEFAULT_HZ + rand() % CONFIG_DEFAULT_HZ;
+}
+
 const std::vector<int> &FlySentinel::getIpfd() const {
     return ipfd;
 }
@@ -1542,6 +1553,9 @@ int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *client
 
     /** 释放所有异步删除的clients */
     flyServer->freeClientsInAsyncFreeList();
+
+    /** 周期性执行 */
+    flyServer->timer();
 
     /** cron loop static */
     flyServer->addCronLoops();

@@ -86,6 +86,7 @@ public:
     void setNowt(time_t nowt);
     void addCronLoops();
     uint64_t getCronLoops() const;
+    void timer();
 
     /** 将一组instance当前状态组成reply, 发送给flyClient */
     void addReplyRedisInstances(std::shared_ptr<AbstractFlyClient> flyClient,

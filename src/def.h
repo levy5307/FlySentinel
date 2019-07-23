@@ -76,6 +76,7 @@ const int SENTINEL_MAX_PENDING_COMMANDS = 100;
 const int SENTINEL_INFO_PERIOD = 10 * 000;
 const int SENTINEL_PUBLISH_PERIOD = 2000;
 const int SENTINEL_PING_PERIOD = 1000;
+const int CONFIG_DEFAULT_HZ = 10;                       /** default hz */
 
 // extern
 extern AbstractLogFactory *logFactory;
