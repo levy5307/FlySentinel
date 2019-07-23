@@ -1216,6 +1216,8 @@ uint64_t FlySentinel::getCronLoops() const {
 }
 
 void FlySentinel::timer() {
+    /** 查看是否进入tilt模式 */
+    this->checkTiltCondition();
     /** 运行脚本任务 */
     this->runPendingScripts();
     /** 处理运行结束的脚本 */
@@ -1543,6 +1545,23 @@ void FlySentinel::checkSubjectivelyDown(AbstractFlyInstance* flyInstance) {
 
 void FlySentinel::checkObjectivelyDown(AbstractFlyInstance* flyInstance) {
 
+}
+
+/**
+ * 如果两次进入checkTiltCondition函数的时间差
+ * 1.< 0(系统时钟修改过)
+ * 2.或者 > SENTINEL_TILT_TRIGGER(两次循环间隔过长：1.系统时钟修改过。2.上次循环中被某种原因block住了)
+ * 则标记为进入tilt模式
+ **/
+void FlySentinel::checkTiltCondition() {
+    time_t nowt = miscTool->mstime();
+    uint64_t delta = nowt - this->previousTime;
+    if (delta < 0 || delta > SENTINEL_TILT_TRIGGER) {
+        this->tilt = true;
+        this->tiltStartTime = nowt;
+        this->sendEvent(LL_WARNING, "+tilt", NULL, "#tilt mode entered");
+    }
+    this->previousTime = nowt;
 }
 
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {

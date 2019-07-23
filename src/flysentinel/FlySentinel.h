@@ -43,6 +43,7 @@ public:
     void setMasters(const std::map<std::string, AbstractFlyInstance *> &masters);
     void checkSubjectivelyDown(AbstractFlyInstance* flyInstance);
     void checkObjectivelyDown(AbstractFlyInstance* flyInstance);
+    void checkTiltCondition();
 
     /** 处理从master/slave/sentinel发送来的hello message */
     void processHelloMessage(std::string &hello);

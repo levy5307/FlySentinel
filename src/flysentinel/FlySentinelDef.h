@@ -39,5 +39,6 @@ enum FlySentinelQuorumState {
 const uint8_t HELLO_SIZE = 8;
 const int SENTINEL_MASTER_LINK_STATUS_UP = 0;
 const int SENTINEL_MASTER_LINK_STATUS_DOWN = 1;
+const int SENTINEL_TILT_TRIGGER = 2000;
 
 #endif //FLYSENTINEL_FLYSENTINELDEF_H
