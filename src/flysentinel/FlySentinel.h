@@ -127,6 +127,9 @@ private:
     void dealWithReplFromDiffMasterAddr(AbstractFlyInstance *flyInstance);
     void dealWithReconfig(AbstractFlyInstance *flyInstance);
     bool sendSlaveOf(AbstractFlyInstance *flyInstance, const std::string &ip, int port);
+    void handleFlyInstance(AbstractFlyInstance *flyInstance);
+    void askMasterStateToOtherSentinels(AbstractFlyInstance *master, bool force);
+    void failoverStateMachine(AbstractFlyInstance *flyInstance);
 
     /************************************************************************************************
      *******************             general server private functions               *****************

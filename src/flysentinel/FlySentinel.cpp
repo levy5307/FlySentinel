@@ -1564,6 +1564,46 @@ void FlySentinel::checkTiltCondition() {
     this->previousTime = nowt;
 }
 
+/** 对指定的flyInstance执行某些特定的任务 */
+void FlySentinel::handleFlyInstance(AbstractFlyInstance *flyInstance) {
+    /** 发送周期命令 */
+    this->sendPeriodicCommands(flyInstance);
+
+    /** 处于tilt模式下 */
+    if (this->tilt) {
+        /** 扔未超过tilt的时长 */
+        if (miscTool->mstime() - this->tiltStartTime < SENTINEL_TILT_PERIOD) {
+            return;
+        }
+
+        /** 已经超过了tilt的时长，退出tilt模式 */
+        this->tilt = false;
+        this->sendEvent(LL_WARNING, "-tilt", NULL, "#tilt mode exited");
+    }
+
+    /** 对于每种类型的instance都要进行subject down检查 */
+    this->checkSubjectivelyDown(flyInstance);
+
+    if (flyInstance->getFlags() & FSI_MASTER) {
+        /** 只对master检查object down，slave如果subject down就会被下掉 */
+        this->checkObjectivelyDown(flyInstance);
+        if (flyInstance->startFailoverIfNeeded()) {
+            this->askMasterStateToOtherSentinels(flyInstance, true);
+        }
+        this->failoverStateMachine(flyInstance);
+        this->askMasterStateToOtherSentinels(flyInstance, false);
+    }
+}
+
+void FlySentinel::askMasterStateToOtherSentinels(AbstractFlyInstance *master,
+                                                 bool force) {
+
+}
+
+void FlySentinel::failoverStateMachine(AbstractFlyInstance *flyInstance) {
+
+}
+
 int serverCron(const AbstractCoordinator *coordinator, uint64_t id, void *clientData) {
     AbstractFlyServer *flyServer = coordinator->getFlyServer();
 
