@@ -99,7 +99,7 @@ public:
     void setFailoverTimeout(uint64_t failoverTimeout);
     void startFailover();
     void abortFailover();
-    int startFailoverIfNeeded();
+    bool startFailoverIfNeeded();
 
 private:
     FlyInstance(){};

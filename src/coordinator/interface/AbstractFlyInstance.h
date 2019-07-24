@@ -93,7 +93,7 @@ public:
     virtual void setFailoverTimeout(uint64_t failoverTimeout) = 0;
     virtual void abortFailover() = 0;
     virtual void startFailover() = 0;
-    virtual int startFailoverIfNeeded() = 0;
+    virtual bool startFailoverIfNeeded() = 0;
 };
 
 #endif //FLYSENTINEL_ABSTRACTFLYINSTANCE_H
