@@ -4,11 +4,8 @@
 
 #include <cassert>
 #include "FlyInstance.h"
-#include "../flysentinel/FlySentinelDef.h"
-#include "../def.h"
 #include "FlyInstanceDef.h"
 #include "../coordinator/interface/AbstractCoordinator.h"
-#include "../net/NetDef.h"
 
 extern AbstractCoordinator *coordinator;
 

@@ -3,10 +3,8 @@
 //
 
 #include <cstdlib>
-#include <poll.h>
 #include "EventLoop.h"
 #include "Select.h"
-#include "EventDef.h"
 
 EventLoop::EventLoop(const AbstractCoordinator *coordinator, int setSize) {
     this->setSize = setSize;

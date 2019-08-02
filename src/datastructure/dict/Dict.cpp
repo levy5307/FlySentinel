@@ -3,9 +3,6 @@
 //
 
 #include "Dict.h"
-#include "../../utils/MiscTool.h"
-#include "../../log/FileLogHandler.h"
-#include "../../log/FileLogFactory.h"
 
 extern bool canResize;
 

@@ -1,0 +1,3 @@
+/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/CMakeFiles/FlySentinel.dir

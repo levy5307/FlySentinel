@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="FlySentinel"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="FlySentinel">
+				<Option output="/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/FlySentinel" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 FlySentinel"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="FlySentinel/fast">
+				<Option output="/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/FlySentinel" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 FlySentinel/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/zhaoliwei/workspace/FlySentinel/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/asyncevent/FlyAsyncEvents.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/asyncevent/FlyAsyncEvents.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/asyncevent/convert.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/asyncevent/convert.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/atomic/AtomicHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/bio/BIODef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/bio/BIOHandler.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/bio/BIOHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/bio/BIOJob.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/bio/BIOJob.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/commandtable/CommandEntry.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/commandtable/CommandEntry.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/commandtable/CommandTable.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/commandtable/CommandTable.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/commandtable/CommandTableDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/ConfigCache.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/ConfigCache.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/ConfigEntry.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/ConfigEntry.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/TextConfigReader.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/TextConfigReader.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/base/BaseConfigReader.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/config/base/BaseConfigReader.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/Coordinator.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/Coordinator.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractBIOHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractCoordinator.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractEventLoop.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractFlyClient.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractFlyClientFactory.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractFlyInstance.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractFlyObjFactory.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractFlyServer.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractInstanceLink.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractLogFactory.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractLogHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractNetHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractPubSubHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/coordinator/interface/AbstractSharedObjects.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/dict/Dict.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/dict/Dict.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/dict/DictDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/dict/DictEntry.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/dict/DictEntry.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/dict/HashTable.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/dict/HashTable.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/skiplist/SkipList.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/skiplist/SkipList.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/skiplist/SkipListDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/skiplist/SkipListNode.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/datastructure/skiplist/SkipListNode.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/EventDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/EventLoop.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/EventLoop.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/FileEvent.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/FileEvent.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/Select.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/Select.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/TimeEvent.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/event/TimeEvent.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyclient/ClientDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyclient/FlyClient.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyclient/FlyClient.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyclient/FlyClientFactory.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyclient/FlyClientFactory.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyinstance/FlyInstance.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyinstance/FlyInstance.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyinstance/FlyInstanceDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObj.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObj.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObjDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/string/FlyObjString.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/string/FlyObjString.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/string/FlyObjStringFactory.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/string/FlyObjStringFactory.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flysentinel/FlySentinel.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flysentinel/FlySentinel.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flysentinel/FlySentinelDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flysentinel/SentinelAddr.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/flysentinel/SentinelAddr.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/instancelink/InstanceLink.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/instancelink/InstanceLink.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/FileFio.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/FileFio.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/MemFio.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/MemFio.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/SocketFio.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/SocketFio.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/base/Fio.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/io/base/Fio.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/log/FileLogFactory.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/log/FileLogFactory.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/log/FileLogHandler.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/log/FileLogHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/log/LogDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/main.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/net/NetDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/net/NetHandler.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/net/NetHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/pubsub/PubSubDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/pubsub/PubSubHandler.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/pubsub/PubSubHandler.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/scriptjob/ScriptJob.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/scriptjob/ScriptJob.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/scriptjob/ScriptJobDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/shared/SharedObjectDef.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/shared/SharedObjects.cpp">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/shared/SharedObjects.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/utils/EndianConvTool.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/src/utils/MiscTool.h">
+			<Option target="FlySentinel"/>
+		</Unit>
+		<Unit filename="/Users/zhaoliwei/workspace/FlySentinel/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

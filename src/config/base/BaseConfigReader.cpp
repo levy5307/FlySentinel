@@ -6,8 +6,6 @@
 #include <syslog.h>
 #include "BaseConfigReader.h"
 #include "../../datastructure/dict/Dict.cpp"
-#include "../../log/LogDef.h"
-#include "../../def.h"
 
 configMap loglevelMap[] = {
         {"debug",   LL_DEBUG},

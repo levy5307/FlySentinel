@@ -5,7 +5,6 @@
 #include <csignal>
 #include "BIOHandler.h"
 #include "../datastructure/dict/Dict.cpp"
-#include "../def.h"
 
 AbstractLogHandler *BIOHandler::logHandler;
 std::array<pthread_t, BIO_NUM_OPS> BIOHandler::threads;

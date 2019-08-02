@@ -2,11 +2,9 @@
 // Created by 赵立伟 on 2018/12/5.
 //
 
-#include <iostream>
 #include "TextConfigReader.h"
 #include "ConfigCache.h"
 #include "../datastructure/dict/Dict.cpp"
-#include "../def.h"
 
 TextConfigReader::TextConfigReader(std::string &configfile) {
     if ('-' == configfile[0] && '\0' == configfile[1]) {

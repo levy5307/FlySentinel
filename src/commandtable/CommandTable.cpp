@@ -2,11 +2,7 @@
 // Created by 赵立伟 on 2018/10/15.
 //
 
-#include <iostream>
 #include "CommandTable.h"
-#include "CommandEntry.h"
-#include "../utils/MiscTool.h"
-#include "../log/FileLogFactory.h"
 #include "../datastructure/dict/Dict.cpp"
 #include "CommandTableDef.h"
 

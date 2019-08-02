@@ -6,13 +6,9 @@
 #include <signal.h>
 #include <cassert>
 #include "FlySentinel.h"
-#include "../flyclient/ClientDef.h"
-#include "../flyclient/FlyClient.h"
-#include "../def.h"
 #include "../datastructure/dict/Dict.cpp"
 #include "FlySentinelDef.h"
 #include "../scriptjob/ScriptJobDef.h"
-#include "../flyinstance/FlyInstanceDef.h"
 #include "../flyinstance/FlyInstance.h"
 #include "../atomic/AtomicHandler.h"
 

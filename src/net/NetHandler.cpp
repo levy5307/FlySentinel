@@ -4,7 +4,6 @@
 
 #include <sys/socket.h>
 #include <sys/time.h>
-#include <string>
 #include <errno.h>
 #include <netinet/in.h>
 #include <cstdarg>
@@ -17,7 +16,6 @@
 #include <array>
 #include <sys/un.h>
 #include <sys/stat.h>
-#include <iostream>
 #include <poll.h>
 #include "NetHandler.h"
 #include "NetDef.h"

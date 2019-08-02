@@ -3,10 +3,6 @@
 //
 
 #include "FlyObj.h"
-#include <string>
-#include <list>
-#include <mach/mach.h>
-#include "FlyObj.h"
 #include "FlyObjDef.h"
 
 FlyObj::FlyObj(FlyObjType type) {

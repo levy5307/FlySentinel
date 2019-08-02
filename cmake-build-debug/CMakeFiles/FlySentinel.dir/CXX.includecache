@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObj.h
+memory
+-
+cstdint
+-
+FlyObjDef.h
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObjDef.h
+
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObjDef.h
+
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/string/FlyObjString.cpp
+string
+-
+FlyObjString.h
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/string/FlyObjString.h
+
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/string/FlyObjString.h
+../FlyObjDef.h
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObjDef.h
+../FlyObj.h
+/Users/zhaoliwei/workspace/FlySentinel/src/flyobj/FlyObj.h
+

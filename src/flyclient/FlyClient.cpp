@@ -7,7 +7,6 @@
 #include "../net/NetDef.h"
 #include "ClientDef.h"
 #include "../io/MemFio.h"
-#include "../utils/MiscTool.h"
 
 extern MiscTool *miscTool;
 
